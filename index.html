@@ -917,7 +917,7 @@
              WEEKEND COVERAGE
         ================================================== -->
 
-        <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <section id="weekend-coverage-section" class="hidden bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
 
             <div class="px-5 py-4 border-b border-slate-200">
 
@@ -3326,7 +3326,15 @@ class RotaMatrixManager {
             );
 
 
+        const weekendCoverage =
+            document.getElementById(
+                'weekend-coverage-section'
+            );
+
+
         if (this.state.isAdmin) {
+
+            weekendCoverage.classList.remove('hidden');
 
             button.className =
                 'px-3 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-sm font-medium';
@@ -3347,6 +3355,8 @@ class RotaMatrixManager {
             changePin.classList.remove('hidden');
 
         } else {
+
+            weekendCoverage.classList.add('hidden');
 
             button.className =
                 'px-3 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-sm font-medium';

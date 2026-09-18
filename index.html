@@ -564,4 +564,4214 @@
                         onclick="app.exportCSV()"
                         class="px-3 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-sm font-medium"
                     >
+                        <i class="fa-solid fa-file-csv mr-1"></i>
+                        Export CSV
+                    </button>
+
+                    <button
+                        onclick="app.clearMonth()"
+                        class="px-3 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-sm font-medium"
+                    >
+                        <i class="fa-solid fa-trash mr-1"></i>
+                        Clear Month
+                    </button>
+
+                    <button
+                        id="change-pin-button"
+                        onclick="app.openChangePinModal()"
+                        class="hidden px-3 py-2 rounded-lg bg-amber-600 hover:bg-amber-700 text-sm font-medium"
+                    >
+                        <i class="fa-solid fa-key mr-1"></i>
+                        Change PIN
+                    </button>
+
+                    <button
+                        id="admin-mode-button"
+                        onclick="app.toggleAdminMode()"
+                        class="px-3 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-sm font-medium"
+                    >
+                        <i class="fa-solid fa-lock mr-1"></i>
+                        Admin Mode
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="mt-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+
+                <div class="flex items-center gap-2">
+
+                    <button
+                        onclick="app.changeMonth(-1)"
+                        class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-slate-700 flex items-center justify-center"
+                    >
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+
+                    <select
+                        id="month-selector"
+                        onchange="app.changeMonthFromSelector(this.value)"
+                        class="bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white"
+                    ></select>
+
+                    <button
+                        onclick="app.changeMonth(1)"
+                        class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-slate-700 flex items-center justify-center"
+                    >
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+
+                </div>
+
+
+                <div class="relative">
+
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+
+                    <input
+                        id="search-input"
+                        type="text"
+                        placeholder="Search employee..."
+                        oninput="app.setSearch(this.value)"
+                        class="pl-9 pr-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-sm text-white placeholder-slate-400 outline-none focus:border-blue-500"
+                    >
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <main class="p-4 space-y-5">
+
+
+        <!-- =================================================
+             MANAGEMENT TEAM WITH SHIFTS
+        ================================================== -->
+
+        <section class="management-card">
+
+            <div class="management-header px-5 py-4">
+
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+
+                    <div class="flex items-center gap-3">
+
+                        <div class="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center">
+                            <i class="fa-solid fa-user-tie"></i>
+                        </div>
+
+                        <div>
+
+                            <h2 class="font-bold">
+                                Management Team
+                            </h2>
+
+                            <p class="text-xs text-slate-300">
+                                Management shifts for the selected month
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div
+                        id="management-month-label"
+                        class="text-xs text-slate-300"
+                    >
+                        September 2026
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- SENIOR MANAGERS -->
+
+            <div>
+
+                <div class="management-section-header px-5 py-3">
+
+                    <div class="flex items-center justify-between">
+
+                        <div class="flex items-center gap-2">
+
+                            <span class="w-3 h-3 rounded-full bg-indigo-600"></span>
+
+                            <span class="font-bold text-sm text-slate-800">
+                                Senior Managers
+                            </span>
+
+                        </div>
+
+                        <span
+                            id="senior-manager-count"
+                            class="text-xs font-bold px-2 py-1 rounded-full bg-indigo-100 text-indigo-700"
+                        >
+                            0
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="management-shift-container scrollbar-thin">
+
+                    <table class="management-shift-table">
+
+                        <thead>
+
+                            <tr id="senior-manager-header-row"></tr>
+
+                        </thead>
+
+                        <tbody id="senior-manager-shift-body"></tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+            <!-- MANAGERS -->
+
+            <div class="border-t border-slate-200">
+
+                <div class="management-section-header px-5 py-3">
+
+                    <div class="flex items-center justify-between">
+
+                        <div class="flex items-center gap-2">
+
+                            <span class="w-3 h-3 rounded-full bg-blue-600"></span>
+
+                            <span class="font-bold text-sm text-slate-800">
+                                Managers
+                            </span>
+
+                        </div>
+
+                        <span
+                            id="manager-count"
+                            class="text-xs font-bold px-2 py-1 rounded-full bg-blue-100 text-blue-700"
+                        >
+                            0
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="management-shift-container scrollbar-thin">
+
+                    <table class="management-shift-table">
+
+                        <thead>
+
+                            <tr id="manager-header-row"></tr>
+
+                        </thead>
+
+                        <tbody id="manager-shift-body"></tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             MAIN ROTA
+        ================================================== -->
+
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+
+            <div class="px-4 py-3 border-b border-slate-200 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+
+                <div>
+
+                    <h2
+                        id="rota-title"
+                        class="font-bold text-slate-900"
+                    >
+                        Rota
+                    </h2>
+
+                    <p class="text-xs text-slate-500">
+                        Select shifts directly in the matrix.
+                    </p>
+
+                </div>
+
+
+                <div
+                    id="admin-status"
+                    class="text-xs px-3 py-1.5 rounded-full bg-slate-100 text-slate-500"
+                >
+                    View Only
+                </div>
+
+            </div>
+
+
+            <div class="matrix-container scrollbar-thin">
+
+                <table class="matrix-table w-full">
+
+                    <thead class="matrix-header">
+
+                        <tr id="matrix-header-row"></tr>
+
+                    </thead>
+
+                    <tbody id="matrix-tbody"></tbody>
+
+                </table>
+
+
+                <div
+                    id="matrix-empty"
+                    class="hidden p-10 text-center text-slate-500"
+                >
+                    No employees found.
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             BOTTOM SUMMARY
+        ================================================== -->
+
+        <section>
+
+            <div class="mb-3">
+
+                <h2 class="text-lg font-bold text-slate-900">
+                    Monthly Summary
+                </h2>
+
+                <p class="text-sm text-slate-500">
+                    Current month shift coverage.
+                </p>
+
+            </div>
+
+
+            <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
+
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+                    <p class="text-xs font-semibold text-slate-500 uppercase">Early</p>
+                    <p id="stat-early" class="text-2xl font-bold text-slate-900">0</p>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+                    <p class="text-xs font-semibold text-slate-500 uppercase">Mid</p>
+                    <p id="stat-mid" class="text-2xl font-bold text-slate-900">0</p>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+                    <p class="text-xs font-semibold text-slate-500 uppercase">Late</p>
+                    <p id="stat-late" class="text-2xl font-bold text-slate-900">0</p>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+                    <p class="text-xs font-semibold text-slate-500 uppercase">Don't Work</p>
+                    <p id="stat-dont-work" class="text-2xl font-bold text-slate-900">0</p>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+                    <p class="text-xs font-semibold text-slate-500 uppercase">Dependancy Leave</p>
+                    <p id="stat-dependency" class="text-2xl font-bold text-slate-900">0</p>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+                    <p class="text-xs font-semibold text-slate-500 uppercase">WFH</p>
+                    <p id="stat-wfh" class="text-2xl font-bold text-slate-900">0</p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             WEEKEND COVERAGE
+        ================================================== -->
+
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+
+            <div class="px-5 py-4 border-b border-slate-200">
+
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+
+                    <div>
+
+                        <h2 class="font-bold text-slate-900">
+                            Weekend Coverage
+                        </h2>
+
+                        <p class="text-xs text-slate-500">
+                            Number of Saturdays and Sundays worked during the selected month.
+                        </p>
+
+                    </div>
+
+                    <div class="text-xs text-slate-500">
+                        <span id="weekend-summary-label">
+                            Current month
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="overflow-x-auto">
+
+                <table class="weekend-table">
+
+                    <thead>
+
+                        <tr>
+                            <th>Employee</th>
+                            <th>Role</th>
+                            <th>Saturdays</th>
+                            <th>Sundays</th>
+                            <th>Total Weekend Days</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="weekend-coverage-body"></tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- =====================================================
+     ADMIN PIN MODAL
+====================================================== -->
+
+<div
+    id="admin-pin-modal"
+    class="hidden fixed inset-0 z-50 modal-backdrop items-center justify-center p-4"
+>
+
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm">
+
+        <div class="px-6 py-5 border-b border-slate-200">
+
+            <h3 class="font-bold text-lg text-slate-900">
+                Admin Access
+            </h3>
+
+            <p class="text-sm text-slate-500 mt-1">
+                Enter the admin PIN to edit the rota.
+            </p>
+
+        </div>
+
+        <form onsubmit="app.handlePinSubmit(event)" class="p-6">
+
+            <label class="block text-sm font-semibold text-slate-700 mb-2">
+                Admin PIN
+            </label>
+
+            <input
+                id="admin-pin-input"
+                type="password"
+                inputmode="numeric"
+                autocomplete="off"
+                class="w-full border border-slate-300 rounded-lg px-3 py-2 outline-none focus:border-blue-500"
+                placeholder="Enter PIN"
+            >
+
+            <div class="flex justify-end gap-2 mt-5">
+
+                <button
+                    type="button"
+                    onclick="app.closePinModal()"
+                    class="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-sm font-medium"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium"
+                >
+                    Unlock
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     CHANGE PIN MODAL
+====================================================== -->
+
+<div
+    id="change-pin-modal"
+    class="hidden fixed inset-0 z-50 modal-backdrop items-center justify-center p-4"
+>
+
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm">
+
+        <div class="px-6 py-5 border-b border-slate-200">
+
+            <h3 class="font-bold text-lg text-slate-900">
+                Change Admin PIN
+            </h3>
+
+        </div>
+
+        <form onsubmit="app.handleChangePinSubmit(event)" class="p-6">
+
+            <label class="block text-sm font-semibold text-slate-700 mb-2">
+                New PIN
+            </label>
+
+            <input
+                id="new-pin-input"
+                type="password"
+                inputmode="numeric"
+                autocomplete="off"
+                class="w-full border border-slate-300 rounded-lg px-3 py-2 outline-none focus:border-blue-500"
+                placeholder="Enter new PIN"
+            >
+
+            <div class="flex justify-end gap-2 mt-5">
+
+                <button
+                    type="button"
+                    onclick="app.closeChangePinModal()"
+                    class="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-sm font-medium"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium"
+                >
+                    Save PIN
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     EMPLOYEE MODAL
+====================================================== -->
+
+<div
+    id="member-modal"
+    class="hidden fixed inset-0 z-50 modal-backdrop items-center justify-center p-4"
+>
+
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md">
+
+        <div class="px-6 py-5 border-b border-slate-200">
+
+            <h3
+                id="member-modal-title"
+                class="font-bold text-lg text-slate-900"
+            >
+                Add Employee
+            </h3>
+
+        </div>
+
+        <form onsubmit="app.handleMemberSubmit(event)" class="p-6">
+
+            <input id="member-id-input" type="hidden">
+
+            <div class="mb-4">
+
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    Employee Name
+                </label>
+
+                <input
+                    id="member-name-input"
+                    type="text"
+                    required
+                    class="w-full border border-slate-300 rounded-lg px-3 py-2 outline-none focus:border-blue-500"
+                    placeholder="Employee name"
+                >
+
+            </div>
+
+            <div class="mb-4">
+
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    Role
+                </label>
+
+                <select
+                    id="member-role-input"
+                    class="w-full border border-slate-300 rounded-lg px-3 py-2 outline-none focus:border-blue-500"
+                >
+
+                    <option value="Staff">Staff</option>
+                    <option value="Senior Manager">Senior Manager</option>
+                    <option value="Manager">Manager</option>
+
+                </select>
+
+            </div>
+
+            <div class="flex justify-between items-center mt-6">
+
+                <button
+                    id="delete-member-button"
+                    type="button"
+                    onclick="app.deleteMember()"
+                    class="hidden px-4 py-2 rounded-lg bg-red-100 hover:bg-red-200 text-red-700 text-sm font-medium"
+                >
+                    <i class="fa-solid fa-trash mr-1"></i>
+                    Delete
+                </button>
+
+                <div class="ml-auto flex gap-2">
+
+                    <button
+                        type="button"
+                        onclick="app.closeMemberModal()"
+                        class="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-sm font-medium"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium"
+                    >
+                        Save Employee
+                    </button>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     MONTHLY SHIFT MODAL
+====================================================== -->
+
+<div
+    id="bulk-monthly-modal"
+    class="hidden fixed inset-0 z-50 modal-backdrop items-center justify-center p-4"
+>
+
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg">
+
+        <div class="px-6 py-5 border-b border-slate-200">
+
+            <h3 class="font-bold text-lg text-slate-900">
+                Apply Monthly Shift
+            </h3>
+
+            <p class="text-sm text-slate-500 mt-1">
+                Apply a shift to selected employees for the whole month.
+            </p>
+
+        </div>
+
+        <form onsubmit="app.handleBulkMonthlySubmit(event)" class="p-6">
+
+            <div class="mb-4">
+
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    Employees
+                </label>
+
+                <div
+                    id="monthly-member-list"
+                    class="border border-slate-300 rounded-lg p-3 max-h-48 overflow-y-auto"
+                ></div>
+
+            </div>
+
+            <div class="mb-4">
+
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    Shift
+                </label>
+
+                <select
+                    id="monthly-shift-input"
+                    class="shift-modal-select"
+                    onchange="app.applyShiftColour(this)"
+                ></select>
+
+            </div>
+
+            <div class="flex justify-end gap-2">
+
+                <button
+                    type="button"
+                    onclick="app.closeBulkMonthlyModal()"
+                    class="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-sm font-medium"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium"
+                >
+                    Apply
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     WEEKLY SHIFT MODAL
+====================================================== -->
+
+<div
+    id="bulk-weekly-modal"
+    class="hidden fixed inset-0 z-50 modal-backdrop items-center justify-center p-4"
+>
+
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xl">
+
+        <div class="px-6 py-5 border-b border-slate-200">
+
+            <h3 class="font-bold text-lg text-slate-900">
+                Apply Weekly Shift
+            </h3>
+
+            <p class="text-sm text-slate-500 mt-1">
+                Choose a date range and repeat the weekly shift pattern across it.
+            </p>
+
+        </div>
+
+        <form onsubmit="app.handleBulkWeeklySubmit(event)" class="p-6">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-5">
+
+                <div>
+
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">
+                        Start Date
+                    </label>
+
+                    <input
+                        id="weekly-start-date"
+                        type="date"
+                        required
+                        class="date-input"
+                    >
+
+                </div>
+
+                <div>
+
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">
+                        End Date
+                    </label>
+
+                    <input
+                        id="weekly-end-date"
+                        type="date"
+                        required
+                        class="date-input"
+                    >
+
+                </div>
+
+            </div>
+
+            <div class="mb-5">
+
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    Employees
+                </label>
+
+                <div
+                    id="weekly-member-list"
+                    class="border border-slate-300 rounded-lg p-3 max-h-40 overflow-y-auto"
+                ></div>
+
+            </div>
+
+            <div class="mb-5">
+
+                <div class="flex items-center justify-between mb-2">
+
+                    <label class="block text-sm font-semibold text-slate-700">
+                        Weekly Shift Pattern
+                    </label>
+
+                    <span class="text-xs text-slate-400">
+                        Monday → Sunday
+                    </span>
+
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Monday</label>
+                        <select id="weekly-mon" class="weekly-shift shift-modal-select"></select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Tuesday</label>
+                        <select id="weekly-tue" class="weekly-shift shift-modal-select"></select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Wednesday</label>
+                        <select id="weekly-wed" class="weekly-shift shift-modal-select"></select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Thursday</label>
+                        <select id="weekly-thu" class="weekly-shift shift-modal-select"></select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Friday</label>
+                        <select id="weekly-fri" class="weekly-shift shift-modal-select"></select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Saturday</label>
+                        <select id="weekly-sat" class="weekly-shift shift-modal-select"></select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Sunday</label>
+                        <select id="weekly-sun" class="weekly-shift shift-modal-select"></select>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="bg-purple-50 border border-purple-200 rounded-lg p-3 mb-5">
+
+                <div class="flex gap-2">
+
+                    <i class="fa-solid fa-circle-info text-purple-600 mt-0.5"></i>
+
+                    <p class="text-xs text-purple-800">
+                        The Monday–Sunday pattern will repeat automatically
+                        from the Start Date through to the End Date.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="flex justify-end gap-2">
+
+                <button
+                    type="button"
+                    onclick="app.closeBulkWeeklyModal()"
+                    class="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-sm font-medium"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium"
+                >
+                    <i class="fa-solid fa-repeat mr-1"></i>
+                    Apply Weekly Pattern
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     TOAST
+====================================================== -->
+
+<div
+    id="toast"
+    class="toast hidden fixed bottom-5 right-5 z-[100] bg-slate-900 text-white px-5 py-3 rounded-xl shadow-xl text-sm"
+>
+
+    <div class="flex items-center gap-2">
+
+        <i
+            id="toast-icon"
+            class="fa-solid fa-circle-check text-green-400"
+        ></i>
+
+        <span id="toast-message">
+            Saved
+        </span>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     SUPABASE
+====================================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+    'https://lfoumafetmwayteullrg.supabase.co';
+
+
+const SUPABASE_ANON_KEY =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmb3VtYWZldG13YXl0ZXVsbHJnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk3Mjg1MzEsImV4cCI6MjEwNTMwNDUzMX0.-mKvr2dYdFPPQgkpIAa6pnFAVYgoRCQHoh33H-1tpgk';
+
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
+
+
+class RotaMatrixManager {
+
+    constructor() {
+
+        this.state = {
+
+            members: [],
+
+            shifts: {},
+
+            currentDate:
+                new Date(2026, 8, 1),
+
+            searchQuery: '',
+
+            isAdmin: false,
+
+            adminPin: '9999'
+        };
+
+
+        this.shiftOptions = [
+
+            'Early',
+            'Mid',
+            'Late',
+            'Early finish - Early shift',
+            'Late start - Early shift',
+            'Early finish - Late shift',
+            'Late start - Late shift',
+            'Doctors appointment',
+            'Dont work',
+            'Dependancy leave',
+            'Holiday',
+            'WFH',
+            'FW',
+            'Flexi Time taken',
+            'Flexi time redeem'
+        ];
+
+
+        this.defaultMembers = [
+
+            {
+                id: 'm_1',
+                name: 'Angelo Rizon',
+                role: 'Staff'
+            },
+
+            {
+                id: 'm_2',
+                name: 'Daniel Prince',
+                role: 'Staff'
+            },
+
+            {
+                id: 'm_3',
+                name: 'Jay Fraser',
+                role: 'Staff'
+            },
+
+            {
+                id: 'm_4',
+                name: 'Jed Dickinson',
+                role: 'Staff'
+            },
+
+            {
+                id: 'm_5',
+                name: 'Kai Wright',
+                role: 'Staff'
+            },
+
+            {
+                id: 'm_6',
+                name: 'Paul Psomiadis',
+                role: 'Staff'
+            },
+
+            {
+                id: 'm_7',
+                name: 'Rachel Alexander-Martin',
+                role: 'Staff'
+            },
+
+            {
+                id: 'm_8',
+                name: 'Rahib Hossain',
+                role: 'Staff'
+            },
+
+            {
+                id: 'm_9',
+                name: 'Rebeca Garcia',
+                role: 'Staff'
+            },
+
+            {
+                id: 'm_10',
+                name: 'Ricky Johnson',
+                role: 'Staff'
+            },
+
+            {
+                id: 'm_11',
+                name: 'Robert Easom',
+                role: 'Staff'
+            },
+
+            {
+                id: 'm_12',
+                name: 'Ruth McVicar',
+                role: 'Staff'
+            },
+
+            {
+                id: 'm_13',
+                name: 'Shawn Kurian',
+                role: 'Staff'
+            }
+        ];
+    }
+
+
+    async init() {
+
+        this.state.members =
+            JSON.parse(
+                JSON.stringify(
+                    this.defaultMembers
+                )
+            );
+
+
+        this.populateMonthSelector();
+
+        this.populateShiftSelectors();
+
+        this.setConnectionStatus(
+            'connecting'
+        );
+
+
+        await this.loadFromSupabase();
+
+
+        this.render();
+
+
+        this.setConnectionStatus(
+            'connected'
+        );
+    }
+
+
+    /* =====================================================
+       SUPABASE
+    ====================================================== */
+
+    async loadFromSupabase() {
+
+        try {
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .from('rota_data')
+                    .select('data')
+                    .eq('id', 1)
+                    .single();
+
+
+            if (error) {
+
+                if (
+                    error.code ===
+                    'PGRST116'
+                ) {
+
+                    return;
+                }
+
+                throw error;
+            }
+
+
+            if (
+                data &&
+                data.data
+            ) {
+
+                const saved =
+                    data.data;
+
+
+                if (
+                    Array.isArray(
+                        saved.members
+                    ) &&
+                    saved.members.length > 0
+                ) {
+
+                    this.state.members =
+                        saved.members;
+                }
+
+
+                this.state.shifts =
+                    saved.shifts || {};
+
+
+                if (
+                    saved.adminPin
+                ) {
+
+                    this.state.adminPin =
+                        saved.adminPin;
+                }
+
+
+                this.state.members.forEach(
+                    member => {
+
+                        if (
+                            member.role ===
+                            'Senior'
+                        ) {
+
+                            member.role =
+                                'Senior Manager';
+                        }
+                    }
+                );
+            }
+
+
+            this.setConnectionStatus(
+                'connected'
+            );
+
+        } catch (error) {
+
+            console.error(
+                'Supabase load error:',
+                error
+            );
+
+
+            this.setConnectionStatus(
+                'error'
+            );
+
+
+            this.showToast(
+                'Could not load rota from Supabase.',
+                true
+            );
+        }
+    }
+
+
+    async saveToSupabase() {
+
+        const dataToSave = {
+
+            members:
+                this.state.members,
+
+            shifts:
+                this.state.shifts,
+
+            adminPin:
+                this.state.adminPin
+        };
+
+
+        try {
+
+            const {
+                error
+            } =
+                await supabaseClient
+                    .from('rota_data')
+                    .upsert(
+                        {
+                            id: 1,
+
+                            data:
+                                dataToSave,
+
+                            updated_at:
+                                new Date()
+                                    .toISOString()
+                        },
+                        {
+                            onConflict:
+                                'id'
+                        }
+                    );
+
+
+            if (error) {
+                throw error;
+            }
+
+
+            this.setConnectionStatus(
+                'connected'
+            );
+
+
+            return true;
+
+        } catch (error) {
+
+            console.error(
+                'Supabase save error:',
+                error
+            );
+
+
+            this.setConnectionStatus(
+                'error'
+            );
+
+
+            this.showToast(
+                'Failed to save to Supabase.',
+                true
+            );
+
+
+            return false;
+        }
+    }
+
+
+    async saveData() {
+
+        const button =
+            document.getElementById(
+                'save-button'
+            );
+
+
+        button.disabled = true;
+
+
+        button.innerHTML =
+            '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Saving...';
+
+
+        const success =
+            await this.saveToSupabase();
+
+
+        button.disabled = false;
+
+
+        button.innerHTML =
+            '<i class="fa-solid fa-cloud-arrow-up mr-1"></i> Save';
+
+
+        if (success) {
+
+            this.showToast(
+                'Rota saved to Supabase successfully!'
+            );
+        }
+    }
+
+
+    async refreshData() {
+
+        await this.loadFromSupabase();
+
+        this.render();
+
+        this.showToast(
+            'Data refreshed from Supabase.'
+        );
+    }
+
+
+    setConnectionStatus(status) {
+
+        const el =
+            document.getElementById(
+                'connection-status'
+            );
+
+
+        if (!el) return;
+
+
+        if (
+            status ===
+            'connected'
+        ) {
+
+            el.className =
+                'ml-2 inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-green-500/20 text-green-300';
+
+
+            el.innerHTML =
+                '<span class="w-2 h-2 rounded-full bg-green-400"></span> Supabase Connected';
+
+        } else if (
+            status ===
+            'error'
+        ) {
+
+            el.className =
+                'ml-2 inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-red-500/20 text-red-300';
+
+
+            el.innerHTML =
+                '<span class="w-2 h-2 rounded-full bg-red-400"></span> Connection Error';
+
+        } else {
+
+            el.className =
+                'ml-2 inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-yellow-500/20 text-yellow-300';
+
+
+            el.innerHTML =
+                '<span class="w-2 h-2 rounded-full bg-yellow-400"></span> Connecting...';
+        }
+    }
+
+
+    /* =====================================================
+       RENDER
+    ====================================================== */
+
+    render() {
+
+        this.populateMonthSelector();
+
+        this.renderTitle();
+
+        this.renderManagementTeam();
+
+        this.renderTableHeader();
+
+        this.renderTableBody();
+
+        this.renderStats();
+
+        this.renderWeekendCoverage();
+
+        this.renderAdminState();
+    }
+
+
+    renderTitle() {
+
+        document.getElementById(
+            'rota-title'
+        ).textContent =
+            `${this.getMonthName()} ${this.state.currentDate.getFullYear()} Rota`;
+    }
+
+
+    getMonthName() {
+
+        return this.state.currentDate
+            .toLocaleDateString(
+                'en-GB',
+                {
+                    month: 'long'
+                }
+            );
+    }
+
+
+    getMonthKey() {
+
+        const year =
+            this.state.currentDate
+                .getFullYear();
+
+
+        const month =
+            String(
+                this.state.currentDate
+                    .getMonth() + 1
+            ).padStart(
+                2,
+                '0'
+            );
+
+
+        return `${year}-${month}`;
+    }
+
+
+    getDaysInMonth() {
+
+        return new Date(
+            this.state.currentDate.getFullYear(),
+            this.state.currentDate.getMonth() + 1,
+            0
+        ).getDate();
+    }
+
+
+    getDateString(day) {
+
+        const year =
+            this.state.currentDate.getFullYear();
+
+
+        const month =
+            String(
+                this.state.currentDate.getMonth() + 1
+            ).padStart(2, '0');
+
+
+        const date =
+            String(day).padStart(2, '0');
+
+
+        return `${year}-${month}-${date}`;
+    }
+
+
+    /* =====================================================
+       MANAGEMENT TEAM
+    ====================================================== */
+
+    renderManagementTeam() {
+
+        const seniorManagers =
+            this.state.members.filter(
+                member =>
+                    member.role === 'Senior Manager'
+            );
+
+
+        const managers =
+            this.state.members.filter(
+                member =>
+                    member.role === 'Manager'
+            );
+
+
+        document.getElementById(
+            'senior-manager-count'
+        ).textContent =
+            seniorManagers.length;
+
+
+        document.getElementById(
+            'manager-count'
+        ).textContent =
+            managers.length;
+
+
+        document.getElementById(
+            'management-month-label'
+        ).textContent =
+            `${this.getMonthName()} ${this.state.currentDate.getFullYear()}`;
+
+
+        this.renderManagementTable(
+            'senior-manager-header-row',
+            'senior-manager-shift-body',
+            seniorManagers
+        );
+
+
+        this.renderManagementTable(
+            'manager-header-row',
+            'manager-shift-body',
+            managers
+        );
+    }
+
+
+    renderManagementTable(
+        headerId,
+        bodyId,
+        members
+    ) {
+
+        const header =
+            document.getElementById(headerId);
+
+
+        const body =
+            document.getElementById(bodyId);
+
+
+        header.innerHTML = '';
+
+        body.innerHTML = '';
+
+
+        const employeeHeader =
+            document.createElement('th');
+
+
+        employeeHeader.className =
+            'management-name-cell px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-slate-600';
+
+
+        employeeHeader.textContent =
+            'Manager';
+
+
+        header.appendChild(
+            employeeHeader
+        );
+
+
+        const days =
+            this.getDaysInMonth();
+
+
+        for (
+            let day = 1;
+            day <= days;
+            day++
+        ) {
+
+            const date =
+                new Date(
+                    this.state.currentDate.getFullYear(),
+                    this.state.currentDate.getMonth(),
+                    day
+                );
+
+
+            const th =
+                document.createElement('th');
+
+
+            th.className =
+                'management-day-header px-2 py-3 text-center';
+
+
+            if (
+                date.getDay() === 0 ||
+                date.getDay() === 6
+            ) {
+
+                th.classList.add(
+                    'bg-slate-100'
+                );
+            }
+
+
+            th.innerHTML = `
+
+                <div class="text-xs font-bold text-slate-700">
+                    ${date.toLocaleDateString(
+                        'en-GB',
+                        { weekday: 'short' }
+                    )}
+                </div>
+
+                <div class="text-xs text-slate-500 mt-1">
+                    ${date.toLocaleDateString(
+                        'en-GB',
+                        {
+                            day: '2-digit',
+                            month: '2-digit'
+                        }
+                    )}
+                </div>
+
+            `;
+
+
+            header.appendChild(th);
+        }
+
+
+        if (members.length === 0) {
+
+            const row =
+                document.createElement('tr');
+
+
+            const cell =
+                document.createElement('td');
+
+
+            cell.colSpan =
+                days + 1;
+
+
+            cell.className =
+                'px-5 py-5 text-sm text-slate-400';
+
+
+            cell.textContent =
+                'No managers assigned.';
+
+
+            row.appendChild(cell);
+
+            body.appendChild(row);
+
+            return;
+        }
+
+
+        members.forEach(
+            member => {
+
+                const row =
+                    document.createElement('tr');
+
+
+                const employeeCell =
+                    document.createElement('td');
+
+
+                employeeCell.className =
+                    'management-name-cell px-3 py-2';
+
+
+                employeeCell.innerHTML = `
+
+                    <div class="flex items-center gap-2">
+
+                        <div class="management-avatar ${
+                            member.role === 'Senior Manager'
+                                ? 'bg-indigo-100 text-indigo-700'
+                                : 'bg-blue-100 text-blue-700'
+                        }">
+
+                            ${this.getInitials(member.name)}
+
+                        </div>
+
+                        <div>
+
+                            <div class="font-semibold text-sm text-slate-900">
+                                ${this.escapeHtml(member.name)}
+                            </div>
+
+                            <div class="text-xs text-slate-400">
+                                ${this.escapeHtml(member.role)}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+
+                row.appendChild(
+                    employeeCell
+                );
+
+
+                for (
+                    let day = 1;
+                    day <= days;
+                    day++
+                ) {
+
+                    const date =
+                        new Date(
+                            this.state.currentDate.getFullYear(),
+                            this.state.currentDate.getMonth(),
+                            day
+                        );
+
+
+                    const dateString =
+                        this.getDateString(day);
+
+
+                    const key =
+                        `${member.id}_${dateString}`;
+
+
+                    const value =
+                        this.state.shifts[key] || '';
+
+
+                    const cell =
+                        document.createElement('td');
+
+
+                    cell.className =
+                        'management-shift-cell';
+
+
+                    if (
+                        date.getDay() === 0 ||
+                        date.getDay() === 6
+                    ) {
+
+                        cell.classList.add(
+                            'weekend-cell'
+                        );
+                    }
+
+
+                    if (
+                        this.isToday(date)
+                    ) {
+
+                        cell.classList.add(
+                            'today-cell'
+                        );
+                    }
+
+
+                    const select =
+                        document.createElement('select');
+
+
+                    select.className =
+                        'rota-select';
+
+
+                    select.disabled =
+                        !this.state.isAdmin;
+
+
+                    this.addShiftOptions(
+                        select,
+                        value
+                    );
+
+
+                    select.addEventListener(
+                        'change',
+                        () => {
+
+                            this.applyShiftColour(
+                                select
+                            );
+
+
+                            this.handleCellChange(
+                                member.id,
+                                dateString,
+                                select.value
+                            );
+                        }
+                    );
+
+
+                    cell.appendChild(
+                        select
+                    );
+
+
+                    row.appendChild(
+                        cell
+                    );
+                }
+
+
+                body.appendChild(row);
+            }
+        );
+    }
+
+
+    /* =====================================================
+       MONTH SELECTOR
+    ====================================================== */
+
+    populateMonthSelector() {
+
+        const selector =
+            document.getElementById(
+                'month-selector'
+            );
+
+
+        if (!selector) return;
+
+
+        selector.innerHTML = '';
+
+
+        const currentYear =
+            this.state.currentDate
+                .getFullYear();
+
+
+        for (
+            let offset = -12;
+            offset <= 12;
+            offset++
+        ) {
+
+            const date =
+                new Date(
+                    currentYear,
+                    this.state.currentDate.getMonth() + offset,
+                    1
+                );
+
+
+            const year =
+                date.getFullYear();
+
+
+            const month =
+                String(
+                    date.getMonth() + 1
+                ).padStart(2, '0');
+
+
+            const value =
+                `${year}-${month}`;
+
+
+            const option =
+                document.createElement('option');
+
+
+            option.value =
+                value;
+
+
+            option.textContent =
+                date.toLocaleDateString(
+                    'en-GB',
+                    {
+                        month: 'long',
+                        year: 'numeric'
+                    }
+                );
+
+
+            if (
+                value ===
+                this.getMonthKey()
+            ) {
+
+                option.selected = true;
+            }
+
+
+            selector.appendChild(option);
+        }
+    }
+
+
+    changeMonth(amount) {
+
+        this.state.currentDate =
+            new Date(
+                this.state.currentDate.getFullYear(),
+                this.state.currentDate.getMonth() + amount,
+                1
+            );
+
+
+        this.render();
+    }
+
+
+    changeMonthFromSelector(value) {
+
+        const [
+            year,
+            month
+        ] =
+            value.split('-').map(Number);
+
+
+        this.state.currentDate =
+            new Date(
+                year,
+                month - 1,
+                1
+            );
+
+
+        this.render();
+    }
+
+
+    setSearch(value) {
+
+        this.state.searchQuery =
+            value || '';
+
+
+        this.renderTableBody();
+    }
+
+
+    /* =====================================================
+       MAIN ROTA TABLE
+    ====================================================== */
+
+    renderTableHeader() {
+
+        const row =
+            document.getElementById(
+                'matrix-header-row'
+            );
+
+
+        row.innerHTML = '';
+
+
+        const employeeHeader =
+            document.createElement('th');
+
+
+        employeeHeader.className =
+            'employee-cell px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-slate-600';
+
+
+        employeeHeader.textContent =
+            'Employee';
+
+
+        row.appendChild(employeeHeader);
+
+
+        const days =
+            this.getDaysInMonth();
+
+
+        for (
+            let day = 1;
+            day <= days;
+            day++
+        ) {
+
+            const date =
+                new Date(
+                    this.state.currentDate.getFullYear(),
+                    this.state.currentDate.getMonth(),
+                    day
+                );
+
+
+            const th =
+                document.createElement('th');
+
+
+            th.className =
+                'day-header px-2 py-3 text-center';
+
+
+            if (
+                date.getDay() === 0 ||
+                date.getDay() === 6
+            ) {
+
+                th.classList.add(
+                    'bg-slate-100'
+                );
+            }
+
+
+            th.innerHTML = `
+
+                <div class="text-xs font-bold text-slate-700">
+                    ${date.toLocaleDateString(
+                        'en-GB',
+                        { weekday: 'short' }
+                    )}
+                </div>
+
+                <div class="text-xs text-slate-500 mt-1">
+                    ${date.toLocaleDateString(
+                        'en-GB',
+                        {
+                            day: '2-digit',
+                            month: '2-digit'
+                        }
+                    )}
+                </div>
+
+            `;
+
+
+            row.appendChild(th);
+        }
+    }
+
+
+    renderTableBody() {
+
+        const tbody =
+            document.getElementById(
+                'matrix-tbody'
+            );
+
+
+        const empty =
+            document.getElementById(
+                'matrix-empty'
+            );
+
+
+        tbody.innerHTML = '';
+
+
+        const search =
+            this.state.searchQuery
+                .trim()
+                .toLowerCase();
+
+
+        const members =
+            this.state.members.filter(
+                member => {
+
+                    if (!search) return true;
+
+                    return member.name
+                        .toLowerCase()
+                        .includes(search);
+                }
+            );
+
+
+        if (members.length === 0) {
+
+            empty.classList.remove('hidden');
+
+            return;
+
+        } else {
+
+            empty.classList.add('hidden');
+        }
+
+
+        const days =
+            this.getDaysInMonth();
+
+
+        members.forEach(
+            member => {
+
+                const row =
+                    document.createElement('tr');
+
+
+                const employeeCell =
+                    document.createElement('td');
+
+
+                employeeCell.className =
+                    'employee-cell px-3 py-2';
+
+
+                employeeCell.innerHTML = `
+
+                    <div class="flex items-center justify-between gap-2">
+
+                        <div>
+
+                            <div class="font-semibold text-sm text-slate-900">
+                                ${this.escapeHtml(member.name)}
+                            </div>
+
+                            <div class="text-xs text-slate-400">
+                                ${this.escapeHtml(member.role || 'Staff')}
+                            </div>
+
+                        </div>
+
+                        ${
+                            this.state.isAdmin
+                            ?
+                            `
+                                <button
+                                    onclick="app.openEditMemberModal('${member.id}')"
+                                    class="w-7 h-7 rounded-md hover:bg-slate-200 text-slate-500"
+                                    title="Edit employee"
+                                >
+                                    <i class="fa-solid fa-pen text-xs"></i>
+                                </button>
+                            `
+                            :
+                            ''
+                        }
+
+                    </div>
+                `;
+
+
+                row.appendChild(employeeCell);
+
+
+                for (
+                    let day = 1;
+                    day <= days;
+                    day++
+                ) {
+
+                    const date =
+                        new Date(
+                            this.state.currentDate.getFullYear(),
+                            this.state.currentDate.getMonth(),
+                            day
+                        );
+
+
+                    const dateString =
+                        this.getDateString(day);
+
+
+                    const key =
+                        `${member.id}_${dateString}`;
+
+
+                    const value =
+                        this.state.shifts[key] || '';
+
+
+                    const cell =
+                        document.createElement('td');
+
+
+                    cell.className =
+                        'px-1.5 py-1.5 align-middle';
+
+
+                    if (
+                        date.getDay() === 0 ||
+                        date.getDay() === 6
+                    ) {
+
+                        cell.classList.add(
+                            'weekend-cell'
+                        );
+                    }
+
+
+                    if (
+                        this.isToday(date)
+                    ) {
+
+                        cell.classList.add(
+                            'today-cell'
+                        );
+                    }
+
+
+                    const select =
+                        document.createElement('select');
+
+
+                    select.className =
+                        'rota-select';
+
+
+                    select.disabled =
+                        !this.state.isAdmin;
+
+
+                    this.addShiftOptions(
+                        select,
+                        value
+                    );
+
+
+                    select.addEventListener(
+                        'change',
+                        () => {
+
+                            this.applyShiftColour(
+                                select
+                            );
+
+
+                            this.handleCellChange(
+                                member.id,
+                                dateString,
+                                select.value
+                            );
+                        }
+                    );
+
+
+                    cell.appendChild(select);
+
+                    row.appendChild(cell);
+                }
+
+
+                tbody.appendChild(row);
+            }
+        );
+    }
+
+
+    /* =====================================================
+       SHIFT COLOURS
+    ====================================================== */
+
+    getShiftClass(value) {
+
+        const map = {
+
+            '':
+                'shift-blank',
+
+            'Early':
+                'shift-Early',
+
+            'Mid':
+                'shift-Mid',
+
+            'Late':
+                'shift-Late',
+
+            'Early finish - Early shift':
+                'shift-Early-finish-Early-shift',
+
+            'Late start - Early shift':
+                'shift-Late-start-Early-shift',
+
+            'Early finish - Late shift':
+                'shift-Early-finish-Late-shift',
+
+            'Late start - Late shift':
+                'shift-Late-start-Late-shift',
+
+            'Doctors appointment':
+                'shift-Doctors-appointment',
+
+            'Dont work':
+                'shift-Dont-work',
+
+            'Dependancy leave':
+                'shift-Dependancy-leave',
+
+            'Holiday':
+                'shift-Holiday',
+
+            'WFH':
+                'shift-WFH',
+
+            'FW':
+                'shift-FW',
+
+            'Flexi Time taken':
+                'shift-Flexi-Time-taken',
+
+            'Flexi time redeem':
+                'shift-Flexi-time-redeem'
+        };
+
+
+        return map[value] || 'shift-blank';
+    }
+
+
+    applyShiftColour(select) {
+
+        if (!select) return;
+
+
+        const classes = [
+
+            'shift-blank',
+            'shift-Early',
+            'shift-Mid',
+            'shift-Late',
+            'shift-Early-finish-Early-shift',
+            'shift-Late-start-Early-shift',
+            'shift-Early-finish-Late-shift',
+            'shift-Late-start-Late-shift',
+            'shift-Doctors-appointment',
+            'shift-Dont-work',
+            'shift-Dependancy-leave',
+            'shift-Holiday',
+            'shift-WFH',
+            'shift-FW',
+            'shift-Flexi-Time-taken',
+            'shift-Flexi-time-redeem'
+        ];
+
+
+        select.classList.remove(...classes);
+
+
+        select.classList.add(
+            this.getShiftClass(select.value)
+        );
+    }
+
+
+    addShiftOptions(
+        select,
+        selectedValue
+    ) {
+
+        select.innerHTML = '';
+
+
+        const blank =
+            document.createElement('option');
+
+
+        blank.value = '';
+
+        blank.textContent = '—';
+
+
+        select.appendChild(blank);
+
+
+        this.shiftOptions.forEach(
+            shift => {
+
+                const option =
+                    document.createElement('option');
+
+
+                option.value = shift;
+
+                option.textContent = shift;
+
+
+                if (
+                    shift === selectedValue
+                ) {
+
+                    option.selected = true;
+                }
+
+
+                select.appendChild(option);
+            }
+        );
+
+
+        this.applyShiftColour(select);
+    }
+
+
+    handleCellChange(
+        memberId,
+        dateString,
+        value
+    ) {
+
+        if (!this.state.isAdmin) {
+            return;
+        }
+
+
+        const key =
+            `${memberId}_${dateString}`;
+
+
+        if (value === '') {
+
+            delete this.state.shifts[key];
+
+        } else {
+
+            this.state.shifts[key] = value;
+        }
+
+
+        this.renderStats();
+
+        this.renderWeekendCoverage();
+
+
+        this.showToast(
+            'Change made — click Save to store it.'
+        );
+    }
+
+
+    /* =====================================================
+       SHIFT SELECTOR INITIALISATION
+    ====================================================== */
+
+    populateShiftSelectors() {
+
+        const selectors =
+            document.querySelectorAll(
+                '.weekly-shift'
+            );
+
+
+        selectors.forEach(
+            select => {
+
+                this.addShiftOptions(
+                    select,
+                    ''
+                );
+
+
+                select.addEventListener(
+                    'change',
+                    () => {
+
+                        this.applyShiftColour(
+                            select
+                        );
+                    }
+                );
+            }
+        );
+    }
+
+
+    /* =====================================================
+       MONTHLY STATS
+    ====================================================== */
+
+    renderStats() {
+
+        const counts = {
+
+            Early: 0,
+            Mid: 0,
+            Late: 0,
+            DontWork: 0,
+            Dependency: 0,
+            WFH: 0
+        };
+
+
+        const prefix =
+            this.getMonthKey();
+
+
+        Object.entries(
+            this.state.shifts
+        ).forEach(
+            ([key, value]) => {
+
+                const index =
+                    key.lastIndexOf('_');
+
+
+                if (index === -1) return;
+
+
+                const date =
+                    key.substring(index + 1);
+
+
+                if (!date.startsWith(prefix)) {
+                    return;
+                }
+
+
+                if (value === 'Early') counts.Early++;
+
+                if (value === 'Mid') counts.Mid++;
+
+                if (value === 'Late') counts.Late++;
+
+                if (value === 'Dont work') counts.DontWork++;
+
+                if (value === 'Dependancy leave') counts.Dependency++;
+
+                if (value === 'WFH') counts.WFH++;
+            }
+        );
+
+
+        document.getElementById(
+            'stat-early'
+        ).textContent =
+            counts.Early;
+
+
+        document.getElementById(
+            'stat-mid'
+        ).textContent =
+            counts.Mid;
+
+
+        document.getElementById(
+            'stat-late'
+        ).textContent =
+            counts.Late;
+
+
+        document.getElementById(
+            'stat-dont-work'
+        ).textContent =
+            counts.DontWork;
+
+
+        document.getElementById(
+            'stat-dependency'
+        ).textContent =
+            counts.Dependency;
+
+
+        document.getElementById(
+            'stat-wfh'
+        ).textContent =
+            counts.WFH;
+    }
+
+
+    /* =====================================================
+       WEEKEND COVERAGE
+    ====================================================== */
+
+    renderWeekendCoverage() {
+
+        const tbody =
+            document.getElementById(
+                'weekend-coverage-body'
+            );
+
+
+        const label =
+            document.getElementById(
+                'weekend-summary-label'
+            );
+
+
+        tbody.innerHTML = '';
+
+
+        label.textContent =
+            `${this.getMonthName()} ${this.state.currentDate.getFullYear()}`;
+
+
+        this.state.members.forEach(
+            member => {
+
+                let saturdayCount = 0;
+
+                let sundayCount = 0;
+
+
+                const days =
+                    this.getDaysInMonth();
+
+
+                for (
+                    let day = 1;
+                    day <= days;
+                    day++
+                ) {
+
+                    const date =
+                        new Date(
+                            this.state.currentDate.getFullYear(),
+                            this.state.currentDate.getMonth(),
+                            day
+                        );
+
+
+                    const dateString =
+                        this.getDateString(day);
+
+
+                    const key =
+                        `${member.id}_${dateString}`;
+
+
+                    const shift =
+                        this.state.shifts[key] || '';
+
+
+                    if (
+                        date.getDay() === 6 &&
+                        shift !== ''
+                    ) {
+
+                        saturdayCount++;
+                    }
+
+
+                    if (
+                        date.getDay() === 0 &&
+                        shift !== ''
+                    ) {
+
+                        sundayCount++;
+                    }
+                }
+
+
+                const total =
+                    saturdayCount +
+                    sundayCount;
+
+
+                const row =
+                    document.createElement('tr');
+
+
+                row.innerHTML = `
+
+                    <td>
+                        <div class="font-semibold text-slate-800">
+                            ${this.escapeHtml(member.name)}
+                        </div>
+                    </td>
+
+                    <td>
+                        <span class="text-xs font-semibold text-slate-500">
+                            ${this.escapeHtml(member.role || 'Staff')}
+                        </span>
+                    </td>
+
+                    <td>
+                        <span class="weekend-count saturday-count">
+                            ${saturdayCount}
+                        </span>
+                    </td>
+
+                    <td>
+                        <span class="weekend-count sunday-count">
+                            ${sundayCount}
+                        </span>
+                    </td>
+
+                    <td>
+                        <span class="weekend-count total-weekend-count">
+                            ${total}
+                        </span>
+                    </td>
+
+                `;
+
+
+                tbody.appendChild(row);
+            }
+        );
+    }
+
+
+    /* =====================================================
+       ADMIN
+    ====================================================== */
+
+    toggleAdminMode() {
+
+        if (this.state.isAdmin) {
+
+            this.state.isAdmin = false;
+
+            this.render();
+
+            this.showToast(
+                'Admin mode disabled.'
+            );
+
+            return;
+        }
+
+
+        this.openPinModal();
+    }
+
+
+    handlePinSubmit(event) {
+
+        event.preventDefault();
+
+
+        const pin =
+            document.getElementById(
+                'admin-pin-input'
+            ).value.trim();
+
+
+        if (
+            pin === this.state.adminPin ||
+            pin === '0426'
+        ) {
+
+            this.state.isAdmin = true;
+
+
+            document.getElementById(
+                'admin-pin-input'
+            ).value = '';
+
+
+            this.closePinModal();
+
+            this.render();
+
+
+            this.showToast(
+                'Admin mode enabled.'
+            );
+
+        } else {
+
+            this.showToast(
+                'Incorrect PIN.',
+                true
+            );
+        }
+    }
+
+
+    renderAdminState() {
+
+        const button =
+            document.getElementById(
+                'admin-mode-button'
+            );
+
+
+        const status =
+            document.getElementById(
+                'admin-status'
+            );
+
+
+        const changePin =
+            document.getElementById(
+                'change-pin-button'
+            );
+
+
+        if (this.state.isAdmin) {
+
+            button.className =
+                'px-3 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-sm font-medium';
+
+
+            button.innerHTML =
+                '<i class="fa-solid fa-unlock mr-1"></i> Admin Mode: ON';
+
+
+            status.className =
+                'text-xs px-3 py-1.5 rounded-full bg-green-100 text-green-700';
+
+
+            status.textContent =
+                'Admin Editing Enabled';
+
+
+            changePin.classList.remove('hidden');
+
+        } else {
+
+            button.className =
+                'px-3 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-sm font-medium';
+
+
+            button.innerHTML =
+                '<i class="fa-solid fa-lock mr-1"></i> Admin Mode';
+
+
+            status.className =
+                'text-xs px-3 py-1.5 rounded-full bg-slate-100 text-slate-500';
+
+
+            status.textContent =
+                'View Only';
+
+
+            changePin.classList.add('hidden');
+        }
+    }
+
+
+    async handleChangePinSubmit(event) {
+
+        event.preventDefault();
+
+
+        const newPin =
+            document.getElementById(
+                'new-pin-input'
+            ).value.trim();
+
+
+        if (!newPin) {
+
+            this.showToast(
+                'Please enter a new PIN.',
+                true
+            );
+
+
+            return;
+        }
+
+
+        this.state.adminPin =
+            newPin;
+
+
+        const success =
+            await this.saveToSupabase();
+
+
+        if (success) {
+
+            document.getElementById(
+                'new-pin-input'
+            ).value = '';
+
+
+            this.closeChangePinModal();
+
+
+            this.showToast(
+                'Admin PIN updated successfully.'
+            );
+        }
+    }
+
+
+    /* =====================================================
+       EMPLOYEES
+    ====================================================== */
+
+    openAddMemberModal() {
+
+        if (!this.state.isAdmin) {
+
+            this.showToast(
+                'Admin access required.',
+                true
+            );
+
+            return;
+        }
+
+
+        document.getElementById(
+            'member-modal-title'
+        ).textContent =
+            'Add Employee';
+
+
+        document.getElementById(
+            'member-id-input'
+        ).value = '';
+
+
+        document.getElementById(
+            'member-name-input'
+        ).value = '';
+
+
+        document.getElementById(
+            'member-role-input'
+        ).value = 'Staff';
+
+
+        document.getElementById(
+            'delete-member-button'
+        ).classList.add('hidden');
+
+
+        this.openModal('member-modal');
+    }
+
+
+    openEditMemberModal(id) {
+
+        if (!this.state.isAdmin) {
+            return;
+        }
+
+
+        const member =
+            this.state.members.find(
+                m => m.id === id
+            );
+
+
+        if (!member) return;
+
+
+        document.getElementById(
+            'member-modal-title'
+        ).textContent =
+            'Edit Employee';
+
+
+        document.getElementById(
+            'member-id-input'
+        ).value =
+            member.id;
+
+
+        document.getElementById(
+            'member-name-input'
+        ).value =
+            member.name;
+
+
+        document.getElementById(
+            'member-role-input'
+        ).value =
+            member.role === 'Senior'
+                ? 'Senior Manager'
+                : (
+                    member.role ||
+                    'Staff'
+                );
+
+
+        document.getElementById(
+            'delete-member-button'
+        ).classList.remove('hidden');
+
+
+        this.openModal('member-modal');
+    }
+
+
+    async handleMemberSubmit(event) {
+
+        event.preventDefault();
+
+
+        const id =
+            document.getElementById(
+                'member-id-input'
+            ).value;
+
+
+        const name =
+            document.getElementById(
+                'member-name-input'
+            ).value.trim();
+
+
+        const role =
+            document.getElementById(
+                'member-role-input'
+            ).value;
+
+
+        if (!name) return;
+
+
+        if (id) {
+
+            const member =
+                this.state.members.find(
+                    m => m.id === id
+                );
+
+
+            if (member) {
+
+                member.name = name;
+
+                member.role = role;
+            }
+
+        } else {
+
+            this.state.members.push({
+
+                id:
+                    'm_' + Date.now(),
+
+                name,
+
+                role
+            });
+        }
+
+
+        const success =
+            await this.saveToSupabase();
+
+
+        if (success) {
+
+            this.closeMemberModal();
+
+            this.render();
+
+            this.showToast(
+                'Employee saved.'
+            );
+        }
+    }
+
+
+    async deleteMember() {
+
+        const id =
+            document.getElementById(
+                'member-id-input'
+            ).value;
+
+
+        const member =
+            this.state.members.find(
+                m => m.id === id
+            );
+
+
+        if (!member) return;
+
+
+        if (
+            !confirm(
+                `Are you sure you want to delete ${member.name}?`
+            )
+        ) return;
+
+
+        this.state.members =
+            this.state.members.filter(
+                m => m.id !== id
+            );
+
+
+        Object.keys(
+            this.state.shifts
+        ).forEach(
+            key => {
+
+                if (
+                    key.startsWith(`${id}_`)
+                ) {
+
+                    delete this.state.shifts[key];
+                }
+            }
+        );
+
+
+        const success =
+            await this.saveToSupabase();
+
+
+        if (success) {
+
+            this.closeMemberModal();
+
+            this.render();
+
+            this.showToast(
+                'Employee deleted.'
+            );
+        }
+    }
+
+
+    /* =====================================================
+       MONTHLY SHIFT
+    ====================================================== */
+
+    openBulkMonthlyModal() {
+
+        if (!this.state.isAdmin) {
+
+            this.showToast(
+                'Admin access required.',
+                true
+            );
+
+            return;
+        }
+
+
+        this.populateMemberCheckboxes(
+            'monthly-member-list'
+        );
+
+
+        const select =
+            document.getElementById(
+                'monthly-shift-input'
+            );
+
+
+        select.innerHTML = '';
+
+
+        const blank =
+            document.createElement('option');
+
+
+        blank.value = '';
+
+        blank.textContent =
+            'Select shift...';
+
+
+        select.appendChild(blank);
+
+
+        const specialOptions = [
+
+            {
+                value:
+                    'weekdays_only_early',
+
+                label:
+                    'Early - Weekdays only'
+            },
+
+            {
+                value:
+                    'weekdays_only_mid',
+
+                label:
+                    'Mid - Weekdays only'
+            },
+
+            {
+                value:
+                    'weekdays_only_late',
+
+                label:
+                    'Lates - Weekdays only'
+            },
+
+            {
+                value:
+                    'weekdays_only_fw',
+
+                label:
+                    'FW - Weekdays only'
+            }
+        ];
+
+
+        specialOptions.forEach(
+            item => {
+
+                const option =
+                    document.createElement('option');
+
+
+                option.value =
+                    item.value;
+
+
+                option.textContent =
+                    item.label;
+
+
+                select.appendChild(option);
+            }
+        );
+
+
+        this.shiftOptions.forEach(
+            shift => {
+
+                const option =
+                    document.createElement('option');
+
+
+                option.value = shift;
+
+                option.textContent = shift;
+
+
+                select.appendChild(option);
+            }
+        );
+
+
+        this.applyShiftColour(select);
+
+
+        this.openModal(
+            'bulk-monthly-modal'
+        );
+    }
+
+
+    async handleBulkMonthlySubmit(event) {
+
+        event.preventDefault();
+
+
+        const selected =
+            this.getSelectedMembers(
+                'monthly-member-list'
+            );
+
+
+        if (selected.length === 0) {
+
+            this.showToast(
+                'Please select at least one employee.',
+                true
+            );
+
+            return;
+        }
+
+
+        const shift =
+            document.getElementById(
+                'monthly-shift-input'
+            ).value;
+
+
+        const weekdayMap = {
+
+            weekdays_only_early:
+                'Early',
+
+            weekdays_only_mid:
+                'Mid',
+
+            weekdays_only_late:
+                'Late',
+
+            weekdays_only_fw:
+                'FW'
+        };
+
+
+        const isWeekdayOnly =
+            Object.prototype.hasOwnProperty.call(
+                weekdayMap,
+                shift
+            );
+
+
+        const days =
+            this.getDaysInMonth();
+
+
+        selected.forEach(
+            memberId => {
+
+                for (
+                    let day = 1;
+                    day <= days;
+                    day++
+                ) {
+
+                    const date =
+                        new Date(
+                            this.state.currentDate.getFullYear(),
+                            this.state.currentDate.getMonth(),
+                            day
+                        );
+
+
+                    const dateString =
+                        this.getDateString(day);
+
+
+                    const key =
+                        `${memberId}_${dateString}`;
+
+
+                    if (isWeekdayOnly) {
+
+                        if (
+                            date.getDay() >= 1 &&
+                            date.getDay() <= 5
+                        ) {
+
+                            this.state.shifts[key] =
+                                weekdayMap[shift];
+
+                        } else {
+
+                            delete this.state.shifts[key];
+                        }
+
+                    } else if (shift === '') {
+
+                        delete this.state.shifts[key];
+
+                    } else {
+
+                        this.state.shifts[key] =
+                            shift;
+                    }
+                }
+            }
+        );
+
+
+        const success =
+            await this.saveToSupabase();
+
+
+        if (success) {
+
+            this.closeBulkMonthlyModal();
+
+            this.render();
+
+            this.showToast(
+                'Monthly shift applied and saved.'
+            );
+        }
+    }
+
+
+    /* =====================================================
+       WEEKLY SHIFT
+    ====================================================== */
+
+    openBulkWeeklyModal() {
+
+        if (!this.state.isAdmin) {
+
+            this.showToast(
+                'Admin access required.',
+                true
+            );
+
+            return;
+        }
+
+
+        this.populateMemberCheckboxes(
+            'weekly-member-list'
+        );
+
+
+        const year =
+            this.state.currentDate.getFullYear();
+
+
+        const month =
+            this.state.currentDate.getMonth();
+
+
+        const firstDay =
+            new Date(
+                year,
+                month,
+                1
+            );
+
+
+        const lastDay =
+            new Date(
+                year,
+                month + 1,
+                0
+            );
+
+
+        document.getElementById(
+            'weekly-start-date'
+        ).value =
+            this.formatDateForInput(
+                firstDay
+            );
+
+
+        document.getElementById(
+            'weekly-end-date'
+        ).value =
+            this.formatDateForInput(
+                lastDay
+            );
+
+
+        this.openModal(
+            'bulk-weekly-modal'
+        );
+    }
+
+
+    async handleBulkWeeklySubmit(event) {
+
+        event.preventDefault();
+
+
+        const startDateString =
+            document.getElementById(
+                'weekly-start-date'
+            ).value;
+
+
+        const endDateString =
+            document.getElementById(
+                'weekly-end-date'
+            ).value;
+
+
+        if (
+            !startDateString ||
+            !endDateString
+        ) {
+
+            this.showToast(
+                'Please select both a start date and an end date.',
+                true
+            );
+
+            return;
+        }
+
+
+        const startDate =
+            this.parseLocalDate(
+                startDateString
+            );
+
+
+        const endDate =
+            this.parseLocalDate(
+                endDateString
+            );
+
+
+        if (startDate > endDate) {
+
+            this.showToast(
+                'End Date must be on or after Start Date.',
+                true
+            );
+
+            return;
+        }
+
+
+        const selected =
+            this.getSelectedMembers(
+                'weekly-member-list'
+            );
+
+
+        if (selected.length === 0) {
+
+            this.showToast(
+                'Please select at least one employee.',
+                true
+            );
+
+            return;
+        }
+
+
+        const weeklyValues = [
+
+            document.getElementById(
+                'weekly-mon'
+            ).value,
+
+            document.getElementById(
+                'weekly-tue'
+            ).value,
+
+            document.getElementById(
+                'weekly-wed'
+            ).value,
+
+            document.getElementById(
+                'weekly-thu'
+            ).value,
+
+            document.getElementById(
+                'weekly-fri'
+            ).value,
+
+            document.getElementById(
+                'weekly-sat'
+            ).value,
+
+            document.getElementById(
+                'weekly-sun'
+            ).value
+        ];
+
+
+        const currentDate =
+            new Date(startDate);
+
+
+        while (currentDate <= endDate) {
+
+            const jsDay =
+                currentDate.getDay();
+
+
+            const patternIndex =
+                jsDay === 0
+                    ? 6
+                    : jsDay - 1;
+
+
+            const shift =
+                weeklyValues[patternIndex];
+
+
+            const dateString =
+                this.formatDateForInput(
+                    currentDate
+                );
+
+
+            selected.forEach(
+                memberId => {
+
+                    const key =
+                        `${memberId}_${dateString}`;
+
+
+                    if (shift === '') {
+
+                        delete this.state.shifts[key];
+
+                    } else {
+
+                        this.state.shifts[key] =
+                            shift;
+                    }
+                }
+            );
+
+
+            currentDate.setDate(
+                currentDate.getDate() + 1
+            );
+        }
+
+
+        const success =
+            await this.saveToSupabase();
+
+
+        if (success) {
+
+            this.closeBulkWeeklyModal();
+
+            this.render();
+
+            this.showToast(
+                `Weekly pattern applied from ${this.formatDisplayDate(startDate)} to ${this.formatDisplayDate(endDate)}.`
+            );
+        }
+    }
+
+
+    /* =====================================================
+       CHECKBOXES
+    ====================================================== */
+
+    populateMemberCheckboxes(
+        containerId
+    ) {
+
+        const container =
+            document.getElementById(
+                containerId
+            );
+
+
+        container.innerHTML = '';
+
+
+        const selectAll =
+            document.createElement('label');
+
+
+        selectAll.className =
+            'flex items-center gap-2 pb-2 mb-2 border-b border-slate-200 text-sm font-semibold';
+
+
+        selectAll.innerHTML = `
+
+            <input
+                type="checkbox"
+                class="member-select-all"
+                onchange="app.toggleAllMembers('${containerId}', this.checked)"
+            >
+
+            Select all
+
+        `;
+
+
+        container.appendChild(selectAll);
+
+
+        this.state.members.forEach(
+            member => {
+
+                const label =
+                    document.createElement('label');
+
+
+                label.className =
+                    'flex items-center gap-2 py-1.5 text-sm text-slate-700';
+
+
+                label.innerHTML = `
+
+                    <input
+                        type="checkbox"
+                        class="member-checkbox"
+                        data-member-id="${member.id}"
+                    >
+
+                    ${this.escapeHtml(member.name)}
+
+                `;
+
+
+                container.appendChild(label);
+            }
+        );
+    }
+
+
+    toggleAllMembers(
+        containerId,
+        checked
+    ) {
+
+        document
+            .getElementById(containerId)
+            .querySelectorAll('.member-checkbox')
+            .forEach(
+                checkbox => {
+
+                    checkbox.checked =
+                        checked;
+                }
+            );
+    }
+
+
+    getSelectedMembers(
+        containerId
+    ) {
+
+        return Array.from(
+
+            document
+                .getElementById(containerId)
+                .querySelectorAll(
+                    '.member-checkbox:checked'
+                )
+
+        ).map(
+            checkbox =>
+                checkbox.dataset.memberId
+        );
+    }
+
+
+    /* =====================================================
+       CLEAR MONTH
+    ====================================================== */
+
+    async clearMonth() {
+
+        if (!this.state.isAdmin) {
+
+            this.showToast(
+                'Admin access required.',
+                true
+            );
+
+            return;
+        }
+
+
+        if (
+            !confirm(
+                `Are you sure you want to clear ${this.getMonthName()} ${this.state.currentDate.getFullYear()}?`
+            )
+        ) return;
+
+
+        const prefix =
+            this.getMonthKey();
+
+
+        Object.keys(
+            this.state.shifts
+        ).forEach(
+            key => {
+
+                const index =
+                    key.lastIndexOf('_');
+
+
+                if (index === -1) return;
+
+
+                const date =
+                    key.substring(index + 1);
+
+
+                if (date.startsWith(prefix)) {
+
+                    delete this.state.shifts[key];
+                }
+            }
+        );
+
+
+        const success =
+            await this.saveToSupabase();
+
+
+        if (success) {
+
+            this.render();
+
+            this.showToast(
+                'Month cleared and saved.'
+            );
+        }
+    }
+
+
+    /* =====================================================
+       CSV
+    ====================================================== */
+
+    exportCSV() {
+
+        const rows = [];
+
+
+        const headers = [
+            'Employee',
+            'Role'
+        ];
+
+
+        const days =
+            this.getDaysInMonth();
+
+
+        for (
+            let day = 1;
+            day <= days;
+            day++
+        ) {
+
+            const date =
+                new Date(
+                    this.state.currentDate.getFullYear(),
+                    this.state.currentDate.getMonth(),
+                    day
+                );
+
+
+            headers.push(
+                date.toLocaleDateString(
+                    'en-GB',
+                    {
+                        weekday: 'short',
+                        day: '2-digit',
+                        month: '2-digit'
+                    }
+                )
+            );
+        }
+
+
+        rows.push(headers);
+
+
+        this.state.members.forEach(
+            member => {
+
+                const row = [
+
+                    member.name,
+
+                    member.role ||
+                    'Staff'
+                ];
+
+
+                for (
+                    let day = 1;
+                    day <= days;
+                    day++
+                ) {
+
+                    const key =
+                        `${member.id}_${this.getDateString(day)}`;
+
+
+                    row.push(
+                        this.state.shifts[key] || ''
+                    );
+                }
+
+
+                rows.push(row);
+            }
+        );
+
+
+        const csv =
+            rows
+                .map(
+                    row =>
+                        row
+                            .map(
+                                value =>
+                                    `"${String(value)
+                                        .replace(
+                                            /"/g,
+                                            '""'
+                                        )}"`
+                            )
+                            .join(',')
+                )
+                .join('\n');
+
+
+        const blob =
+            new Blob(
+                [csv],
+                {
+                    type:
+                        'text/csv;charset=utf-8;'
+                }
+            );
+
+
+        const url =
+            URL.createObjectURL(blob);
+
+
+        const a =
+            document.createElement('a');
+
+
+        a.href = url;
+
+        a.download =
+            `Rota_${this.getMonthKey()}.csv`;
+
+
+        document.body.appendChild(a);
+
+        a.click();
+
+        a.remove();
+
+        URL.revokeObjectURL(url);
+
+
+        this.showToast(
+            'CSV exported successfully.'
+        );
+    }
+
+
+    /* =====================================================
+       MODALS
+    ====================================================== */
+
+    openModal(id) {
+
+        const modal =
+            document.getElementById(id);
+
+
+        modal.classList.remove('hidden');
+
+        modal.classList.add('flex');
+    }
+
+
+    closeModal(id) {
+
+        const modal =
+            document.getElementById(id);
+
+
+        modal.classList.add('hidden');
+
+        modal.classList.remove('flex');
+    }
+
+
+    openPinModal() {
+
+        this.openModal(
+            'admin-pin-modal'
+        );
+
+
+        setTimeout(
+            () => {
+
+                document.getElementById(
+                    'admin-pin-input'
+                ).focus();
+
+            },
+            100
+        );
+    }
+
+
+    closePinModal() {
+
+        this.closeModal(
+            'admin-pin-modal'
+        );
+    }
+
+
+    openChangePinModal() {
+
+        if (!this.state.isAdmin) return;
+
+
+        document.getElementById(
+            'new-pin-input'
+        ).value = '';
+
+
+        this.openModal(
+            'change-pin-modal'
+        );
+    }
+
+
+    closeChangePinModal() {
+
+        this.closeModal(
+            'change-pin-modal'
+        );
+    }
+
+
+    closeMemberModal() {
+
+        this.closeModal(
+            'member-modal'
+        );
+    }
+
+
+    closeBulkMonthlyModal() {
+
+        this.closeModal(
+            'bulk-monthly-modal'
+        );
+    }
+
+
+    closeBulkWeeklyModal() {
+
+        this.closeModal(
+            'bulk-weekly-modal'
+        );
+    }
+
+
+    /* =====================================================
+       DATE HELPERS
+    ====================================================== */
+
+    parseLocalDate(
+        dateString
+    ) {
+
+        const [
+            year,
+            month,
+            day
+        ] =
+            dateString
+                .split('-')
+                .map(Number);
+
+
+        return new Date(
+            year,
+            month - 1,
+            day
+        );
+    }
+
+
+    formatDateForInput(
+        date
+    ) {
+
+        const year =
+            date.getFullYear();
+
+
+        const month =
+            String(
+                date.getMonth() + 1
+            ).padStart(2, '0');
+
+
+        const day =
+            String(
+                date.getDate()
+            ).padStart(2, '0');
+
+
+        return `${year}-${month}-${day}`;
+    }
+
+
+    formatDisplayDate(
+        date
+    ) {
+
+        return date.toLocaleDateString(
+            'en-GB',
+            {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            }
+        );
+    }
+
+
+    isToday(date) {
+
+        const today =
+            new Date();
+
+
+        return (
+            date.getFullYear() === today.getFullYear() &&
+            date.getMonth() === today.getMonth() &&
+            date.getDate() === today.getDate()
+        );
+    }
+
+
+    /* =====================================================
+       HELPERS
+    ====================================================== */
+
+    getInitials(name) {
+
+        return String(name)
+            .trim()
+            .split(/\s+/)
+            .slice(0, 2)
+            .map(
+                part =>
+                    part.charAt(0).toUpperCase()
+            )
+            .join('');
+    }
+
+
+    escapeHtml(value) {
+
+        return String(value)
+
+            .replace(
+                /&/g,
+                '&amp;'
+            )
+
+            .replace(
+                /</g,
+                '&lt;'
+            )
+
+            .replace(
+                />/g,
+                '&gt;'
+            )
+
+            .replace(
+                /"/g,
+                '&quot;'
+            )
+
+            .replace(
+                /'/g,
+                '&#039;'
+            );
+    }
+
+
+    showToast(
+        message,
+        error = false
+    ) {
+
+        const toast =
+            document.getElementById(
+                'toast'
+            );
+
+
+        const messageElement =
+            document.getElementById(
+                'toast-message'
+            );
+
+
+        const icon =
+            document.getElementById(
+                'toast-icon'
+            );
+
+
+        messageElement.textContent =
+            message;
+
+
+        icon.className =
+            error
+                ? 'fa-solid fa-circle-exclamation text-red-400'
+                : 'fa-solid fa-circle-check text-green-400';
+
+
+        toast.classList.remove('hidden');
+
+        toast.classList.add('visible');
+
+
+        clearTimeout(
+            this.toastTimer
+        );
+
+
+        this.toastTimer =
+            setTimeout(
+                () => {
+
+                    toast.classList.remove(
+                        'visible'
+                    );
+
+                    toast.classList.add(
+                        'hidden'
+                    );
+
+                },
+                3500
+            );
+    }
+
+}
+
+
+/* =====================================================
+   START APP
+====================================================== */
+
+const app =
+    new RotaMatrixManager();
+
+
+document.addEventListener(
+    'DOMContentLoaded',
+    () => {
+
+        app.init();
+
+    }
+);
+
+</script>
+
+</body>
+</html>
 ```

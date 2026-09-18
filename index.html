@@ -6,13 +6,16 @@
 
     <title>Team Rota Manager</title>
 
+    <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <!-- Font Awesome -->
     <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     >
 
+    <!-- Inter -->
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
         rel="stylesheet"
@@ -50,7 +53,7 @@
         .matrix-container {
             overflow-x: auto;
             overflow-y: auto;
-            max-height: calc(100vh - 300px);
+            max-height: calc(100vh - 280px);
         }
 
         .matrix-table {
@@ -226,81 +229,6 @@
             border-color: #4338ca !important;
         }
 
-        .shift-option-Early {
-            background: #16a34a;
-            color: white;
-        }
-
-        .shift-option-Mid {
-            background: #f59e0b;
-            color: white;
-        }
-
-        .shift-option-Late {
-            background: #7c3aed;
-            color: white;
-        }
-
-        .shift-option-Early-finish-Early-shift {
-            background: #06b6d4;
-            color: white;
-        }
-
-        .shift-option-Late-start-Early-shift {
-            background: #0d9488;
-            color: white;
-        }
-
-        .shift-option-Early-finish-Late-shift {
-            background: #ec4899;
-            color: white;
-        }
-
-        .shift-option-Late-start-Late-shift {
-            background: #f43f5e;
-            color: white;
-        }
-
-        .shift-option-Doctors-appointment {
-            background: #2563eb;
-            color: white;
-        }
-
-        .shift-option-Dont-work {
-            background: #dc2626;
-            color: white;
-        }
-
-        .shift-option-Dependancy-leave {
-            background: #ea580c;
-            color: white;
-        }
-
-        .shift-option-Holiday {
-            background: #eab308;
-            color: white;
-        }
-
-        .shift-option-WFH {
-            background: #059669;
-            color: white;
-        }
-
-        .shift-option-FW {
-            background: #0891b2;
-            color: white;
-        }
-
-        .shift-option-Flexi-Time-taken {
-            background: #9333ea;
-            color: white;
-        }
-
-        .shift-option-Flexi-time-redeem {
-            background: #4f46e5;
-            color: white;
-        }
-
         .weekend-cell {
             background: #f8fafc;
         }
@@ -309,25 +237,103 @@
             background: #eff6ff;
         }
 
-        .modal-backdrop {
-            background: rgba(15, 23, 42, 0.55);
-            backdrop-filter: blur(3px);
+        /* =====================================================
+           MANAGEMENT TABLE
+        ====================================================== */
+
+        .management-card {
+            border: 1px solid #e2e8f0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
         }
 
-        .toast {
-            transition: all 0.3s ease;
+        .management-header {
+            background: #0f172a;
+            color: white;
         }
 
-        .toast.hidden {
-            opacity: 0;
-            transform: translateY(20px);
-            pointer-events: none;
+        .management-person {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 14px;
+            border-bottom: 1px solid #e2e8f0;
         }
 
-        .toast.visible {
-            opacity: 1;
-            transform: translateY(0);
+        .management-person:last-child {
+            border-bottom: 0;
         }
+
+        .management-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        /* =====================================================
+           WEEKEND TABLE
+        ====================================================== */
+
+        .weekend-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .weekend-table th,
+        .weekend-table td {
+            border-bottom: 1px solid #e2e8f0;
+            padding: 10px 14px;
+            text-align: left;
+        }
+
+        .weekend-table th {
+            background: #f8fafc;
+            color: #475569;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            font-weight: 800;
+        }
+
+        .weekend-table td {
+            font-size: 13px;
+            color: #334155;
+        }
+
+        .weekend-count {
+            display: inline-flex;
+            min-width: 32px;
+            height: 28px;
+            align-items: center;
+            justify-content: center;
+            border-radius: 7px;
+            font-weight: 800;
+        }
+
+        .saturday-count {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .sunday-count {
+            background: #ede9fe;
+            color: #6d28d9;
+        }
+
+        .total-weekend-count {
+            background: #f1f5f9;
+            color: #334155;
+        }
+
+        /* =====================================================
+           DATE INPUT
+        ====================================================== */
 
         .date-input {
             width: 100%;
@@ -343,6 +349,34 @@
         .date-input:focus {
             border-color: #8b5cf6;
             box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.12);
+        }
+
+        /* =====================================================
+           MODALS
+        ====================================================== */
+
+        .modal-backdrop {
+            background: rgba(15, 23, 42, 0.55);
+            backdrop-filter: blur(3px);
+        }
+
+        /* =====================================================
+           TOAST
+        ====================================================== */
+
+        .toast {
+            transition: all 0.3s ease;
+        }
+
+        .toast.hidden {
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+        }
+
+        .toast.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         @media print {
@@ -554,50 +588,136 @@
          MAIN
     ====================================================== -->
 
-    <main class="p-4">
+    <main class="p-4 space-y-5">
 
-        <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3 mb-4">
 
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
-                <p class="text-xs font-semibold text-slate-500 uppercase">Early</p>
-                <p id="stat-early" class="text-2xl font-bold text-slate-900">0</p>
+        <!-- =================================================
+             MANAGEMENT TEAM
+        ================================================== -->
+
+        <section class="management-card">
+
+            <div class="management-header px-5 py-4">
+
+                <div class="flex items-center gap-3">
+
+                    <div class="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center">
+                        <i class="fa-solid fa-user-tie"></i>
+                    </div>
+
+                    <div>
+
+                        <h2 class="font-bold">
+                            Management Team
+                        </h2>
+
+                        <p class="text-xs text-slate-300">
+                            Senior Managers and Managers
+                        </p>
+
+                    </div>
+
+                </div>
+
             </div>
 
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
-                <p class="text-xs font-semibold text-slate-500 uppercase">Mid</p>
-                <p id="stat-mid" class="text-2xl font-bold text-slate-900">0</p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-slate-200">
+
+                <!-- SENIOR MANAGERS -->
+
+                <div>
+
+                    <div class="px-5 py-3 bg-slate-50 border-b border-slate-200">
+
+                        <div class="flex items-center justify-between">
+
+                            <div class="flex items-center gap-2">
+
+                                <span class="w-3 h-3 rounded-full bg-indigo-600"></span>
+
+                                <span class="font-bold text-sm text-slate-800">
+                                    Senior Managers
+                                </span>
+
+                            </div>
+
+                            <span
+                                id="senior-manager-count"
+                                class="text-xs font-bold px-2 py-1 rounded-full bg-indigo-100 text-indigo-700"
+                            >
+                                0
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        id="senior-manager-list"
+                        class="min-h-[60px]"
+                    ></div>
+
+                </div>
+
+
+                <!-- MANAGERS -->
+
+                <div>
+
+                    <div class="px-5 py-3 bg-slate-50 border-b border-slate-200">
+
+                        <div class="flex items-center justify-between">
+
+                            <div class="flex items-center gap-2">
+
+                                <span class="w-3 h-3 rounded-full bg-blue-600"></span>
+
+                                <span class="font-bold text-sm text-slate-800">
+                                    Managers
+                                </span>
+
+                            </div>
+
+                            <span
+                                id="manager-count"
+                                class="text-xs font-bold px-2 py-1 rounded-full bg-blue-100 text-blue-700"
+                            >
+                                0
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        id="manager-list"
+                        class="min-h-[60px]"
+                    ></div>
+
+                </div>
+
             </div>
 
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
-                <p class="text-xs font-semibold text-slate-500 uppercase">Late</p>
-                <p id="stat-late" class="text-2xl font-bold text-slate-900">0</p>
-            </div>
-
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
-                <p class="text-xs font-semibold text-slate-500 uppercase">Don't Work</p>
-                <p id="stat-dont-work" class="text-2xl font-bold text-slate-900">0</p>
-            </div>
-
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
-                <p class="text-xs font-semibold text-slate-500 uppercase">Dependancy Leave</p>
-                <p id="stat-dependency" class="text-2xl font-bold text-slate-900">0</p>
-            </div>
-
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
-                <p class="text-xs font-semibold text-slate-500 uppercase">WFH</p>
-                <p id="stat-wfh" class="text-2xl font-bold text-slate-900">0</p>
-            </div>
-
-        </div>
+        </section>
 
 
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <!-- =================================================
+             MAIN ROTA
+        ================================================== -->
+
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
 
             <div class="px-4 py-3 border-b border-slate-200 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
 
                 <div>
 
-                    <h2 id="rota-title" class="font-bold text-slate-900">
+                    <h2
+                        id="rota-title"
+                        class="font-bold text-slate-900"
+                    >
                         Rota
                     </h2>
 
@@ -606,6 +726,7 @@
                     </p>
 
                 </div>
+
 
                 <div
                     id="admin-status"
@@ -641,7 +762,205 @@
 
             </div>
 
-        </div>
+        </section>
+
+
+        <!-- =================================================
+             BOTTOM SUMMARY
+        ================================================== -->
+
+        <section>
+
+            <div class="mb-3">
+
+                <h2 class="text-lg font-bold text-slate-900">
+                    Monthly Summary
+                </h2>
+
+                <p class="text-sm text-slate-500">
+                    Current month shift coverage.
+                </p>
+
+            </div>
+
+
+            <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
+
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+
+                    <p class="text-xs font-semibold text-slate-500 uppercase">
+                        Early
+                    </p>
+
+                    <p
+                        id="stat-early"
+                        class="text-2xl font-bold text-slate-900"
+                    >
+                        0
+                    </p>
+
+                </div>
+
+
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+
+                    <p class="text-xs font-semibold text-slate-500 uppercase">
+                        Mid
+                    </p>
+
+                    <p
+                        id="stat-mid"
+                        class="text-2xl font-bold text-slate-900"
+                    >
+                        0
+                    </p>
+
+                </div>
+
+
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+
+                    <p class="text-xs font-semibold text-slate-500 uppercase">
+                        Late
+                    </p>
+
+                    <p
+                        id="stat-late"
+                        class="text-2xl font-bold text-slate-900"
+                    >
+                        0
+                    </p>
+
+                </div>
+
+
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+
+                    <p class="text-xs font-semibold text-slate-500 uppercase">
+                        Don't Work
+                    </p>
+
+                    <p
+                        id="stat-dont-work"
+                        class="text-2xl font-bold text-slate-900"
+                    >
+                        0
+                    </p>
+
+                </div>
+
+
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+
+                    <p class="text-xs font-semibold text-slate-500 uppercase">
+                        Dependancy Leave
+                    </p>
+
+                    <p
+                        id="stat-dependency"
+                        class="text-2xl font-bold text-slate-900"
+                    >
+                        0
+                    </p>
+
+                </div>
+
+
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+
+                    <p class="text-xs font-semibold text-slate-500 uppercase">
+                        WFH
+                    </p>
+
+                    <p
+                        id="stat-wfh"
+                        class="text-2xl font-bold text-slate-900"
+                    >
+                        0
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             WEEKEND COVERAGE
+        ================================================== -->
+
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+
+            <div class="px-5 py-4 border-b border-slate-200">
+
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+
+                    <div>
+
+                        <h2 class="font-bold text-slate-900">
+                            Weekend Coverage
+                        </h2>
+
+                        <p class="text-xs text-slate-500">
+                            Number of Saturdays and Sundays worked during the selected month.
+                        </p>
+
+                    </div>
+
+
+                    <div class="text-xs text-slate-500">
+
+                        <span id="weekend-summary-label">
+                            Current month
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="overflow-x-auto">
+
+                <table class="weekend-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Employee
+                            </th>
+
+                            <th>
+                                Role
+                            </th>
+
+                            <th>
+                                Saturdays
+                            </th>
+
+                            <th>
+                                Sundays
+                            </th>
+
+                            <th>
+                                Total Weekend Days
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="weekend-coverage-body"></tbody>
+
+                </table>
+
+            </div>
+
+        </section>
 
     </main>
 
@@ -672,7 +991,10 @@
         </div>
 
 
-        <form onsubmit="app.handlePinSubmit(event)" class="p-6">
+        <form
+            onsubmit="app.handlePinSubmit(event)"
+            class="p-6"
+        >
 
             <label class="block text-sm font-semibold text-slate-700 mb-2">
                 Admin PIN
@@ -733,7 +1055,10 @@
         </div>
 
 
-        <form onsubmit="app.handleChangePinSubmit(event)" class="p-6">
+        <form
+            onsubmit="app.handleChangePinSubmit(event)"
+            class="p-6"
+        >
 
             <label class="block text-sm font-semibold text-slate-700 mb-2">
                 New PIN
@@ -797,12 +1122,16 @@
         </div>
 
 
-        <form onsubmit="app.handleMemberSubmit(event)" class="p-6">
+        <form
+            onsubmit="app.handleMemberSubmit(event)"
+            class="p-6"
+        >
 
             <input
                 id="member-id-input"
                 type="hidden"
             >
+
 
             <div class="mb-4">
 
@@ -831,9 +1160,19 @@
                     id="member-role-input"
                     class="w-full border border-slate-300 rounded-lg px-3 py-2 outline-none focus:border-blue-500"
                 >
-                    <option value="Staff">Staff</option>
-                    <option value="Senior">Senior</option>
-                    <option value="Manager">Manager</option>
+
+                    <option value="Staff">
+                        Staff
+                    </option>
+
+                    <option value="Senior Manager">
+                        Senior Manager
+                    </option>
+
+                    <option value="Manager">
+                        Manager
+                    </option>
+
                 </select>
 
             </div>
@@ -904,7 +1243,10 @@
         </div>
 
 
-        <form onsubmit="app.handleBulkMonthlySubmit(event)" class="p-6">
+        <form
+            onsubmit="app.handleBulkMonthlySubmit(event)"
+            class="p-6"
+        >
 
             <div class="mb-4">
 
@@ -985,7 +1327,10 @@
         </div>
 
 
-        <form onsubmit="app.handleBulkWeeklySubmit(event)" class="p-6">
+        <form
+            onsubmit="app.handleBulkWeeklySubmit(event)"
+            class="p-6"
+        >
 
             <!-- DATE RANGE -->
 
@@ -1041,7 +1386,7 @@
             </div>
 
 
-            <!-- WEEKLY PATTERN -->
+            <!-- PATTERN -->
 
             <div class="mb-5">
 
@@ -1162,8 +1507,6 @@
             </div>
 
 
-            <!-- INFO -->
-
             <div class="bg-purple-50 border border-purple-200 rounded-lg p-3 mb-5">
 
                 <div class="flex gap-2">
@@ -1171,7 +1514,7 @@
                     <i class="fa-solid fa-circle-info text-purple-600 mt-0.5"></i>
 
                     <p class="text-xs text-purple-800">
-                        The selected Monday–Sunday pattern will repeat automatically
+                        The Monday–Sunday pattern will repeat automatically
                         from the Start Date through to the End Date.
                     </p>
 
@@ -1232,15 +1575,22 @@
 </div>
 
 
+<!-- =====================================================
+     SUPABASE
+====================================================== -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 
 <script>
 
 const SUPABASE_URL =
     'https://lfoumafetmwayteullrg.supabase.co';
 
+
 const SUPABASE_ANON_KEY =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmb3VtYWZldG13YXl0ZXVsbHJnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk3Mjg1MzEsImV4cCI6MjEwNTMwNDUzMX0.-mKvr2dYdFPPQgkpIAa6pnFAVYgoRCQHoh33H-1tpgk';
+
 
 const supabaseClient =
     window.supabase.createClient(
@@ -1396,6 +1746,7 @@ class RotaMatrixManager {
                 )
             );
 
+
         this.populateMonthSelector();
 
         this.populateShiftSelectors();
@@ -1404,15 +1755,22 @@ class RotaMatrixManager {
             'connecting'
         );
 
+
         await this.loadFromSupabase();
 
+
         this.render();
+
 
         this.setConnectionStatus(
             'connected'
         );
     }
 
+
+    /* =====================================================
+       SUPABASE
+    ====================================================== */
 
     async loadFromSupabase() {
 
@@ -1475,6 +1833,26 @@ class RotaMatrixManager {
                     this.state.adminPin =
                         saved.adminPin;
                 }
+
+
+                /*
+                 * Convert any old "Senior"
+                 * role to "Senior Manager".
+                 */
+
+                this.state.members.forEach(
+                    member => {
+
+                        if (
+                            member.role ===
+                            'Senior'
+                        ) {
+
+                            member.role =
+                                'Senior Manager';
+                        }
+                    }
+                );
             }
 
 
@@ -1489,9 +1867,11 @@ class RotaMatrixManager {
                 error
             );
 
+
             this.setConnectionStatus(
                 'error'
             );
+
 
             this.showToast(
                 'Could not load rota from Supabase.',
@@ -1550,6 +1930,7 @@ class RotaMatrixManager {
                 'connected'
             );
 
+
             return true;
 
         } catch (error) {
@@ -1559,59 +1940,19 @@ class RotaMatrixManager {
                 error
             );
 
+
             this.setConnectionStatus(
                 'error'
             );
+
 
             this.showToast(
                 'Failed to save to Supabase.',
                 true
             );
 
+
             return false;
-        }
-    }
-
-
-    setConnectionStatus(status) {
-
-        const el =
-            document.getElementById(
-                'connection-status'
-            );
-
-        if (!el) return;
-
-
-        if (
-            status ===
-            'connected'
-        ) {
-
-            el.className =
-                'ml-2 inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-green-500/20 text-green-300';
-
-            el.innerHTML =
-                '<span class="w-2 h-2 rounded-full bg-green-400"></span> Supabase Connected';
-
-        } else if (
-            status ===
-            'error'
-        ) {
-
-            el.className =
-                'ml-2 inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-red-500/20 text-red-300';
-
-            el.innerHTML =
-                '<span class="w-2 h-2 rounded-full bg-red-400"></span> Connection Error';
-
-        } else {
-
-            el.className =
-                'ml-2 inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-yellow-500/20 text-yellow-300';
-
-            el.innerHTML =
-                '<span class="w-2 h-2 rounded-full bg-yellow-400"></span> Connecting...';
         }
     }
 
@@ -1626,6 +1967,7 @@ class RotaMatrixManager {
 
         button.disabled = true;
 
+
         button.innerHTML =
             '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Saving...';
 
@@ -1635,6 +1977,7 @@ class RotaMatrixManager {
 
 
         button.disabled = false;
+
 
         button.innerHTML =
             '<i class="fa-solid fa-cloud-arrow-up mr-1"></i> Save';
@@ -1661,17 +2004,72 @@ class RotaMatrixManager {
     }
 
 
+    setConnectionStatus(status) {
+
+        const el =
+            document.getElementById(
+                'connection-status'
+            );
+
+
+        if (!el) return;
+
+
+        if (
+            status ===
+            'connected'
+        ) {
+
+            el.className =
+                'ml-2 inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-green-500/20 text-green-300';
+
+
+            el.innerHTML =
+                '<span class="w-2 h-2 rounded-full bg-green-400"></span> Supabase Connected';
+
+        } else if (
+            status ===
+            'error'
+        ) {
+
+            el.className =
+                'ml-2 inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-red-500/20 text-red-300';
+
+
+            el.innerHTML =
+                '<span class="w-2 h-2 rounded-full bg-red-400"></span> Connection Error';
+
+        } else {
+
+            el.className =
+                'ml-2 inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-yellow-500/20 text-yellow-300';
+
+
+            el.innerHTML =
+                '<span class="w-2 h-2 rounded-full bg-yellow-400"></span> Connecting...';
+        }
+    }
+
+
+    /* =====================================================
+       RENDER
+    ====================================================== */
+
     render() {
 
         this.populateMonthSelector();
 
         this.renderTitle();
 
+        this.renderManagementTeam();
+
         this.renderTableHeader();
 
         this.renderTableBody();
 
         this.renderStats();
+
+        this.renderWeekendCoverage();
 
         this.renderAdminState();
     }
@@ -1704,6 +2102,7 @@ class RotaMatrixManager {
             this.state.currentDate
                 .getFullYear();
 
+
         const month =
             String(
                 this.state.currentDate
@@ -1713,6 +2112,7 @@ class RotaMatrixManager {
                 '0'
             );
 
+
         return `${year}-${month}`;
     }
 
@@ -1720,6 +2120,7 @@ class RotaMatrixManager {
     getDaysInMonth() {
 
         return new Date(
+
             this.state.currentDate
                 .getFullYear(),
 
@@ -1727,6 +2128,7 @@ class RotaMatrixManager {
                 .getMonth() + 1,
 
             0
+
         ).getDate();
     }
 
@@ -1737,6 +2139,7 @@ class RotaMatrixManager {
             this.state.currentDate
                 .getFullYear();
 
+
         const month =
             String(
                 this.state.currentDate
@@ -1746,6 +2149,7 @@ class RotaMatrixManager {
                 '0'
             );
 
+
         const date =
             String(day)
                 .padStart(
@@ -1753,9 +2157,179 @@ class RotaMatrixManager {
                     '0'
                 );
 
+
         return `${year}-${month}-${date}`;
     }
 
+
+    /* =====================================================
+       MANAGEMENT TEAM
+    ====================================================== */
+
+    renderManagementTeam() {
+
+        const seniorManagerList =
+            document.getElementById(
+                'senior-manager-list'
+            );
+
+
+        const managerList =
+            document.getElementById(
+                'manager-list'
+            );
+
+
+        const seniorManagerCount =
+            document.getElementById(
+                'senior-manager-count'
+            );
+
+
+        const managerCount =
+            document.getElementById(
+                'manager-count'
+            );
+
+
+        seniorManagerList.innerHTML = '';
+
+        managerList.innerHTML = '';
+
+
+        const seniorManagers =
+            this.state.members.filter(
+                member =>
+                    member.role ===
+                    'Senior Manager'
+            );
+
+
+        const managers =
+            this.state.members.filter(
+                member =>
+                    member.role ===
+                    'Manager'
+            );
+
+
+        seniorManagerCount.textContent =
+            seniorManagers.length;
+
+
+        managerCount.textContent =
+            managers.length;
+
+
+        this.renderManagementPeople(
+            seniorManagerList,
+            seniorManagers,
+            'senior'
+        );
+
+
+        this.renderManagementPeople(
+            managerList,
+            managers,
+            'manager'
+        );
+    }
+
+
+    renderManagementPeople(
+        container,
+        members,
+        type
+    ) {
+
+        if (
+            members.length === 0
+        ) {
+
+            container.innerHTML = `
+
+                <div class="px-5 py-5 text-sm text-slate-400">
+                    No ${type === 'senior' ? 'Senior Managers' : 'Managers'} assigned.
+                </div>
+
+            `;
+
+            return;
+        }
+
+
+        members.forEach(
+            member => {
+
+                const initials =
+                    this.getInitials(
+                        member.name
+                    );
+
+
+                const wrapper =
+                    document.createElement(
+                        'div'
+                    );
+
+
+                wrapper.className =
+                    'management-person';
+
+
+                const avatarClass =
+                    type === 'senior'
+                        ? 'bg-indigo-100 text-indigo-700'
+                        : 'bg-blue-100 text-blue-700';
+
+
+                wrapper.innerHTML = `
+
+                    <div class="management-avatar ${avatarClass}">
+                        ${initials}
+                    </div>
+
+                    <div class="flex-1">
+
+                        <div class="text-sm font-bold text-slate-800">
+                            ${this.escapeHtml(member.name)}
+                        </div>
+
+                        <div class="text-xs text-slate-400">
+                            ${this.escapeHtml(member.role)}
+                        </div>
+
+                    </div>
+
+                `;
+
+
+                container.appendChild(
+                    wrapper
+                );
+            }
+        );
+    }
+
+
+    getInitials(name) {
+
+        return String(name)
+            .trim()
+            .split(/\s+/)
+            .slice(0, 2)
+            .map(
+                part =>
+                    part.charAt(0)
+                        .toUpperCase()
+            )
+            .join('');
+    }
+
+
+    /* =====================================================
+       MONTH SELECTOR
+    ====================================================== */
 
     populateMonthSelector() {
 
@@ -1764,7 +2338,9 @@ class RotaMatrixManager {
                 'month-selector'
             );
 
+
         if (!selector) return;
+
 
         selector.innerHTML = '';
 
@@ -1847,6 +2423,7 @@ class RotaMatrixManager {
 
         this.state.currentDate =
             new Date(
+
                 this.state.currentDate
                     .getFullYear(),
 
@@ -1855,6 +2432,7 @@ class RotaMatrixManager {
 
                 1
             );
+
 
         this.render();
     }
@@ -1888,9 +2466,14 @@ class RotaMatrixManager {
         this.state.searchQuery =
             value || '';
 
+
         this.renderTableBody();
     }
 
+
+    /* =====================================================
+       MAIN ROTA TABLE
+    ====================================================== */
 
     renderTableHeader() {
 
@@ -1934,6 +2517,7 @@ class RotaMatrixManager {
 
             const date =
                 new Date(
+
                     this.state.currentDate
                         .getFullYear(),
 
@@ -2030,6 +2614,7 @@ class RotaMatrixManager {
                     if (!search) {
                         return true;
                     }
+
 
                     return member.name
                         .toLowerCase()
@@ -2128,6 +2713,7 @@ class RotaMatrixManager {
 
                     const date =
                         new Date(
+
                             this.state.currentDate
                                 .getFullYear(),
 
@@ -2240,6 +2826,10 @@ class RotaMatrixManager {
         );
     }
 
+
+    /* =====================================================
+       SHIFT COLOURS
+    ====================================================== */
 
     getShiftClass(value) {
 
@@ -2395,16 +2985,6 @@ class RotaMatrixManager {
                     shift;
 
 
-                option.classList.add(
-                    this.getShiftClass(
-                        shift
-                    ).replace(
-                        'shift-',
-                        'shift-option-'
-                    )
-                );
-
-
                 if (
                     shift ===
                     selectedValue
@@ -2460,12 +3040,18 @@ class RotaMatrixManager {
 
         this.renderStats();
 
+        this.renderWeekendCoverage();
+
 
         this.showToast(
             'Change made — click Save to store it.'
         );
     }
 
+
+    /* =====================================================
+       MONTHLY STATS
+    ====================================================== */
 
     renderStats() {
 
@@ -2585,6 +3171,175 @@ class RotaMatrixManager {
     }
 
 
+    /* =====================================================
+       WEEKEND COVERAGE
+    ====================================================== */
+
+    renderWeekendCoverage() {
+
+        const tbody =
+            document.getElementById(
+                'weekend-coverage-body'
+            );
+
+
+        const label =
+            document.getElementById(
+                'weekend-summary-label'
+            );
+
+
+        tbody.innerHTML = '';
+
+
+        label.textContent =
+            `${this.getMonthName()} ${this.state.currentDate.getFullYear()}`;
+
+
+        this.state.members.forEach(
+            member => {
+
+                let saturdayCount = 0;
+
+                let sundayCount = 0;
+
+
+                const days =
+                    this.getDaysInMonth();
+
+
+                for (
+                    let day = 1;
+                    day <= days;
+                    day++
+                ) {
+
+                    const date =
+                        new Date(
+
+                            this.state.currentDate
+                                .getFullYear(),
+
+                            this.state.currentDate
+                                .getMonth(),
+
+                            day
+                        );
+
+
+                    const dateString =
+                        this.getDateString(
+                            day
+                        );
+
+
+                    const key =
+                        `${member.id}_${dateString}`;
+
+
+                    const shift =
+                        this.state.shifts[key] ||
+                        '';
+
+
+                    /*
+                     * A weekend day is counted as worked
+                     * if a shift is assigned.
+                     *
+                     * Blank = not worked.
+                     */
+
+                    if (
+                        date.getDay() === 6 &&
+                        shift !== ''
+                    ) {
+
+                        saturdayCount++;
+                    }
+
+
+                    if (
+                        date.getDay() === 0 &&
+                        shift !== ''
+                    ) {
+
+                        sundayCount++;
+                    }
+                }
+
+
+                const total =
+                    saturdayCount +
+                    sundayCount;
+
+
+                const row =
+                    document.createElement(
+                        'tr'
+                    );
+
+
+                row.innerHTML = `
+
+                    <td>
+
+                        <div class="font-semibold text-slate-800">
+                            ${this.escapeHtml(member.name)}
+                        </div>
+
+                    </td>
+
+
+                    <td>
+
+                        <span class="text-xs font-semibold text-slate-500">
+                            ${this.escapeHtml(member.role || 'Staff')}
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        <span class="weekend-count saturday-count">
+                            ${saturdayCount}
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        <span class="weekend-count sunday-count">
+                            ${sundayCount}
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        <span class="weekend-count total-weekend-count">
+                            ${total}
+                        </span>
+
+                    </td>
+
+                `;
+
+
+                tbody.appendChild(
+                    row
+                );
+            }
+        );
+    }
+
+
+    /* =====================================================
+       ADMIN
+    ====================================================== */
+
     toggleAdminMode() {
 
         if (
@@ -2594,11 +3349,14 @@ class RotaMatrixManager {
             this.state.isAdmin =
                 false;
 
+
             this.render();
+
 
             this.showToast(
                 'Admin mode disabled.'
             );
+
 
             return;
         }
@@ -2634,6 +3392,7 @@ class RotaMatrixManager {
 
 
             this.closePinModal();
+
 
             this.render();
 
@@ -2739,6 +3498,7 @@ class RotaMatrixManager {
                 true
             );
 
+
             return;
         }
 
@@ -2768,6 +3528,10 @@ class RotaMatrixManager {
     }
 
 
+    /* =====================================================
+       EMPLOYEES
+    ====================================================== */
+
     openAddMemberModal() {
 
         if (!this.state.isAdmin) {
@@ -2776,6 +3540,7 @@ class RotaMatrixManager {
                 'Admin access required.',
                 true
             );
+
 
             return;
         }
@@ -2853,8 +3618,12 @@ class RotaMatrixManager {
         document.getElementById(
             'member-role-input'
         ).value =
-            member.role ||
-            'Staff';
+            member.role === 'Senior'
+                ? 'Senior Manager'
+                : (
+                    member.role ||
+                    'Staff'
+                );
 
 
         document.getElementById(
@@ -2909,6 +3678,7 @@ class RotaMatrixManager {
                 member.name =
                     name;
 
+
                 member.role =
                     role;
             }
@@ -2936,7 +3706,9 @@ class RotaMatrixManager {
 
             this.closeMemberModal();
 
+
             this.render();
+
 
             this.showToast(
                 'Employee saved.'
@@ -3000,7 +3772,9 @@ class RotaMatrixManager {
 
             this.closeMemberModal();
 
+
             this.render();
+
 
             this.showToast(
                 'Employee deleted.'
@@ -3021,6 +3795,7 @@ class RotaMatrixManager {
                 'Admin access required.',
                 true
             );
+
 
             return;
         }
@@ -3064,10 +3839,7 @@ class RotaMatrixManager {
                     'weekdays_only_early',
 
                 label:
-                    'Early - Weekdays only',
-
-                colour:
-                    'shift-Early'
+                    'Early - Weekdays only'
             },
 
             {
@@ -3075,10 +3847,7 @@ class RotaMatrixManager {
                     'weekdays_only_mid',
 
                 label:
-                    'Mid - Weekdays only',
-
-                colour:
-                    'shift-Mid'
+                    'Mid - Weekdays only'
             },
 
             {
@@ -3086,10 +3855,7 @@ class RotaMatrixManager {
                     'weekdays_only_late',
 
                 label:
-                    'Lates - Weekdays only',
-
-                colour:
-                    'shift-Late'
+                    'Lates - Weekdays only'
             },
 
             {
@@ -3097,10 +3863,7 @@ class RotaMatrixManager {
                     'weekdays_only_fw',
 
                 label:
-                    'FW - Weekdays only',
-
-                colour:
-                    'shift-FW'
+                    'FW - Weekdays only'
             }
         ];
 
@@ -3120,14 +3883,6 @@ class RotaMatrixManager {
 
                 option.textContent =
                     item.label;
-
-
-                option.classList.add(
-                    item.colour.replace(
-                        'shift-',
-                        'shift-option-'
-                    )
-                );
 
 
                 select.appendChild(
@@ -3152,16 +3907,6 @@ class RotaMatrixManager {
 
                 option.textContent =
                     shift;
-
-
-                option.classList.add(
-                    this.getShiftClass(
-                        shift
-                    ).replace(
-                        'shift-',
-                        'shift-option-'
-                    )
-                );
 
 
                 select.appendChild(
@@ -3201,6 +3946,7 @@ class RotaMatrixManager {
                 'Please select at least one employee.',
                 true
             );
+
 
             return;
         }
@@ -3250,6 +3996,7 @@ class RotaMatrixManager {
 
                     const date =
                         new Date(
+
                             this.state.currentDate
                                 .getFullYear(),
 
@@ -3311,7 +4058,9 @@ class RotaMatrixManager {
 
             this.closeBulkMonthlyModal();
 
+
             this.render();
+
 
             this.showToast(
                 'Monthly shift applied and saved.'
@@ -3321,7 +4070,7 @@ class RotaMatrixManager {
 
 
     /* =====================================================
-       WEEKLY SHIFT WITH DATE RANGE
+       WEEKLY SHIFT
     ====================================================== */
 
     openBulkWeeklyModal() {
@@ -3333,6 +4082,7 @@ class RotaMatrixManager {
                 true
             );
 
+
             return;
         }
 
@@ -3342,14 +4092,10 @@ class RotaMatrixManager {
         );
 
 
-        /*
-         * Default the date range to the
-         * currently selected month.
-         */
-
         const year =
             this.state.currentDate
                 .getFullYear();
+
 
         const month =
             this.state.currentDate
@@ -3421,15 +4167,10 @@ class RotaMatrixManager {
                 true
             );
 
+
             return;
         }
 
-
-        /*
-         * Use local date values rather than
-         * UTC conversion to avoid UK timezone
-         * date shifting.
-         */
 
         const startDate =
             this.parseLocalDate(
@@ -3452,6 +4193,7 @@ class RotaMatrixManager {
                 true
             );
 
+
             return;
         }
 
@@ -3470,6 +4212,7 @@ class RotaMatrixManager {
                 'Please select at least one employee.',
                 true
             );
+
 
             return;
         }
@@ -3506,48 +4249,6 @@ class RotaMatrixManager {
             ).value
         ];
 
-
-        /*
-         * Make sure the user has selected
-         * at least one shift / blank is allowed
-         * for deliberately clearing a day.
-         */
-
-        const hasPattern =
-            weeklyValues.some(
-                value => value !== ''
-            );
-
-
-        if (!hasPattern) {
-
-            const proceed =
-                confirm(
-                    'All days are blank. This will clear the selected employees\' rota within the selected date range. Continue?'
-                );
-
-
-            if (!proceed) {
-                return;
-            }
-        }
-
-
-        /*
-         * Calculate every date in the range.
-         *
-         * JavaScript:
-         * Sunday = 0
-         * Monday = 1
-         * ...
-         * Saturday = 6
-         *
-         * We convert this to:
-         * Monday = 0
-         * Tuesday = 1
-         * ...
-         * Sunday = 6
-         */
 
         const currentDate =
             new Date(
@@ -3617,7 +4318,9 @@ class RotaMatrixManager {
 
             this.closeBulkWeeklyModal();
 
+
             this.render();
+
 
             this.showToast(
                 `Weekly pattern applied from ${this.formatDisplayDate(startDate)} to ${this.formatDisplayDate(endDate)}.`
@@ -3627,164 +4330,7 @@ class RotaMatrixManager {
 
 
     /* =====================================================
-       DATE HELPERS
-    ====================================================== */
-
-    parseLocalDate(
-        dateString
-    ) {
-
-        const [
-            year,
-            month,
-            day
-        ] =
-            dateString
-                .split('-')
-                .map(Number);
-
-
-        return new Date(
-            year,
-            month - 1,
-            day
-        );
-    }
-
-
-    formatDateForInput(
-        date
-    ) {
-
-        const year =
-            date.getFullYear();
-
-
-        const month =
-            String(
-                date.getMonth() + 1
-            ).padStart(
-                2,
-                '0'
-            );
-
-
-        const day =
-            String(
-                date.getDate()
-            ).padStart(
-                2,
-                '0'
-            );
-
-
-        return `${year}-${month}-${day}`;
-    }
-
-
-    formatDisplayDate(
-        date
-    ) {
-
-        return date.toLocaleDateString(
-            'en-GB',
-            {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric'
-            }
-        );
-    }
-
-
-    /* =====================================================
-       WEEKLY SELECTS
-    ====================================================== */
-
-    populateShiftSelectors() {
-
-        document
-            .querySelectorAll(
-                '.weekly-shift'
-            )
-            .forEach(
-                select => {
-
-                    select.innerHTML = '';
-
-
-                    const blank =
-                        document.createElement(
-                            'option'
-                        );
-
-
-                    blank.value = '';
-
-                    blank.textContent =
-                        'No change / blank';
-
-
-                    select.appendChild(
-                        blank
-                    );
-
-
-                    this.shiftOptions.forEach(
-                        shift => {
-
-                            const option =
-                                document.createElement(
-                                    'option'
-                                );
-
-
-                            option.value =
-                                shift;
-
-
-                            option.textContent =
-                                shift;
-
-
-                            option.classList.add(
-                                this.getShiftClass(
-                                    shift
-                                ).replace(
-                                    'shift-',
-                                    'shift-option-'
-                                )
-                            );
-
-
-                            select.appendChild(
-                                option
-                            );
-                        }
-                    );
-
-
-                    this.applyShiftColour(
-                        select
-                    );
-
-
-                    select.addEventListener(
-                        'change',
-                        () => {
-
-                            this.applyShiftColour(
-                                select
-                            );
-                        }
-                    );
-                }
-            );
-    }
-
-
-    /* =====================================================
-       MEMBERS
+       CHECKBOXES
     ====================================================== */
 
     populateMemberCheckboxes(
@@ -3889,6 +4435,7 @@ class RotaMatrixManager {
     ) {
 
         return Array.from(
+
             document
                 .getElementById(
                     containerId
@@ -3896,9 +4443,12 @@ class RotaMatrixManager {
                 .querySelectorAll(
                     '.member-checkbox:checked'
                 )
+
         ).map(
+
             checkbox =>
                 checkbox.dataset.memberId
+
         );
     }
 
@@ -3915,6 +4465,7 @@ class RotaMatrixManager {
                 'Admin access required.',
                 true
             );
+
 
             return;
         }
@@ -3969,6 +4520,7 @@ class RotaMatrixManager {
 
             this.render();
 
+
             this.showToast(
                 'Month cleared and saved.'
             );
@@ -3986,7 +4538,9 @@ class RotaMatrixManager {
 
 
         const headers = [
+
             'Employee',
+
             'Role'
         ];
 
@@ -4003,6 +4557,7 @@ class RotaMatrixManager {
 
             const date =
                 new Date(
+
                     this.state.currentDate
                         .getFullYear(),
 
@@ -4014,6 +4569,7 @@ class RotaMatrixManager {
 
 
             headers.push(
+
                 date.toLocaleDateString(
                     'en-GB',
                     {
@@ -4256,8 +4812,75 @@ class RotaMatrixManager {
 
 
     /* =====================================================
-       HELPERS
+       DATE HELPERS
     ====================================================== */
+
+    parseLocalDate(
+        dateString
+    ) {
+
+        const [
+            year,
+            month,
+            day
+        ] =
+            dateString
+                .split('-')
+                .map(Number);
+
+
+        return new Date(
+            year,
+            month - 1,
+            day
+        );
+    }
+
+
+    formatDateForInput(
+        date
+    ) {
+
+        const year =
+            date.getFullYear();
+
+
+        const month =
+            String(
+                date.getMonth() + 1
+            ).padStart(
+                2,
+                '0'
+            );
+
+
+        const day =
+            String(
+                date.getDate()
+            ).padStart(
+                2,
+                '0'
+            );
+
+
+        return `${year}-${month}-${day}`;
+    }
+
+
+    formatDisplayDate(
+        date
+    ) {
+
+        return date.toLocaleDateString(
+            'en-GB',
+            {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            }
+        );
+    }
+
 
     isToday(date) {
 
@@ -4282,6 +4905,10 @@ class RotaMatrixManager {
         );
     }
 
+
+    /* =====================================================
+       HELPERS
+    ====================================================== */
 
     escapeHtml(value) {
 
@@ -4343,7 +4970,9 @@ class RotaMatrixManager {
 
         icon.className =
             error
+
                 ? 'fa-solid fa-circle-exclamation text-red-400'
+
                 : 'fa-solid fa-circle-check text-green-400';
 
 
@@ -4381,6 +5010,10 @@ class RotaMatrixManager {
 
 }
 
+
+/* =====================================================
+   START APP
+====================================================== */
 
 const app =
     new RotaMatrixManager();

@@ -3,1068 +3,3109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Team Rota Manager</title>
-    <!-- Tailwind CSS CDN -->
+
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome for gorgeous icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
+
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    >
+
+    <!-- Inter Font -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
     <style>
-        @media print {
-            .no-print { display: none !important; }
-            body { background: white !important; color: black !important; }
-            .print-shadow { box-shadow: none !important; border: 1px solid #e5e7eb !important; }
+        * {
+            box-sizing: border-box;
         }
-        /* Custom scrollbar for horizontal month matrix */
-        ::-webkit-scrollbar {
-            height: 8px;
-            width: 8px;
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
         }
-        ::-webkit-scrollbar-track {
+
+        .scrollbar-thin::-webkit-scrollbar {
+            width: 7px;
+            height: 7px;
+        }
+
+        .scrollbar-thin::-webkit-scrollbar-track {
             background: #f1f5f9;
         }
-        ::-webkit-scrollbar-thumb {
+
+        .scrollbar-thin::-webkit-scrollbar-thumb {
             background: #cbd5e1;
-            border-radius: 4px;
+            border-radius: 10px;
         }
-        ::-webkit-scrollbar-thumb:hover {
+
+        .scrollbar-thin::-webkit-scrollbar-thumb:hover {
             background: #94a3b8;
+        }
+
+        .matrix-container {
+            overflow-x: auto;
+            overflow-y: auto;
+            max-height: calc(100vh - 300px);
+        }
+
+        .matrix-table {
+            border-collapse: separate;
+            border-spacing: 0;
+            min-width: max-content;
+        }
+
+        .matrix-table th,
+        .matrix-table td {
+            border-right: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .matrix-table th:first-child,
+        .matrix-table td:first-child {
+            border-left: 1px solid #e2e8f0;
+        }
+
+        .matrix-header {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: #f8fafc;
+        }
+
+        .employee-cell {
+            position: sticky;
+            left: 0;
+            z-index: 15;
+            background: white;
+            min-width: 220px;
+            width: 220px;
+        }
+
+        .matrix-header .employee-cell {
+            z-index: 30;
+            background: #f1f5f9;
+        }
+
+        .day-header {
+            min-width: 125px;
+            width: 125px;
+        }
+
+        .rota-select {
+            width: 100%;
+            min-width: 112px;
+            padding: 7px 28px 7px 8px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            background: white;
+            font-size: 12px;
+            outline: none;
+        }
+
+        .rota-select:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+        }
+
+        .weekend-cell {
+            background: #f8fafc;
+        }
+
+        .today-cell {
+            background: #eff6ff;
+        }
+
+        .modal-backdrop {
+            background: rgba(15, 23, 42, 0.55);
+            backdrop-filter: blur(3px);
+        }
+
+        .toast {
+            transition: all 0.3s ease;
+        }
+
+        .toast.hidden {
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+        }
+
+        .toast.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media print {
+            body {
+                background: white !important;
+            }
+
+            header,
+            .no-print,
+            button,
+            input,
+            select {
+                display: none !important;
+            }
+
+            .matrix-container {
+                max-height: none !important;
+                overflow: visible !important;
+            }
+
+            .employee-cell {
+                position: static !important;
+            }
         }
     </style>
 </head>
-<body class="bg-slate-100 text-slate-800 h-full flex flex-col font-sans selection:bg-indigo-500 selection:text-white">
 
-    <!-- Top Action Bar -->
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 no-print shadow-sm">
-        <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-3">
-            <div class="flex flex-wrap items-center gap-2">
-                <button onclick="app.openBulkMonthlyModal()" id="btn-monthly" class="inline-flex items-center space-x-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition shadow-sm admin-restricted">
-                    <i class="fa-solid fa-calendar-days"></i>
-                    <span>Apply Monthly Shift</span>
-                </button>
-                <button onclick="app.openBulkWeeklyModal()" id="btn-weekly" class="inline-flex items-center space-x-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition shadow-sm admin-restricted">
-                    <i class="fa-solid fa-calendar-week"></i>
-                    <span>Apply Weekly Shift</span>
-                </button>
-                <button onclick="app.openAddMemberModal()" id="btn-add-member" class="inline-flex items-center space-x-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-purple-600 rounded-lg hover:bg-purple-700 transition shadow-sm admin-restricted">
-                    <i class="fa-solid fa-user-plus"></i>
-                    <span>Add Employee</span>
-                </button>
-                <button onclick="app.saveData()" id="btn-save" class="inline-flex items-center space-x-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition shadow-sm admin-restricted">
-                    <i class="fa-solid fa-floppy-disk"></i>
-                    <span>Save</span>
-                </button>
-                <button onclick="app.refreshData()" class="inline-flex items-center space-x-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-sky-600 rounded-lg hover:bg-sky-700 transition shadow-sm">
-                    <i class="fa-solid fa-rotate"></i>
-                    <span>Refresh Data</span>
-                </button>
-                <button onclick="app.exportCSV()" class="inline-flex items-center space-x-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-emerald-600 rounded-lg hover:bg-emerald-700 transition shadow-sm">
-                    <i class="fa-solid fa-file-csv"></i>
-                    <span>Export CSV</span>
-                </button>
-                <button onclick="app.clearMonth()" id="btn-clear" class="inline-flex items-center space-x-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-rose-600 rounded-lg hover:bg-rose-700 transition shadow-sm admin-restricted">
-                    <i class="fa-solid fa-trash-can"></i>
-                    <span>Clear Month</span>
-                </button>
-                <button onclick="app.openChangePinModal()" id="btn-change-pin" class="inline-flex items-center space-x-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-amber-600 rounded-lg hover:bg-amber-700 transition shadow-sm admin-restricted hidden">
-                    <i class="fa-solid fa-key"></i>
-                    <span>Change PIN</span>
-                </button>
-            </div>
+<body class="h-full">
 
-            <!-- Month Navigator, Year & Admin Toggle -->
-            <div class="flex items-center space-x-3">
-                <button id="admin-toggle-btn" onclick="app.toggleAdminMode()" class="inline-flex items-center space-x-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg transition shadow-sm bg-slate-800 text-white hover:bg-slate-900">
-                    <i id="admin-icon" class="fa-solid fa-lock"></i>
-                    <span id="admin-label">Admin Mode: Locked</span>
-                </button>
+<div id="app" class="min-h-screen">
 
-                <div class="flex items-center space-x-2">
-                    <button onclick="app.prevMonth()" class="p-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition shadow-sm">
-                        <i class="fa-solid fa-chevron-left text-xs"></i>
+    <!-- HEADER -->
+    <header class="bg-slate-900 text-white shadow-lg no-print">
+        <div class="max-w-full mx-auto px-4 py-4">
+
+            <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
+
+                <!-- TITLE -->
+                <div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center">
+                            <i class="fa-solid fa-calendar-days text-lg"></i>
+                        </div>
+
+                        <div>
+                            <h1 class="text-xl font-bold">
+                                Team Rota Manager
+                            </h1>
+
+                            <p class="text-xs text-slate-400">
+                                Supabase Connected
+                            </p>
+                        </div>
+
+                        <span
+                            id="connection-status"
+                            class="ml-2 inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-yellow-500/20 text-yellow-300"
+                        >
+                            <span class="w-2 h-2 rounded-full bg-yellow-400"></span>
+                            Connecting...
+                        </span>
+                    </div>
+                </div>
+
+                <!-- ACTIONS -->
+                <div class="flex flex-wrap items-center gap-2">
+
+                    <button
+                        onclick="app.openBulkMonthlyModal()"
+                        class="px-3 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-sm font-medium"
+                    >
+                        <i class="fa-solid fa-calendar-plus mr-1"></i>
+                        Apply Monthly Shift
                     </button>
-                    <select id="month-selector" onchange="app.handleMonthSelect(this.value)" class="px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm font-semibold text-slate-700 shadow-sm focus:ring-2 focus:ring-indigo-500 outline-none">
-                        <!-- Populated dynamically -->
-                    </select>
-                    <button onclick="app.nextMonth()" class="p-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition shadow-sm">
-                        <i class="fa-solid fa-chevron-right text-xs"></i>
+
+                    <button
+                        onclick="app.openBulkWeeklyModal()"
+                        class="px-3 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-sm font-medium"
+                    >
+                        <i class="fa-solid fa-repeat mr-1"></i>
+                        Apply Weekly Shift
                     </button>
+
+                    <button
+                        onclick="app.openAddMemberModal()"
+                        class="px-3 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-sm font-medium"
+                    >
+                        <i class="fa-solid fa-user-plus mr-1"></i>
+                        Add Employee
+                    </button>
+
+                    <button
+                        onclick="app.saveData()"
+                        class="px-3 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-sm font-semibold"
+                    >
+                        <i class="fa-solid fa-cloud-arrow-up mr-1"></i>
+                        Save
+                    </button>
+
+                    <button
+                        onclick="app.refreshData()"
+                        class="px-3 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-sm font-medium"
+                    >
+                        <i class="fa-solid fa-rotate mr-1"></i>
+                        Refresh Data
+                    </button>
+
+                    <button
+                        onclick="app.exportCSV()"
+                        class="px-3 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-sm font-medium"
+                    >
+                        <i class="fa-solid fa-file-csv mr-1"></i>
+                        Export CSV
+                    </button>
+
+                    <button
+                        onclick="app.clearMonth()"
+                        class="px-3 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-sm font-medium"
+                    >
+                        <i class="fa-solid fa-trash mr-1"></i>
+                        Clear Month
+                    </button>
+
+                    <button
+                        id="change-pin-button"
+                        onclick="app.openChangePinModal()"
+                        class="hidden px-3 py-2 rounded-lg bg-amber-600 hover:bg-amber-700 text-sm font-medium"
+                    >
+                        <i class="fa-solid fa-key mr-1"></i>
+                        Change PIN
+                    </button>
+
+                    <button
+                        id="admin-mode-button"
+                        onclick="app.toggleAdminMode()"
+                        class="px-3 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-sm font-medium"
+                    >
+                        <i class="fa-solid fa-lock mr-1"></i>
+                        Admin Mode
+                    </button>
+
                 </div>
             </div>
+
+            <!-- MONTH NAVIGATION -->
+            <div class="mt-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+
+                <div class="flex items-center gap-2">
+
+                    <button
+                        onclick="app.changeMonth(-1)"
+                        class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-slate-700 flex items-center justify-center"
+                    >
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+
+                    <select
+                        id="month-selector"
+                        onchange="app.changeMonthFromSelector(this.value)"
+                        class="bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white"
+                    ></select>
+
+                    <button
+                        onclick="app.changeMonth(1)"
+                        class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-slate-700 flex items-center justify-center"
+                    >
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+
+                </div>
+
+                <div class="flex items-center gap-2">
+
+                    <div class="relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+
+                        <input
+                            id="search-input"
+                            type="text"
+                            placeholder="Search employee..."
+                            oninput="app.setSearch(this.value)"
+                            class="pl-9 pr-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-sm text-white placeholder-slate-400 outline-none focus:border-blue-500"
+                        >
+                    </div>
+
+                </div>
+
+            </div>
+
         </div>
     </header>
 
-    <main class="flex-1 max-w-[1600px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col gap-6">
-        
-        <!-- Stats Summary Bar -->
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 no-print">
-            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">EARLY SHIFTS</p>
-                <h3 id="stat-early" class="text-2xl font-black text-slate-900 mt-1">0</h3>
-            </div>
-            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">MID SHIFTS</p>
-                <h3 id="stat-mid" class="text-2xl font-black text-slate-900 mt-1">0</h3>
-            </div>
-            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">LATE SHIFTS</p>
-                <h3 id="stat-late" class="text-2xl font-black text-slate-900 mt-1">0</h3>
-            </div>
-            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">DON'T WORK</p>
-                <h3 id="stat-off" class="text-2xl font-black text-slate-900 mt-1">0</h3>
-            </div>
-            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">DEPENDANCY LEAVE</p>
-                <h3 id="stat-leave" class="text-2xl font-black text-slate-900 mt-1">0</h3>
-            </div>
-            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm col-span-2 sm:col-span-1">
-                <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">WFH</p>
-                <h3 id="stat-sick" class="text-2xl font-black text-slate-900 mt-1">0</h3>
-            </div>
-        </div>
+    <!-- MAIN -->
+    <main class="p-4">
 
-        <!-- Main Rota Section Card -->
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col overflow-hidden print-shadow">
-            <div class="px-6 py-4 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 no-print bg-slate-50/50">
-                <h2 class="text-lg font-bold text-slate-900">Monthly Rota</h2>
-                
-                <div class="relative w-full sm:w-72">
-                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                        <i class="fa-solid fa-magnifying-glass text-xs"></i>
-                    </span>
-                    <input type="text" id="employee-search" oninput="app.handleSearch(this.value)" placeholder="Search employee..." class="w-full pl-9 pr-4 py-2 bg-white border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 outline-none shadow-sm">
+        <!-- STATS -->
+        <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3 mb-4">
+
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase">Early</p>
+                        <p id="stat-early" class="text-2xl font-bold text-slate-900">0</p>
+                    </div>
+                    <div class="w-9 h-9 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center">
+                        <i class="fa-solid fa-sun"></i>
+                    </div>
                 </div>
             </div>
 
-            <!-- Horizontal Month Matrix Container -->
-            <div class="overflow-x-auto">
-                <table id="matrix-table" class="w-full text-left border-collapse border-spacing-0">
-                    <thead>
-                        <tr id="matrix-header-row" class="bg-slate-900 text-white text-xs font-semibold select-none">
-                            <!-- Populated dynamically -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase">Mid</p>
+                        <p id="stat-mid" class="text-2xl font-bold text-slate-900">0</p>
+                    </div>
+                    <div class="w-9 h-9 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center">
+                        <i class="fa-solid fa-clock"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase">Late</p>
+                        <p id="stat-late" class="text-2xl font-bold text-slate-900">0</p>
+                    </div>
+                    <div class="w-9 h-9 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center">
+                        <i class="fa-solid fa-moon"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase">Don't Work</p>
+                        <p id="stat-dont-work" class="text-2xl font-bold text-slate-900">0</p>
+                    </div>
+                    <div class="w-9 h-9 rounded-lg bg-red-100 text-red-600 flex items-center justify-center">
+                        <i class="fa-solid fa-ban"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase">Dependancy Leave</p>
+                        <p id="stat-dependency" class="text-2xl font-bold text-slate-900">0</p>
+                    </div>
+                    <div class="w-9 h-9 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center">
+                        <i class="fa-solid fa-people-arrows"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase">WFH</p>
+                        <p id="stat-wfh" class="text-2xl font-bold text-slate-900">0</p>
+                    </div>
+                    <div class="w-9 h-9 rounded-lg bg-green-100 text-green-600 flex items-center justify-center">
+                        <i class="fa-solid fa-house-laptop"></i>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ROTA -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+
+            <div class="px-4 py-3 border-b border-slate-200 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+
+                <div>
+                    <h2 id="rota-title" class="font-bold text-slate-900">
+                        Rota
+                    </h2>
+
+                    <p class="text-xs text-slate-500">
+                        Select shifts directly in the matrix.
+                    </p>
+                </div>
+
+                <div
+                    id="admin-status"
+                    class="text-xs px-3 py-1.5 rounded-full bg-slate-100 text-slate-500"
+                >
+                    View Only
+                </div>
+
+            </div>
+
+            <div class="matrix-container scrollbar-thin">
+
+                <table class="matrix-table w-full">
+
+                    <thead class="matrix-header">
+                        <tr id="matrix-header-row">
+                            <!-- generated -->
                         </tr>
                     </thead>
-                    <tbody id="matrix-tbody" class="divide-y divide-slate-200 text-xs">
-                        <!-- Populated dynamically -->
+
+                    <tbody id="matrix-tbody">
+                        <!-- generated -->
                     </tbody>
+
                 </table>
+
+                <div
+                    id="matrix-empty"
+                    class="hidden p-10 text-center text-slate-500"
+                >
+                    No employees found.
+                </div>
+
             </div>
 
-            <!-- Empty State -->
-            <div id="matrix-empty" class="hidden py-16 text-center flex flex-col items-center justify-center">
-                <div class="w-16 h-16 bg-slate-100 text-slate-400 rounded-2xl flex items-center justify-center text-2xl mb-4">
-                    <i class="fa-solid fa-users-slash"></i>
-                </div>
-                <h3 class="text-base font-semibold text-slate-800">No employees found</h3>
-                <p class="text-sm text-slate-500 max-w-sm mt-1">Click "Add Employee" in the top bar to start building your monthly rota.</p>
-            </div>
         </div>
+
     </main>
 
-    <!-- Floating Toast Notification -->
-    <div id="toast" class="fixed bottom-6 right-6 bg-slate-900 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center space-x-3 transition-all duration-300 transform translate-y-20 opacity-0 z-50">
-        <i id="toast-icon" class="fa-solid fa-circle-check text-emerald-400"></i>
-        <span id="toast-message" class="text-xs font-medium">Shifts assigned successfully. Click Save to persist.</span>
-    </div>
+</div>
 
-    <!-- Admin PIN Modal -->
-    <div id="admin-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl shadow-xl max-w-xs w-full overflow-hidden border border-slate-200 animate-in fade-in zoom-in-95 duration-200">
-            <div class="px-5 py-3.5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
-                <h3 class="font-bold text-slate-900 text-xs uppercase tracking-wider">Admin Authentication</h3>
-                <button onclick="app.closeAdminModal()" class="text-slate-400 hover:text-slate-600 text-base p-1">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-            <form onsubmit="app.handleAdminPinSubmit(event)" class="p-5 space-y-3.5">
-                <div>
-                    <label class="block text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-1">Enter Admin PIN</label>
-                    <input type="password" id="admin-pin-input" required placeholder="••••" class="w-full px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 text-slate-900 outline-none text-xs text-center tracking-widest font-mono">
-                </div>
-                <div class="flex justify-end space-x-2 pt-2 border-t border-slate-200">
-                    <button type="button" onclick="app.closeAdminModal()" class="px-3 py-1.5 border border-slate-300 rounded-lg text-slate-700 text-xs font-medium hover:bg-slate-50">Cancel</button>
-                    <button type="submit" class="px-3 py-1.5 bg-indigo-600 text-white rounded-lg text-xs font-medium hover:bg-indigo-700 shadow-sm">Unlock</button>
-                </div>
-            </form>
+
+<!-- ========================================================= -->
+<!-- ADMIN PIN MODAL -->
+<!-- ========================================================= -->
+
+<div
+    id="admin-pin-modal"
+    class="hidden fixed inset-0 z-50 modal-backdrop items-center justify-center p-4"
+>
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm">
+
+        <div class="px-6 py-5 border-b border-slate-200">
+            <h3 class="font-bold text-lg text-slate-900">
+                Admin Access
+            </h3>
+
+            <p class="text-sm text-slate-500 mt-1">
+                Enter the admin PIN to edit the rota.
+            </p>
         </div>
-    </div>
 
-    <!-- Change PIN Modal -->
-    <div id="change-pin-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl shadow-xl max-w-xs w-full overflow-hidden border border-slate-200 animate-in fade-in zoom-in-95 duration-200">
-            <div class="px-5 py-3.5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
-                <h3 class="font-bold text-slate-900 text-xs uppercase tracking-wider">Change Admin PIN</h3>
-                <button onclick="app.closeChangePinModal()" class="text-slate-400 hover:text-slate-600 text-base p-1">
-                    <i class="fa-solid fa-xmark"></i>
+        <form onsubmit="app.handlePinSubmit(event)" class="p-6">
+
+            <label class="block text-sm font-semibold text-slate-700 mb-2">
+                Admin PIN
+            </label>
+
+            <input
+                id="admin-pin-input"
+                type="password"
+                inputmode="numeric"
+                autocomplete="off"
+                class="w-full border border-slate-300 rounded-lg px-3 py-2 outline-none focus:border-blue-500"
+                placeholder="Enter PIN"
+            >
+
+            <div class="flex justify-end gap-2 mt-5">
+
+                <button
+                    type="button"
+                    onclick="app.closePinModal()"
+                    class="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-sm font-medium"
+                >
+                    Cancel
                 </button>
-            </div>
-            <form onsubmit="app.handleChangePinSubmit(event)" class="p-5 space-y-3.5">
-                <div>
-                    <label class="block text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-1">New Admin PIN</label>
-                    <input type="password" id="new-pin-input" required placeholder="••••" class="w-full px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 text-slate-900 outline-none text-xs text-center tracking-widest font-mono">
-                </div>
-                <div class="flex justify-end space-x-2 pt-2 border-t border-slate-200">
-                    <button type="button" onclick="app.closeChangePinModal()" class="px-3 py-1.5 border border-slate-300 rounded-lg text-slate-700 text-xs font-medium hover:bg-slate-50">Cancel</button>
-                    <button type="submit" class="px-3 py-1.5 bg-indigo-600 text-white rounded-lg text-xs font-medium hover:bg-indigo-700 shadow-sm">Update PIN</button>
-                </div>
-            </form>
-        </div>
-    </div>
 
-    <!-- Add/Edit Employee Modal -->
-    <div id="member-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl shadow-xl max-w-md w-full overflow-hidden border border-slate-200 animate-in fade-in zoom-in-95 duration-200">
-            <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
-                <h3 id="member-modal-title" class="font-bold text-slate-900 text-sm">Add Employee</h3>
-                <button onclick="app.closeMemberModal()" class="text-slate-400 hover:text-slate-600 text-lg p-1">
-                    <i class="fa-solid fa-xmark"></i>
+                <button
+                    type="submit"
+                    class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium"
+                >
+                    Unlock
                 </button>
-            </div>
-            <form id="member-form" onsubmit="app.handleMemberSubmit(event)" class="p-6 space-y-4">
-                <input type="hidden" id="member-id">
-                <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">Employee Name / Initials</label>
-                    <input type="text" id="member-name" required placeholder="e.g. John Doe" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 text-slate-900 outline-none text-xs">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">Role / Department</label>
-                    <input type="text" id="member-role" placeholder="e.g. Staff" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 text-slate-900 outline-none text-xs">
-                </div>
-                <div class="pt-4 flex justify-end space-x-3 border-t border-slate-200">
-                    <button type="button" onclick="app.closeMemberModal()" class="px-4 py-2 border border-slate-300 rounded-xl text-slate-700 text-xs font-medium hover:bg-slate-50">Cancel</button>
-                    <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs font-medium hover:bg-indigo-700 shadow-sm">Save Employee</button>
-                </div>
-            </form>
-        </div>
-    </div>
 
-    <!-- Apply Monthly Shift Modal -->
-    <div id="bulk-monthly-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl shadow-xl max-w-md w-full overflow-hidden border border-slate-200 animate-in fade-in zoom-in-95 duration-200">
-            <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
-                <h3 class="font-bold text-slate-900 text-sm">Apply Monthly Shift</h3>
-                <button onclick="app.closeBulkMonthlyModal()" class="text-slate-400 hover:text-slate-600 text-lg p-1">
-                    <i class="fa-solid fa-xmark"></i>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+
+<!-- ========================================================= -->
+<!-- CHANGE PIN MODAL -->
+<!-- ========================================================= -->
+
+<div
+    id="change-pin-modal"
+    class="hidden fixed inset-0 z-50 modal-backdrop items-center justify-center p-4"
+>
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm">
+
+        <div class="px-6 py-5 border-b border-slate-200">
+            <h3 class="font-bold text-lg text-slate-900">
+                Change Admin PIN
+            </h3>
+        </div>
+
+        <form onsubmit="app.handleChangePinSubmit(event)" class="p-6">
+
+            <label class="block text-sm font-semibold text-slate-700 mb-2">
+                New PIN
+            </label>
+
+            <input
+                id="new-pin-input"
+                type="password"
+                inputmode="numeric"
+                autocomplete="off"
+                class="w-full border border-slate-300 rounded-lg px-3 py-2 outline-none focus:border-blue-500"
+                placeholder="Enter new PIN"
+            >
+
+            <div class="flex justify-end gap-2 mt-5">
+
+                <button
+                    type="button"
+                    onclick="app.closeChangePinModal()"
+                    class="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-sm font-medium"
+                >
+                    Cancel
                 </button>
-            </div>
-            <form onsubmit="app.handleBulkMonthlySubmit(event)" class="p-6 space-y-4">
-                <div>
-                    <div class="flex items-center justify-between mb-1.5">
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Target Employees</label>
-                        <div class="space-x-2 text-[11px]">
-                            <button type="button" onclick="app.selectAllBulkEmployees(true)" class="text-indigo-600 hover:underline font-medium">Select All</button>
-                            <span class="text-slate-300">|</span>
-                            <button type="button" onclick="app.selectAllBulkEmployees(false)" class="text-slate-500 hover:underline font-medium">Deselect All</button>
-                        </div>
-                    </div>
-                    <!-- Custom multi-select checklist container -->
-                    <div id="bulk-m-employees-container" class="border border-slate-300 rounded-xl max-h-48 overflow-y-auto p-2 space-y-1 bg-slate-50/50 text-xs">
-                        <!-- Populated dynamically -->
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">Shift Code to Fill Month</label>
-                    <select id="bulk-m-shift" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-xs bg-white outline-none focus:ring-2 focus:ring-indigo-500">
-                        <option value="Early">Early Shift</option>
-                        <option value="Mid">Mid Shift</option>
-                        <option value="Late">Late Shift</option>
-                        <option value="Early finish - Early shift">Early finish - Early shift</option>
-                        <option value="Late start - Early shift">Late start - Early shift</option>
-                        <option value="Early finish - Late shift">Early finish - Late shift</option>
-                        <option value="Late start - Late shift">Late start - Late shift</option>
-                        <option value="Doctors appointment">Doctors appointment</option>
-                        <option value="Dont work">Don't work</option>
-                        <option value="Dependancy leave">Dependancy leave</option>
-                        <option value="Holiday">Holiday</option>
-                        <option value="WFH">WFH</option>
-                        <option value="FW">FW</option>
-                        <option value="Flexi Time taken">Flexi Time taken</option>
-                        <option value="Flexi time redeem">Flexi time redeem</option>
-                        <option value="weekdays_only_select">Weekdays only (Weekends None - Early)</option>
-                        <option value="weekdays_only_fw">Weekdays only (Weekends None - FW)</option>
-                    </select>
-                </div>
-                <div class="pt-4 flex justify-end space-x-3 border-t border-slate-200">
-                    <button type="button" onclick="app.closeBulkMonthlyModal()" class="px-4 py-2 border border-slate-300 rounded-xl text-slate-700 text-xs font-medium hover:bg-slate-50">Cancel</button>
-                    <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs font-medium hover:bg-indigo-700 shadow-sm">Apply to Month</button>
-                </div>
-            </form>
-        </div>
-    </div>
 
-    <!-- Apply Weekly Shift Modal -->
-    <div id="bulk-weekly-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl shadow-xl max-w-md w-full overflow-hidden border border-slate-200 animate-in fade-in zoom-in-95 duration-200">
-            <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
-                <h3 class="font-bold text-slate-900 text-sm">Apply Weekly Pattern</h3>
-                <button onclick="app.closeBulkWeeklyModal()" class="text-slate-400 hover:text-slate-600 text-lg p-1">
-                    <i class="fa-solid fa-xmark"></i>
+                <button
+                    type="submit"
+                    class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium"
+                >
+                    Save PIN
                 </button>
+
             </div>
-            <form onsubmit="app.handleBulkWeeklySubmit(event)" class="p-6 space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">Target Employee</label>
-                    <select id="bulk-w-employee" class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs bg-white outline-none">
-                        <!-- Populated -->
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">Day of Week to Target</label>
-                    <select id="bulk-w-day" class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs bg-white outline-none">
-                        <option value="1">Monday</option>
-                        <option value="2">Tuesday</option>
-                        <option value="3">Wednesday</option>
-                        <option value="4">Thursday</option>
-                        <option value="5">Friday</option>
-                        <option value="6">Saturday</option>
-                        <option value="0">Sunday</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">Shift to Apply on all matching weekdays</label>
-                    <select id="bulk-w-shift" class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs bg-white outline-none">
-                        <option value="Early">Early Shift</option>
-                        <option value="Mid">Mid Shift</option>
-                        <option value="Late">Late Shift</option>
-                        <option value="Early finish - Early shift">Early finish - Early shift</option>
-                        <option value="Late start - Early shift">Late start - Early shift</option>
-                        <option value="Early finish - Late shift">Early finish - Late shift</option>
-                        <option value="Late start - Late shift">Late start - Late shift</option>
-                        <option value="Doctors appointment">Doctors appointment</option>
-                        <option value="Dont work">Don't work</option>
-                        <option value="Dependancy leave">Dependancy leave</option>
-                        <option value="Holiday">Holiday</option>
-                        <option value="WFH">WFH</option>
-                        <option value="FW">FW</option>
-                        <option value="Flexi Time taken">Flexi Time taken</option>
-                        <option value="Flexi time redeem">Flexi time redeem</option>
-                    </select>
-                </div>
-                <div class="pt-4 flex justify-end space-x-3 border-t border-slate-200">
-                    <button type="button" onclick="app.closeBulkWeeklyModal()" class="px-4 py-2 border border-slate-300 rounded-xl text-slate-700 text-xs font-medium hover:bg-slate-50">Cancel</button>
-                    <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs font-medium hover:bg-indigo-700 shadow-sm">Apply Weekly Pattern</button>
-                </div>
-            </form>
-        </div>
+
+        </form>
+
     </div>
+</div>
 
-    <script>
-        class RotaMatrixManager {
-            constructor() {
-                this.state = {
-                    members: [],
-                    shifts: {}, // key: "memberId_YYYY-MM-DD", value: string
-                    currentDate: new Date(2026, 8, 1), // September 2026 default
-                    searchQuery: '',
-                    isAdmin: false,
-                    adminPin: '9999'
-                };
-                this.init();
-            }
 
-            async init() {
-                await this.loadFromStorage();
-                if (this.state.members.length === 0) {
-                    const defaultNames = [
-                        "Angelo Rizon",
-                        "Daniel Prince",
-                        "Jay Fraser",
-                        "Jed Dickinson",
-                        "Kai Wright",
-                        "Paul Psomiadis",
-                        "Rachel Alexander-Martin",
-                        "Rahib Hossain",
-                        "Rebeca Garcia",
-                        "Ricky Johnson",
-                        "Robert Easom",
-                        "Ruth McVicar",
-                        "Shawn Kurian"
-                    ];
-                    this.state.members = defaultNames.map((name, index) => ({
-                        id: 'm_' + (index + 1),
-                        name: name,
-                        role: 'Staff'
-                    }));
-                }
-                this.initMonthSelector();
-                this.render();
-            }
+<!-- ========================================================= -->
+<!-- ADD / EDIT EMPLOYEE MODAL -->
+<!-- ========================================================= -->
 
-            toggleAdminMode() {
-                if (this.state.isAdmin) {
-                    this.state.isAdmin = false;
-                    this.updateAdminUI();
-                    this.showToast("Admin mode locked.");
-                } else {
-                    document.getElementById('admin-pin-input').value = '';
-                    document.getElementById('admin-modal').classList.remove('hidden');
-                    document.getElementById('admin-pin-input').focus();
-                }
-            }
+<div
+    id="member-modal"
+    class="hidden fixed inset-0 z-50 modal-backdrop items-center justify-center p-4"
+>
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md">
 
-            closeAdminModal() {
-                document.getElementById('admin-modal').classList.add('hidden');
-            }
+        <div class="px-6 py-5 border-b border-slate-200">
+            <h3
+                id="member-modal-title"
+                class="font-bold text-lg text-slate-900"
+            >
+                Add Employee
+            </h3>
+        </div>
 
-            handleAdminPinSubmit(e) {
-                e.preventDefault();
-                const pin = document.getElementById('admin-pin-input').value;
-                if (pin === this.state.adminPin || pin === '0426') {
-                    this.state.isAdmin = true;
-                    this.closeAdminModal();
-                    this.updateAdminUI();
-                    this.showToast("Admin mode unlocked successfully!");
-                } else {
-                    this.showToast("Incorrect Admin PIN");
-                }
-            }
+        <form onsubmit="app.handleMemberSubmit(event)" class="p-6">
 
-            updateAdminUI() {
-                const btn = document.getElementById('admin-toggle-btn');
-                const icon = document.getElementById('admin-icon');
-                const label = document.getElementById('admin-label');
-                const changePinBtn = document.getElementById('btn-change-pin');
+            <input
+                id="member-id-input"
+                type="hidden"
+            >
 
-                if (this.state.isAdmin) {
-                    btn.className = "inline-flex items-center space-x-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg transition shadow-sm bg-emerald-600 text-white hover:bg-emerald-700";
-                    icon.className = "fa-solid fa-lock-open";
-                    label.innerText = "Admin Mode: Unlocked";
-                    changePinBtn.classList.remove('hidden');
-                } else {
-                    btn.className = "inline-flex items-center space-x-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg transition shadow-sm bg-slate-800 text-white hover:bg-slate-900";
-                    icon.className = "fa-solid fa-lock";
-                    label.innerText = "Admin Mode: Locked";
-                    changePinBtn.classList.add('hidden');
-                }
-                this.render();
-            }
+            <div class="mb-4">
 
-            async loadFromStorage() {
-                try {
-                    const response = await fetch('./rota_data.json');
-                    if (response.ok) {
-                        const parsed = await response.json();
-                        if (parsed.members && parsed.members.length > 0) {
-                            this.state.members = parsed.members;
-                        }
-                        this.state.shifts = parsed.shifts || {};
-                        if (parsed.adminPin) {
-                            this.state.adminPin = parsed.adminPin;
-                        }
-                        return;
-                    }
-                } catch (e) {
-                    console.log("Could not load rota_data.json via fetch, checking localStorage fallback.");
-                }
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    Employee Name
+                </label>
 
-                // Fallback to localStorage if fetch fails or file isn't present yet
-                const saved = localStorage.getItem('rota_matrix_state_v2');
-                if (saved) {
-                    try {
-                        const parsed = JSON.parse(saved);
-                        if (parsed.members && parsed.members.length > 0) {
-                            this.state.members = parsed.members;
-                        }
-                        this.state.shifts = parsed.shifts || {};
-                        if (parsed.adminPin) {
-                            this.state.adminPin = parsed.adminPin;
-                        }
-                    } catch (e) {
-                        console.error("Failed to load saved state", e);
-                    }
-                }
-            }
+                <input
+                    id="member-name-input"
+                    type="text"
+                    required
+                    class="w-full border border-slate-300 rounded-lg px-3 py-2 outline-none focus:border-blue-500"
+                    placeholder="Employee name"
+                >
 
-            saveToStorage() {
-                const dataToSave = {
-                    members: this.state.members,
-                    shifts: this.state.shifts,
-                    adminPin: this.state.adminPin
-                };
-                
-                // Keep local browser cache active
-                localStorage.setItem('rota_matrix_state_v2', JSON.stringify(dataToSave));
+            </div>
 
-                // Generate automatic JSON download blob so you can easily update your rota_data.json file in GitHub
-                const blob = new Blob([JSON.stringify(dataToSave, null, 2)], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'rota_data.json';
-                a.click();
-                URL.revokeObjectURL(url);
-            }
+            <div class="mb-4">
 
-            openChangePinModal() {
-                if (!this.state.isAdmin) return;
-                document.getElementById('new-pin-input').value = '';
-                document.getElementById('change-pin-modal').classList.remove('hidden');
-                document.getElementById('new-pin-input').focus();
-            }
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    Role
+                </label>
 
-            closeChangePinModal() {
-                document.getElementById('change-pin-modal').classList.add('hidden');
-            }
+                <select
+                    id="member-role-input"
+                    class="w-full border border-slate-300 rounded-lg px-3 py-2 outline-none focus:border-blue-500"
+                >
+                    <option value="Staff">Staff</option>
+                    <option value="Senior">Senior</option>
+                    <option value="Manager">Manager</option>
+                </select>
 
-            handleChangePinSubmit(e) {
-                e.preventDefault();
-                if (!this.state.isAdmin) return;
-                const newPin = document.getElementById('new-pin-input').value.trim();
-                if (newPin) {
-                    this.state.adminPin = newPin;
-                    this.saveToStorage();
-                    this.closeChangePinModal();
-                    this.showToast("Admin PIN updated successfully!");
-                }
-            }
+            </div>
 
-            saveData() {
-                this.saveToStorage();
-                this.showToast("Rota saved & configuration file downloaded for GitHub!");
-            }
+            <div class="flex justify-between items-center mt-6">
 
-            async refreshData() {
-                await this.loadFromStorage();
-                this.render();
-                this.showToast("Data refreshed from storage.");
-            }
+                <button
+                    id="delete-member-button"
+                    type="button"
+                    onclick="app.deleteMember()"
+                    class="hidden px-4 py-2 rounded-lg bg-red-100 hover:bg-red-200 text-red-700 text-sm font-medium"
+                >
+                    <i class="fa-solid fa-trash mr-1"></i>
+                    Delete
+                </button>
 
-            exportCSV() {
-                const year = this.state.currentDate.getFullYear();
-                const month = this.state.currentDate.getMonth();
-                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                <div class="ml-auto flex gap-2">
 
-                let csvContent = "Employee,";
-                for (let d = 1; d <= daysInMonth; d++) {
-                    csvContent += `${d},`;
-                }
-                csvContent += "Balance\n";
+                    <button
+                        type="button"
+                        onclick="app.closeMemberModal()"
+                        class="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-sm font-medium"
+                    >
+                        Cancel
+                    </button>
 
-                this.state.members.forEach(m => {
-                    csvContent += `"${m.name}",`;
-                    for (let d = 1; d <= daysInMonth; d++) {
-                        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-                        const val = this.state.shifts[`${m.id}_${dateStr}`] || '';
-                        csvContent += `"${val}",`;
-                    }
-                    csvContent += "\n";
-                });
+                    <button
+                        type="submit"
+                        class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium"
+                    >
+                        Save Employee
+                    </button>
 
-                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `rota_${year}_${month + 1}.csv`;
-                a.click();
-                this.showToast("CSV exported successfully!");
-            }
+                </div>
 
-            clearMonth() {
-                if (!this.state.isAdmin) {
-                    this.showToast("Restricted: Admin access required to clear month.");
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+
+<!-- ========================================================= -->
+<!-- MONTHLY SHIFT MODAL -->
+<!-- ========================================================= -->
+
+<div
+    id="bulk-monthly-modal"
+    class="hidden fixed inset-0 z-50 modal-backdrop items-center justify-center p-4"
+>
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg">
+
+        <div class="px-6 py-5 border-b border-slate-200">
+            <h3 class="font-bold text-lg text-slate-900">
+                Apply Monthly Shift
+            </h3>
+
+            <p class="text-sm text-slate-500 mt-1">
+                Apply a shift to selected employees for the whole month.
+            </p>
+        </div>
+
+        <form onsubmit="app.handleBulkMonthlySubmit(event)" class="p-6">
+
+            <div class="mb-4">
+
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    Employees
+                </label>
+
+                <div
+                    id="monthly-member-list"
+                    class="border border-slate-300 rounded-lg p-3 max-h-48 overflow-y-auto"
+                ></div>
+
+            </div>
+
+            <div class="mb-4">
+
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    Shift
+                </label>
+
+                <select
+                    id="monthly-shift-input"
+                    class="w-full border border-slate-300 rounded-lg px-3 py-2"
+                ></select>
+
+            </div>
+
+            <div class="flex justify-end gap-2">
+
+                <button
+                    type="button"
+                    onclick="app.closeBulkMonthlyModal()"
+                    class="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-sm font-medium"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium"
+                >
+                    Apply
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+
+<!-- ========================================================= -->
+<!-- WEEKLY SHIFT MODAL -->
+<!-- ========================================================= -->
+
+<div
+    id="bulk-weekly-modal"
+    class="hidden fixed inset-0 z-50 modal-backdrop items-center justify-center p-4"
+>
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg">
+
+        <div class="px-6 py-5 border-b border-slate-200">
+            <h3 class="font-bold text-lg text-slate-900">
+                Apply Weekly Shift
+            </h3>
+
+            <p class="text-sm text-slate-500 mt-1">
+                Apply the same weekly pattern to selected employees.
+            </p>
+        </div>
+
+        <form onsubmit="app.handleBulkWeeklySubmit(event)" class="p-6">
+
+            <div class="mb-4">
+
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    Employees
+                </label>
+
+                <div
+                    id="weekly-member-list"
+                    class="border border-slate-300 rounded-lg p-3 max-h-48 overflow-y-auto"
+                ></div>
+
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">
+                        Monday
+                    </label>
+                    <select id="weekly-mon" class="weekly-shift w-full border rounded-lg px-3 py-2"></select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">
+                        Tuesday
+                    </label>
+                    <select id="weekly-tue" class="weekly-shift w-full border rounded-lg px-3 py-2"></select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">
+                        Wednesday
+                    </label>
+                    <select id="weekly-wed" class="weekly-shift w-full border rounded-lg px-3 py-2"></select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">
+                        Thursday
+                    </label>
+                    <select id="weekly-thu" class="weekly-shift w-full border rounded-lg px-3 py-2"></select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">
+                        Friday
+                    </label>
+                    <select id="weekly-fri" class="weekly-shift w-full border rounded-lg px-3 py-2"></select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">
+                        Saturday
+                    </label>
+                    <select id="weekly-sat" class="weekly-shift w-full border rounded-lg px-3 py-2"></select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">
+                        Sunday
+                    </label>
+                    <select id="weekly-sun" class="weekly-shift w-full border rounded-lg px-3 py-2"></select>
+                </div>
+
+            </div>
+
+            <div class="flex justify-end gap-2">
+
+                <button
+                    type="button"
+                    onclick="app.closeBulkWeeklyModal()"
+                    class="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-sm font-medium"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium"
+                >
+                    Apply
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+
+<!-- TOAST -->
+
+<div
+    id="toast"
+    class="toast hidden fixed bottom-5 right-5 z-[100] bg-slate-900 text-white px-5 py-3 rounded-xl shadow-xl text-sm"
+>
+    <div class="flex items-center gap-2">
+        <i id="toast-icon" class="fa-solid fa-circle-check text-green-400"></i>
+        <span id="toast-message">Saved</span>
+    </div>
+</div>
+
+
+<!-- ========================================================= -->
+<!-- SUPABASE -->
+<!-- ========================================================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+    /*
+        ========================================================
+        SUPABASE CONFIGURATION
+        ========================================================
+
+        Your Supabase project URL is already entered.
+
+        ONLY replace YOUR_SUPABASE_ANON_KEY with your
+        Supabase anon/publishable key.
+    */
+
+    const SUPABASE_URL = 'https://lfoumafetmwayteullrg.supabase.co';
+
+    const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+
+    const supabaseClient = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
+</script>
+
+
+<!-- ========================================================= -->
+<!-- APPLICATION -->
+<!-- ========================================================= -->
+
+<script>
+
+class RotaMatrixManager {
+
+    constructor() {
+
+        this.state = {
+            members: [],
+            shifts: {},
+            currentDate: new Date(2026, 8, 1),
+            searchQuery: '',
+            isAdmin: false,
+            adminPin: '9999'
+        };
+
+        this.shiftOptions = [
+            'Early',
+            'Mid',
+            'Late',
+            'Early finish - Early shift',
+            'Late start - Early shift',
+            'Early finish - Late shift',
+            'Late start - Late shift',
+            'Doctors appointment',
+            'Dont work',
+            'Dependancy leave',
+            'Holiday',
+            'WFH',
+            'FW',
+            'Flexi Time taken',
+            'Flexi time redeem'
+        ];
+
+        this.defaultMembers = [
+            { id: 'm_1', name: 'Angelo Rizon', role: 'Staff' },
+            { id: 'm_2', name: 'Daniel Prince', role: 'Staff' },
+            { id: 'm_3', name: 'Jay Fraser', role: 'Staff' },
+            { id: 'm_4', name: 'Jed Dickinson', role: 'Staff' },
+            { id: 'm_5', name: 'Kai Wright', role: 'Staff' },
+            { id: 'm_6', name: 'Paul Psomiadis', role: 'Staff' },
+            { id: 'm_7', name: 'Rachel Alexander-Martin', role: 'Staff' },
+            { id: 'm_8', name: 'Rahib Hossain', role: 'Staff' },
+            { id: 'm_9', name: 'Rebeca Garcia', role: 'Staff' },
+            { id: 'm_10', name: 'Ricky Johnson', role: 'Staff' },
+            { id: 'm_11', name: 'Robert Easom', role: 'Staff' },
+            { id: 'm_12', name: 'Ruth McVicar', role: 'Staff' },
+            { id: 'm_13', name: 'Shawn Kurian', role: 'Staff' }
+        ];
+    }
+
+
+    /* ========================================================
+       INIT
+    ======================================================== */
+
+    async init() {
+
+        this.state.members = JSON.parse(
+            JSON.stringify(this.defaultMembers)
+        );
+
+        this.populateMonthSelector();
+        this.populateShiftSelectors();
+
+        this.setConnectionStatus('connecting');
+
+        await this.loadFromSupabase();
+
+        this.render();
+
+        this.setConnectionStatus('connected');
+    }
+
+
+    /* ========================================================
+       SUPABASE LOAD
+    ======================================================== */
+
+    async loadFromSupabase() {
+
+        try {
+
+            const { data, error } = await supabaseClient
+                .from('rota_data')
+                .select('data')
+                .eq('id', 1)
+                .single();
+
+            if (error) {
+
+                /*
+                    If the row doesn't exist yet, that's okay.
+                    We will create it when the user saves.
+                */
+
+                if (error.code === 'PGRST116') {
+
+                    console.log(
+                        'No existing rota found in Supabase. Using defaults.'
+                    );
+
+                    this.setConnectionStatus('connected');
+
                     return;
                 }
-                if (confirm("Are you sure you want to clear all shifts for this month?")) {
-                    const year = this.state.currentDate.getFullYear();
-                    const month = this.state.currentDate.getMonth();
-                    const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-                    this.state.members.forEach(m => {
-                        for (let d = 1; d <= daysInMonth; d++) {
-                            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-                            delete this.state.shifts[`${m.id}_${dateStr}`];
-                        }
-                    });
+                throw error;
+            }
 
-                    this.saveToStorage();
-                    this.render();
-                    this.showToast("Month cleared.");
+            if (data && data.data) {
+
+                const saved = data.data;
+
+                if (
+                    Array.isArray(saved.members) &&
+                    saved.members.length > 0
+                ) {
+                    this.state.members = saved.members;
+                }
+
+                this.state.shifts = saved.shifts || {};
+
+                if (saved.adminPin) {
+                    this.state.adminPin = saved.adminPin;
                 }
             }
 
-            showToast(msg) {
-                const toast = document.getElementById('toast');
-                document.getElementById('toast-message').innerText = msg;
-                toast.classList.remove('translate-y-20', 'opacity-0');
-                setTimeout(() => {
-                    toast.classList.add('translate-y-20', 'opacity-0');
-                }, 3000);
-            }
+            this.setConnectionStatus('connected');
 
-            initMonthSelector() {
-                const selector = document.getElementById('month-selector');
-                selector.innerHTML = '';
-                const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-                
-                for (let y = 2024; y <= 2030; y++) {
-                    months.forEach((m, idx) => {
-                        const val = `${y}-${idx}`;
-                        const opt = document.createElement('option');
-                        opt.value = val;
-                        opt.innerText = `${m} ${y}`;
-                        if (y === this.state.currentDate.getFullYear() && idx === this.state.currentDate.getMonth()) {
-                            opt.selected = true;
-                        }
-                        selector.appendChild(opt);
-                    });
-                }
-            }
+        } catch (error) {
 
-            handleMonthSelect(val) {
-                const parts = val.split('-');
-                this.state.currentDate = new Date(parseInt(parts[0]), parseInt(parts[1]), 1);
-                this.render();
-            }
+            console.error(
+                'Supabase load error:',
+                error
+            );
 
-            prevMonth() {
-                this.state.currentDate.setMonth(this.state.currentDate.getMonth() - 1);
-                this.initMonthSelector();
-                this.render();
-            }
+            this.setConnectionStatus('error');
 
-            nextMonth() {
-                this.state.currentDate.setMonth(this.state.currentDate.getMonth() + 1);
-                this.initMonthSelector();
-                this.render();
-            }
+            this.showToast(
+                'Could not load rota from Supabase.',
+                true
+            );
+        }
+    }
 
-            handleSearch(query) {
-                this.state.searchQuery = query.toLowerCase();
-                this.renderTableBody();
-            }
 
-            render() {
-                this.renderStats();
-                this.renderTableHeader();
-                this.renderTableBody();
-            }
+    /* ========================================================
+       SUPABASE SAVE
+    ======================================================== */
 
-            renderStats() {
-                const year = this.state.currentDate.getFullYear();
-                const month = this.state.currentDate.getMonth();
-                const daysInMonth = new Date(year, month + 1, 0).getDate();
+    async saveToSupabase() {
 
-                let earlyCount = 0;
-                let midCount = 0;
-                let lateCount = 0;
-                let dontWorkCount = 0;
-                let depLeaveCount = 0;
-                let wfhCount = 0;
+        const dataToSave = {
+            members: this.state.members,
+            shifts: this.state.shifts,
+            adminPin: this.state.adminPin
+        };
 
-                this.state.members.forEach(m => {
-                    for (let d = 1; d <= daysInMonth; d++) {
-                        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-                        const val = this.state.shifts[`${m.id}_${dateStr}`];
-                        if (val === 'Early' || val === 'Early finish - Early shift' || val === 'Late start - Early shift') earlyCount++;
-                        if (val === 'Mid') midCount++;
-                        if (val === 'Late' || val === 'Early finish - Late shift' || val === 'Late start - Late shift') lateCount++;
-                        if (val === 'Dont work') dontWorkCount++;
-                        if (val === 'Dependancy leave') depLeaveCount++;
-                        if (val === 'WFH') wfhCount++;
+        try {
+
+            const { error } = await supabaseClient
+                .from('rota_data')
+                .upsert(
+                    {
+                        id: 1,
+                        data: dataToSave,
+                        updated_at: new Date().toISOString()
+                    },
+                    {
+                        onConflict: 'id'
                     }
-                });
-
-                document.getElementById('stat-early').innerText = earlyCount;
-                document.getElementById('stat-mid').innerText = midCount;
-                document.getElementById('stat-late').innerText = lateCount;
-                document.getElementById('stat-off').innerText = dontWorkCount;
-                document.getElementById('stat-leave').innerText = depLeaveCount;
-                document.getElementById('stat-sick').innerText = wfhCount;
-            }
-
-            renderTableHeader() {
-                const headerRow = document.getElementById('matrix-header-row');
-                const year = this.state.currentDate.getFullYear();
-                const month = this.state.currentDate.getMonth();
-                const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-                let html = `
-                    <th class="py-3 px-4 sticky left-0 bg-slate-900 z-20 w-56 border-r border-slate-700">Employee</th>
-                `;
-
-                for (let d = 1; d <= daysInMonth; d++) {
-                    const dateObj = new Date(year, month, d);
-                    const dayName = dateObj.toLocaleDateString('en-US', { weekday: 'short' });
-                    html += `
-                        <th class="py-3 px-1 text-center min-w-[70px] border-r border-slate-700/50">
-                            <div class="flex flex-col items-center">
-                                <span class="text-[10px] text-slate-400 font-normal">${dayName}</span>
-                                <span class="text-xs font-bold text-white mt-0.5">${d}</span>
-                            </div>
-                        </th>
-                    `;
-                }
-
-                html += `<th class="py-3 px-3 text-center min-w-[110px] bg-slate-900">Balance</th>`;
-                headerRow.innerHTML = html;
-            }
-
-            renderTableBody() {
-                const tbody = document.getElementById('matrix-tbody');
-                const emptyState = document.getElementById('matrix-empty');
-                tbody.innerHTML = '';
-
-                const filteredMembers = this.state.members.filter(m => 
-                    m.name.toLowerCase().includes(this.state.searchQuery) || 
-                    m.role.toLowerCase().includes(this.state.searchQuery)
                 );
 
-                if (filteredMembers.length === 0) {
-                    emptyState.classList.remove('hidden');
-                    return;
-                } else {
-                    emptyState.classList.add('hidden');
-                }
-
-                const year = this.state.currentDate.getFullYear();
-                const month = this.state.currentDate.getMonth();
-                const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-                filteredMembers.forEach(member => {
-                    const tr = document.createElement('tr');
-                    tr.className = "hover:bg-slate-50 transition bg-white";
-
-                    let empEarly = 0;
-                    let empMid = 0;
-                    let empLate = 0;
-                    let empDontWork = 0;
-                    let empDepLeave = 0;
-                    let empHoliday = 0;
-                    let empWFH = 0;
-                    let empFW = 0;
-                    let empFlexTake = 0;
-                    let empFlexRedeem = 0;
-                    let empSpecial = 0;
-
-                    for (let d = 1; d <= daysInMonth; d++) {
-                        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-                        const val = this.state.shifts[`${member.id}_${dateStr}`];
-                        if (val === 'Early' || val === 'Early finish - Early shift' || val === 'Late start - Early shift') empEarly++;
-                        if (val === 'Mid') empMid++;
-                        if (val === 'Late' || val === 'Early finish - Late shift' || val === 'Late start - Late shift') empLate++;
-                        if (val === 'Dont work') empDontWork++;
-                        if (val === 'Dependancy leave') empDepLeave++;
-                        if (val === 'Holiday') empHoliday++;
-                        if (val === 'WFH') empWFH++;
-                        if (val === 'FW') empFW++;
-                        if (val === 'Flexi Time taken') empFlexTake++;
-                        if (val === 'Flexi time redeem') empFlexRedeem++;
-                        if (val && val.includes(' - ') || val === 'Doctors appointment') empSpecial++;
-                    }
-
-                    let deleteBtnHtml = this.state.isAdmin ? `
-                        <button onclick="app.deleteMember('${member.id}')" class="text-rose-400 hover:text-rose-600 p-1 flex-shrink-0" title="Remove Employee">
-                            <i class="fa-solid fa-xmark text-xs"></i>
-                        </button>
-                    ` : '';
-
-                    let html = `
-                        <td class="py-2.5 px-3 sticky left-0 bg-white z-10 border-r border-slate-200 flex items-center justify-between shadow-sm">
-                            <span class="font-bold text-slate-800 truncate" title="${member.name}">${member.name}</span>
-                            ${deleteBtnHtml}
-                        </td>
-                    `;
-
-                    for (let d = 1; d <= daysInMonth; d++) {
-                        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-                        const currentVal = this.state.shifts[`${member.id}_${dateStr}`] || '';
-
-                        let selectBg = "bg-slate-100 text-slate-700 border-slate-200";
-                        if (currentVal === 'Early') selectBg = "bg-emerald-500 text-white border-emerald-600 font-bold shadow-sm";
-                        if (currentVal === 'Mid') selectBg = "bg-indigo-500 text-white border-indigo-600 font-bold shadow-sm";
-                        if (currentVal === 'Late') selectBg = "bg-amber-500 text-white border-amber-600 font-bold shadow-sm";
-                        if (currentVal === 'Early finish - Early shift') selectBg = "bg-emerald-600 text-white border-emerald-700 font-bold shadow-sm";
-                        if (currentVal === 'Late start - Early shift') selectBg = "bg-emerald-700 text-white border-emerald-800 font-bold shadow-sm";
-                        if (currentVal === 'Early finish - Late shift') selectBg = "bg-amber-600 text-white border-amber-700 font-bold shadow-sm";
-                        if (currentVal === 'Late start - Late shift') selectBg = "bg-amber-700 text-white border-amber-800 font-bold shadow-sm";
-                        if (currentVal === 'Doctors appointment') selectBg = "bg-cyan-600 text-white border-cyan-700 font-bold shadow-sm";
-                        if (currentVal === 'Dont work') selectBg = "bg-slate-400 text-white border-slate-500 font-bold shadow-sm";
-                        if (currentVal === 'Dependancy leave') selectBg = "bg-purple-600 text-white border-purple-700 font-bold shadow-sm";
-                        if (currentVal === 'Holiday') selectBg = "bg-rose-500 text-white border-rose-600 font-bold shadow-sm";
-                        if (currentVal === 'WFH') selectBg = "bg-sky-500 text-white border-sky-600 font-bold shadow-sm";
-                        if (currentVal === 'FW') selectBg = "bg-slate-900 text-white border-slate-950 font-bold shadow-sm";
-                        if (currentVal === 'Flexi Time taken') selectBg = "bg-indigo-600 text-white border-indigo-700 font-bold shadow-sm";
-                        if (currentVal === 'Flexi time redeem') selectBg = "bg-teal-600 text-white border-teal-700 font-bold shadow-sm";
-
-                        if (this.state.isAdmin) {
-                            html += `
-                                <td class="py-2 px-1 text-center border-r border-slate-100">
-                                    <select onchange="app.handleCellChange('${member.id}', '${dateStr}', this.value)" class="w-32 h-8 px-1.5 text-[10px] rounded-lg border ${selectBg} outline-none cursor-pointer text-center">
-                                        <option value="" ${currentVal === '' ? 'selected' : ''} class="bg-white text-slate-700">- None -</option>
-                                        <option value="Early" ${currentVal === 'Early' ? 'selected' : ''} class="bg-emerald-500 text-white font-semibold">Early Shift</option>
-                                        <option value="Mid" ${currentVal === 'Mid' ? 'selected' : ''} class="bg-indigo-500 text-white font-semibold">Mid Shift</option>
-                                        <option value="Late" ${currentVal === 'Late' ? 'selected' : ''} class="bg-amber-500 text-white font-semibold">Late Shift</option>
-                                        <option value="Early finish - Early shift" ${currentVal === 'Early finish - Early shift' ? 'selected' : ''} class="bg-emerald-600 text-white font-semibold">Early Finish (Early)</option>
-                                        <option value="Late start - Early shift" ${currentVal === 'Late start - Early shift' ? 'selected' : ''} class="bg-emerald-700 text-white font-semibold">Late Start (Early)</option>
-                                        <option value="Early finish - Late shift" ${currentVal === 'Early finish - Late shift' ? 'selected' : ''} class="bg-amber-600 text-white font-semibold">Early Finish (Late)</option>
-                                        <option value="Late start - Late shift" ${currentVal === 'Late start - Late shift' ? 'selected' : ''} class="bg-amber-700 text-white font-semibold">Late Start (Late)</option>
-                                        <option value="Doctors appointment" ${currentVal === 'Doctors appointment' ? 'selected' : ''} class="bg-cyan-600 text-white font-semibold">Doctors Appointment</option>
-                                        <option value="Dont work" ${currentVal === 'Dont work' ? 'selected' : ''} class="bg-slate-400 text-white font-semibold">Don't work</option>
-                                        <option value="Dependancy leave" ${currentVal === 'Dependancy leave' ? 'selected' : ''} class="bg-purple-600 text-white font-semibold">Dependancy leave</option>
-                                        <option value="Holiday" ${currentVal === 'Holiday' ? 'selected' : ''} class="bg-rose-500 text-white font-semibold">Holiday</option>
-                                        <option value="WFH" ${currentVal === 'WFH' ? 'selected' : ''} class="bg-sky-500 text-white font-semibold">WFH</option>
-                                        <option value="FW" ${currentVal === 'FW' ? 'selected' : ''} class="bg-slate-900 text-white font-semibold">FW</option>
-                                        <option value="Flexi Time taken" ${currentVal === 'Flexi Time taken' ? 'selected' : ''} class="bg-indigo-600 text-white font-semibold">Flexi Time taken</option>
-                                        <option value="Flexi time redeem" ${currentVal === 'Flexi time redeem' ? 'selected' : ''} class="bg-teal-600 text-white font-semibold">Flexi time redeem</option>
-                                    </select>
-                                </td>
-                            `;
-                        } else {
-                            let displayLabel = "- None -";
-                            if (currentVal === 'Early') displayLabel = "Early Shift";
-                            if (currentVal === 'Mid') displayLabel = "Mid Shift";
-                            if (currentVal === 'Late') displayLabel = "Late Shift";
-                            if (currentVal === 'Early finish - Early shift') displayLabel = "Early Finish (Early)";
-                            if (currentVal === 'Late start - Early shift') displayLabel = "Late Start (Early)";
-                            if (currentVal === 'Early finish - Late shift') displayLabel = "Early Finish (Late)";
-                            if (currentVal === 'Late start - Late shift') displayLabel = "Late Start (Late)";
-                            if (currentVal === 'Doctors appointment') displayLabel = "Doctors Appt";
-                            if (currentVal === 'Dont work') displayLabel = "Don't work";
-                            if (currentVal === 'Dependancy leave') displayLabel = "Dependancy leave";
-                            if (currentVal === 'Holiday') displayLabel = "Holiday";
-                            if (currentVal === 'WFH') displayLabel = "WFH";
-                            if (currentVal === 'FW') displayLabel = "FW";
-                            if (currentVal === 'Flexi Time taken') displayLabel = "Flexi Time taken";
-                            if (currentVal === 'Flexi time redeem') displayLabel = "Flexi time redeem";
-
-                            html += `
-                                <td class="py-2 px-1 text-center border-r border-slate-100">
-                                    <div class="w-32 h-8 px-1.5 text-[10px] rounded-lg border ${selectBg} flex items-center justify-center truncate select-none opacity-90" title="${displayLabel}">
-                                        ${displayLabel}
-                                    </div>
-                                </td>
-                            `;
-                        }
-                    }
-
-                    html += `
-                        <td class="py-2.5 px-3 text-[11px] font-semibold text-slate-600 bg-slate-50 border-l border-slate-200 whitespace-nowrap">
-                            <div>E:${empEarly} M:${empMid} L:${empLate} W:${empWFH}</div>
-                            <div class="text-[10px] text-slate-400">Off:${empDontWork} Dep:${empDepLeave} Hol:${empHoliday}</div>
-                        </td>
-                    `;
-
-                    tr.innerHTML = html;
-                    tbody.appendChild(tr);
-                });
+            if (error) {
+                throw error;
             }
 
-            handleCellChange(memberId, dateStr, value) {
-                if (!this.state.isAdmin) {
-                    this.showToast("Restricted: Admin access required.");
-                    return;
-                }
-                const key = `${memberId}_${dateStr}`;
-                if (value === '') {
-                    delete this.state.shifts[key];
-                } else {
-                    this.state.shifts[key] = value;
-                }
-                this.renderStats();
-                this.renderTableBody();
-            }
+            this.setConnectionStatus('connected');
 
-            openAddMemberModal() {
-                if (!this.state.isAdmin) {
-                    this.showToast("Restricted: Admin access required.");
-                    return;
-                }
-                document.getElementById('member-modal-title').innerText = "Add Employee";
-                document.getElementById('member-id').value = "";
-                document.getElementById('member-name').value = "";
-                document.getElementById('member-role').value = "";
-                document.getElementById('member-modal').classList.remove('hidden');
-            }
+            return true;
 
-            closeMemberModal() {
-                document.getElementById('member-modal').classList.add('hidden');
-            }
+        } catch (error) {
 
-            handleMemberSubmit(e) {
-                e.preventDefault();
-                if (!this.state.isAdmin) return;
-                const name = document.getElementById('member-name').value.trim();
-                const role = document.getElementById('member-role').value.trim();
+            console.error(
+                'Supabase save error:',
+                error
+            );
 
-                if (!name) return;
+            this.setConnectionStatus('error');
 
-                const newMember = { id: 'm_' + Date.now(), name, role: role || 'Staff' };
-                this.state.members.push(newMember);
-                this.saveToStorage();
-                this.closeMemberModal();
-                this.render();
-                this.showToast("Employee added successfully.");
-            }
+            this.showToast(
+                'Failed to save to Supabase.',
+                true
+            );
 
-            deleteMember(id) {
-                if (!this.state.isAdmin) {
-                    this.showToast("Restricted: Admin access required.");
-                    return;
-                }
-                if (confirm("Are you sure you want to remove this employee?")) {
-                    this.state.members = this.state.members.filter(m => m.id !== id);
-                    Object.keys(this.state.shifts).forEach(key => {
-                        if (key.startsWith(id + '_')) delete this.state.shifts[key];
-                    });
-                    this.saveToStorage();
-                    this.render();
-                    this.showToast("Employee removed.");
-                }
-            }
+            return false;
+        }
+    }
 
-            openBulkMonthlyModal() {
-                if (!this.state.isAdmin) {
-                    this.showToast("Restricted: Admin access required.");
-                    return;
-                }
-                const container = document.getElementById('bulk-m-employees-container');
-                container.innerHTML = '';
-                
-                this.state.members.forEach(m => {
-                    const div = document.createElement('label');
-                    div.className = "flex items-center space-x-2.5 p-1.5 hover:bg-white rounded-lg cursor-pointer transition";
-                    div.innerHTML = `
-                        <input type="checkbox" name="bulk-m-emp" value="${m.id}" checked class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-4 h-4">
-                        <span class="text-slate-800 font-medium">${m.name}</span>
-                    `;
-                    container.appendChild(div);
-                });
 
-                document.getElementById('bulk-monthly-modal').classList.remove('hidden');
-            }
+    /* ========================================================
+       CONNECTION STATUS
+    ======================================================== */
 
-            selectAllBulkEmployees(checked) {
-                const checkboxes = document.querySelectorAll('input[name="bulk-m-emp"]');
-                checkboxes.forEach(cb => cb.checked = checked);
-            }
+    setConnectionStatus(status) {
 
-            closeBulkMonthlyModal() {
-                document.getElementById('bulk-monthly-modal').classList.add('hidden');
-            }
+        const el = document.getElementById(
+            'connection-status'
+        );
 
-            handleBulkMonthlySubmit(e) {
-                e.preventDefault();
-                if (!this.state.isAdmin) return;
-                
-                const checkedCheckboxes = document.querySelectorAll('input[name="bulk-m-emp"]:checked');
-                const selectedIds = Array.from(checkedCheckboxes).map(cb => cb.value);
+        if (!el) return;
 
-                if (selectedIds.length === 0) {
-                    this.showToast("Please select at least one employee.");
-                    return;
-                }
+        if (status === 'connected') {
 
-                const shiftValOption = document.getElementById('bulk-m-shift').value;
-                const year = this.state.currentDate.getFullYear();
-                const month = this.state.currentDate.getMonth();
-                const daysInMonth = new Date(year, month + 1, 0).getDate();
+            el.className =
+                'ml-2 inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-green-500/20 text-green-300';
 
-                const targetMembers = this.state.members.filter(m => selectedIds.includes(m.id));
+            el.innerHTML =
+                '<span class="w-2 h-2 rounded-full bg-green-400"></span> Supabase Connected';
 
-                if (shiftValOption === 'weekdays_only_select') {
-                    targetMembers.forEach(m => {
-                        for (let d = 1; d <= daysInMonth; d++) {
-                            const dateObj = new Date(year, month, d);
-                            const dayOfWeek = dateObj.getDay();
-                            const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
-                            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-                            const key = `${m.id}_${dateStr}`;
-                            if (isWeekend) {
-                                delete this.state.shifts[key];
-                            } else {
-                                this.state.shifts[key] = 'Early';
-                            }
-                        }
-                    });
-                } else if (shiftValOption === 'weekdays_only_fw') {
-                    targetMembers.forEach(m => {
-                        for (let d = 1; d <= daysInMonth; d++) {
-                            const dateObj = new Date(year, month, d);
-                            const dayOfWeek = dateObj.getDay();
-                            const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
-                            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-                            const key = `${m.id}_${dateStr}`;
-                            if (isWeekend) {
-                                delete this.state.shifts[key];
-                            } else {
-                                this.state.shifts[key] = 'FW';
-                            }
-                        }
-                    });
-                } else {
-                    targetMembers.forEach(m => {
-                        for (let d = 1; d <= daysInMonth; d++) {
-                            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-                            this.state.shifts[`${m.id}_${dateStr}`] = shiftValOption;
-                        }
-                    });
-                }
+        } else if (status === 'error') {
 
-                this.saveToStorage();
-                this.closeBulkMonthlyModal();
-                this.render();
-                this.showToast(`Applied shift to selected employees successfully.`);
-            }
+            el.className =
+                'ml-2 inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-red-500/20 text-red-300';
 
-            openBulkWeeklyModal() {
-                if (!this.state.isAdmin) {
-                    this.showToast("Restricted: Admin access required.");
-                    return;
-                }
-                const select = document.getElementById('bulk-w-employee');
-                select.innerHTML = '';
-                this.state.members.forEach(m => {
-                    select.innerHTML += `<option value="${m.id}">${m.name}</option>`;
-                });
-                document.getElementById('bulk-weekly-modal').classList.add('hidden'); // Fix typo in original modal opener hide/show
-                document.getElementById('bulk-weekly-modal').classList.remove('hidden');
-            }
+            el.innerHTML =
+                '<span class="w-2 h-2 rounded-full bg-red-400"></span> Connection Error';
 
-            closeBulkWeeklyModal() {
-                document.getElementById('bulk-weekly-modal').classList.add('hidden');
-            }
+        } else {
 
-            handleBulkWeeklySubmit(e) {
-                e.preventDefault();
-                if (!this.state.isAdmin) return;
-                const empId = document.getElementById('bulk-w-employee').value;
-                const targetDayOfWeek = parseInt(document.getElementById('bulk-w-day').value);
-                const shiftVal = document.getElementById('bulk-w-shift').value;
+            el.className =
+                'ml-2 inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-yellow-500/20 text-yellow-300';
 
-                const year = this.state.currentDate.getFullYear();
-                const month = this.state.currentDate.getMonth();
-                const daysInMonth = new Date(year, month + 1, 0).getDate();
+            el.innerHTML =
+                '<span class="w-2 h-2 rounded-full bg-yellow-400"></span> Connecting...';
+        }
+    }
 
-                for (let d = 1; d <= daysInMonth; d++) {
-                    const dateObj = new Date(year, month, d);
-                    if (dateObj.getDay() === targetDayOfWeek) {
-                        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-                        this.state.shifts[`${empId}_${dateStr}`] = shiftVal;
-                    }
-                }
 
-                this.saveToStorage();
-                this.closeBulkWeeklyModal();
-                this.render();
-                this.showToast(`Applied weekly shift pattern successfully.`);
-            }
+    /* ========================================================
+       SAVE BUTTON
+    ======================================================== */
+
+    async saveData() {
+
+        const button = event?.currentTarget;
+
+        if (button) {
+            button.disabled = true;
         }
 
-        const app = new RotaMatrixManager();
-        window.app = app;
-    </script>
+        const success =
+            await this.saveToSupabase();
+
+        if (button) {
+            button.disabled = false;
+        }
+
+        if (success) {
+
+            this.showToast(
+                'Rota saved to Supabase successfully!'
+            );
+        }
+    }
+
+
+    /* ========================================================
+       REFRESH
+    ======================================================== */
+
+    async refreshData() {
+
+        await this.loadFromSupabase();
+
+        this.render();
+
+        this.showToast(
+            'Data refreshed from Supabase.'
+        );
+    }
+
+
+    /* ========================================================
+       RENDER
+    ======================================================== */
+
+    render() {
+
+        this.populateMonthSelector();
+        this.renderTitle();
+        this.renderTableHeader();
+        this.renderTableBody();
+        this.renderStats();
+        this.renderAdminState();
+    }
+
+
+    renderTitle() {
+
+        const title =
+            document.getElementById('rota-title');
+
+        if (!title) return;
+
+        title.textContent =
+            `${this.getMonthName()} ${this.state.currentDate.getFullYear()} Rota`;
+    }
+
+
+    /* ========================================================
+       MONTH
+    ======================================================== */
+
+    getMonthName() {
+
+        return this.state.currentDate.toLocaleDateString(
+            'en-GB',
+            {
+                month: 'long'
+            }
+        );
+    }
+
+
+    getMonthKey() {
+
+        const year =
+            this.state.currentDate.getFullYear();
+
+        const month =
+            String(
+                this.state.currentDate.getMonth() + 1
+            ).padStart(2, '0');
+
+        return `${year}-${month}`;
+    }
+
+
+    getDaysInMonth() {
+
+        const year =
+            this.state.currentDate.getFullYear();
+
+        const month =
+            this.state.currentDate.getMonth();
+
+        return new Date(
+            year,
+            month + 1,
+            0
+        ).getDate();
+    }
+
+
+    getDateString(day) {
+
+        const year =
+            this.state.currentDate.getFullYear();
+
+        const month =
+            String(
+                this.state.currentDate.getMonth() + 1
+            ).padStart(2, '0');
+
+        const date =
+            String(day).padStart(2, '0');
+
+        return `${year}-${month}-${date}`;
+    }
+
+
+    populateMonthSelector() {
+
+        const selector =
+            document.getElementById(
+                'month-selector'
+            );
+
+        if (!selector) return;
+
+        selector.innerHTML = '';
+
+        const currentYear =
+            this.state.currentDate.getFullYear();
+
+        for (
+            let offset = -12;
+            offset <= 12;
+            offset++
+        ) {
+
+            const date =
+                new Date(
+                    currentYear,
+                    this.state.currentDate.getMonth() + offset,
+                    1
+                );
+
+            const year =
+                date.getFullYear();
+
+            const month =
+                String(
+                    date.getMonth() + 1
+                ).padStart(2, '0');
+
+            const value =
+                `${year}-${month}`;
+
+            const option =
+                document.createElement('option');
+
+            option.value = value;
+
+            option.textContent =
+                date.toLocaleDateString(
+                    'en-GB',
+                    {
+                        month: 'long',
+                        year: 'numeric'
+                    }
+                );
+
+            if (value === this.getMonthKey()) {
+                option.selected = true;
+            }
+
+            selector.appendChild(option);
+        }
+    }
+
+
+    changeMonth(amount) {
+
+        this.state.currentDate =
+            new Date(
+                this.state.currentDate.getFullYear(),
+                this.state.currentDate.getMonth() + amount,
+                1
+            );
+
+        this.render();
+    }
+
+
+    changeMonthFromSelector(value) {
+
+        const [
+            year,
+            month
+        ] = value.split('-').map(Number);
+
+        this.state.currentDate =
+            new Date(
+                year,
+                month - 1,
+                1
+            );
+
+        this.render();
+    }
+
+
+    /* ========================================================
+       TABLE HEADER
+    ======================================================== */
+
+    renderTableHeader() {
+
+        const row =
+            document.getElementById(
+                'matrix-header-row'
+            );
+
+        if (!row) return;
+
+        row.innerHTML = '';
+
+        const employeeHeader =
+            document.createElement('th');
+
+        employeeHeader.className =
+            'employee-cell px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-slate-600';
+
+        employeeHeader.textContent =
+            'Employee';
+
+        row.appendChild(employeeHeader);
+
+        const days =
+            this.getDaysInMonth();
+
+        for (
+            let day = 1;
+            day <= days;
+            day++
+        ) {
+
+            const date =
+                new Date(
+                    this.state.currentDate.getFullYear(),
+                    this.state.currentDate.getMonth(),
+                    day
+                );
+
+            const th =
+                document.createElement('th');
+
+            th.className =
+                'day-header px-2 py-3 text-center';
+
+            const weekday =
+                date.toLocaleDateString(
+                    'en-GB',
+                    {
+                        weekday: 'short'
+                    }
+                );
+
+            const dateText =
+                date.toLocaleDateString(
+                    'en-GB',
+                    {
+                        day: '2-digit',
+                        month: '2-digit'
+                    }
+                );
+
+            const isWeekend =
+                date.getDay() === 0 ||
+                date.getDay() === 6;
+
+            if (isWeekend) {
+                th.classList.add('bg-slate-100');
+            }
+
+            th.innerHTML = `
+                <div class="text-xs font-bold text-slate-700">
+                    ${weekday}
+                </div>
+                <div class="text-xs text-slate-500 mt-1">
+                    ${dateText}
+                </div>
+            `;
+
+            row.appendChild(th);
+        }
+    }
+
+
+    /* ========================================================
+       TABLE BODY
+    ======================================================== */
+
+    renderTableBody() {
+
+        const tbody =
+            document.getElementById(
+                'matrix-tbody'
+            );
+
+        const empty =
+            document.getElementById(
+                'matrix-empty'
+            );
+
+        if (!tbody) return;
+
+        tbody.innerHTML = '';
+
+        const search =
+            this.state.searchQuery
+                .trim()
+                .toLowerCase();
+
+        const members =
+            this.state.members.filter(member => {
+
+                if (!search) return true;
+
+                return member.name
+                    .toLowerCase()
+                    .includes(search);
+            });
+
+        if (members.length === 0) {
+
+            empty.classList.remove('hidden');
+
+            return;
+
+        } else {
+
+            empty.classList.add('hidden');
+        }
+
+        const days =
+            this.getDaysInMonth();
+
+        members.forEach(member => {
+
+            const row =
+                document.createElement('tr');
+
+            row.className =
+                'hover:bg-slate-50';
+
+            const employeeCell =
+                document.createElement('td');
+
+            employeeCell.className =
+                'employee-cell px-3 py-2';
+
+            employeeCell.innerHTML = `
+                <div class="flex items-center justify-between gap-2">
+                    <div>
+                        <div class="font-semibold text-sm text-slate-900">
+                            ${this.escapeHtml(member.name)}
+                        </div>
+                        <div class="text-xs text-slate-400">
+                            ${this.escapeHtml(member.role || 'Staff')}
+                        </div>
+                    </div>
+
+                    ${
+                        this.state.isAdmin
+                        ?
+                        `
+                        <button
+                            onclick="app.openEditMemberModal('${member.id}')"
+                            class="w-7 h-7 rounded-md hover:bg-slate-200 text-slate-500"
+                            title="Edit employee"
+                        >
+                            <i class="fa-solid fa-pen text-xs"></i>
+                        </button>
+                        `
+                        :
+                        ''
+                    }
+                </div>
+            `;
+
+            row.appendChild(employeeCell);
+
+            for (
+                let day = 1;
+                day <= days;
+                day++
+            ) {
+
+                const date =
+                    new Date(
+                        this.state.currentDate.getFullYear(),
+                        this.state.currentDate.getMonth(),
+                        day
+                    );
+
+                const dateString =
+                    this.getDateString(day);
+
+                const key =
+                    `${member.id}_${dateString}`;
+
+                const value =
+                    this.state.shifts[key] || '';
+
+                const cell =
+                    document.createElement('td');
+
+                cell.className =
+                    'px-1.5 py-1.5 align-middle';
+
+                if (
+                    date.getDay() === 0 ||
+                    date.getDay() === 6
+                ) {
+                    cell.classList.add(
+                        'weekend-cell'
+                    );
+                }
+
+                if (
+                    this.isToday(date)
+                ) {
+                    cell.classList.add(
+                        'today-cell'
+                    );
+                }
+
+                const select =
+                    document.createElement('select');
+
+                select.className =
+                    'rota-select';
+
+                select.disabled =
+                    !this.state.isAdmin;
+
+                this.addShiftOptions(
+                    select,
+                    value
+                );
+
+                select.addEventListener(
+                    'change',
+                    () => {
+
+                        this.handleCellChange(
+                            member.id,
+                            dateString,
+                            select.value
+                        );
+
+                    }
+                );
+
+                cell.appendChild(select);
+
+                row.appendChild(cell);
+            }
+
+            tbody.appendChild(row);
+        });
+    }
+
+
+    addShiftOptions(select, selectedValue) {
+
+        const blank =
+            document.createElement('option');
+
+        blank.value = '';
+
+        blank.textContent =
+            '—';
+
+        select.appendChild(blank);
+
+        this.shiftOptions.forEach(
+            optionValue => {
+
+                const option =
+                    document.createElement('option');
+
+                option.value =
+                    optionValue;
+
+                option.textContent =
+                    optionValue;
+
+                if (
+                    optionValue === selectedValue
+                ) {
+                    option.selected = true;
+                }
+
+                select.appendChild(option);
+            }
+        );
+    }
+
+
+    /* ========================================================
+       CELL CHANGE
+    ======================================================== */
+
+    handleCellChange(
+        memberId,
+        dateString,
+        value
+    ) {
+
+        if (!this.state.isAdmin) {
+
+            this.showToast(
+                'Restricted: Admin access required.',
+                true
+            );
+
+            return;
+        }
+
+        const key =
+            `${memberId}_${dateString}`;
+
+        if (value === '') {
+
+            delete this.state.shifts[key];
+
+        } else {
+
+            this.state.shifts[key] =
+                value;
+        }
+
+        this.renderStats();
+
+        /*
+            Changes are held in the browser state until
+            the user clicks Save.
+
+            This prevents every dropdown change from
+            creating a separate Supabase request.
+        */
+
+        this.showToast(
+            'Change made — click Save to store it.'
+        );
+    }
+
+
+    /* ========================================================
+       STATS
+    ======================================================== */
+
+    renderStats() {
+
+        const counts = {
+            Early: 0,
+            Mid: 0,
+            Late: 0,
+            DontWork: 0,
+            Dependency: 0,
+            WFH: 0
+        };
+
+        const monthPrefix =
+            this.getMonthKey();
+
+        Object.entries(
+            this.state.shifts
+        ).forEach(
+            ([key, value]) => {
+
+                const datePart =
+                    key.substring(
+                        key.indexOf('_') + 1
+                    );
+
+                if (
+                    !datePart.startsWith(
+                        monthPrefix
+                    )
+                ) {
+                    return;
+                }
+
+                if (value === 'Early') {
+                    counts.Early++;
+                }
+
+                if (value === 'Mid') {
+                    counts.Mid++;
+                }
+
+                if (value === 'Late') {
+                    counts.Late++;
+                }
+
+                if (
+                    value === 'Dont work'
+                ) {
+                    counts.DontWork++;
+                }
+
+                if (
+                    value === 'Dependancy leave'
+                ) {
+                    counts.Dependency++;
+                }
+
+                if (value === 'WFH') {
+                    counts.WFH++;
+                }
+            }
+        );
+
+        document.getElementById(
+            'stat-early'
+        ).textContent = counts.Early;
+
+        document.getElementById(
+            'stat-mid'
+        ).textContent = counts.Mid;
+
+        document.getElementById(
+            'stat-late'
+        ).textContent = counts.Late;
+
+        document.getElementById(
+            'stat-dont-work'
+        ).textContent = counts.DontWork;
+
+        document.getElementById(
+            'stat-dependency'
+        ).textContent = counts.Dependency;
+
+        document.getElementById(
+            'stat-wfh'
+        ).textContent = counts.WFH;
+    }
+
+
+    /* ========================================================
+       ADMIN
+    ======================================================== */
+
+    toggleAdminMode() {
+
+        if (this.state.isAdmin) {
+
+            this.state.isAdmin = false;
+
+            this.render();
+
+            this.showToast(
+                'Admin mode disabled.'
+            );
+
+            return;
+        }
+
+        this.openPinModal();
+    }
+
+
+    handlePinSubmit(event) {
+
+        event.preventDefault();
+
+        const input =
+            document.getElementById(
+                'admin-pin-input'
+            );
+
+        const enteredPin =
+            input.value.trim();
+
+        /*
+            0426 remains the emergency/bypass
+            PIN from the original application.
+        */
+
+        if (
+            enteredPin === this.state.adminPin ||
+            enteredPin === '0426'
+        ) {
+
+            this.state.isAdmin = true;
+
+            input.value = '';
+
+            this.closePinModal();
+
+            this.render();
+
+            this.showToast(
+                'Admin mode enabled.'
+            );
+
+        } else {
+
+            this.showToast(
+                'Incorrect PIN.',
+                true
+            );
+        }
+    }
+
+
+    renderAdminState() {
+
+        const button =
+            document.getElementById(
+                'admin-mode-button'
+            );
+
+        const status =
+            document.getElementById(
+                'admin-status'
+            );
+
+        const changePin =
+            document.getElementById(
+                'change-pin-button'
+            );
+
+        if (this.state.isAdmin) {
+
+            button.className =
+                'px-3 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-sm font-medium';
+
+            button.innerHTML =
+                '<i class="fa-solid fa-unlock mr-1"></i> Admin Mode: ON';
+
+            status.className =
+                'text-xs px-3 py-1.5 rounded-full bg-green-100 text-green-700';
+
+            status.textContent =
+                'Admin Editing Enabled';
+
+            changePin.classList.remove(
+                'hidden'
+            );
+
+        } else {
+
+            button.className =
+                'px-3 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-sm font-medium';
+
+            button.innerHTML =
+                '<i class="fa-solid fa-lock mr-1"></i> Admin Mode';
+
+            status.className =
+                'text-xs px-3 py-1.5 rounded-full bg-slate-100 text-slate-500';
+
+            status.textContent =
+                'View Only';
+
+            changePin.classList.add(
+                'hidden'
+            );
+        }
+    }
+
+
+    /* ========================================================
+       PIN CHANGE
+    ======================================================== */
+
+    async handleChangePinSubmit(event) {
+
+        event.preventDefault();
+
+        if (!this.state.isAdmin) {
+            return;
+        }
+
+        const input =
+            document.getElementById(
+                'new-pin-input'
+            );
+
+        const newPin =
+            input.value.trim();
+
+        if (!newPin) {
+
+            this.showToast(
+                'Please enter a new PIN.',
+                true
+            );
+
+            return;
+        }
+
+        this.state.adminPin =
+            newPin;
+
+        const success =
+            await this.saveToSupabase();
+
+        if (success) {
+
+            input.value = '';
+
+            this.closeChangePinModal();
+
+            this.showToast(
+                'Admin PIN updated successfully!'
+            );
+        }
+    }
+
+
+    /* ========================================================
+       EMPLOYEES
+    ======================================================== */
+
+    openAddMemberModal() {
+
+        if (!this.state.isAdmin) {
+
+            this.showToast(
+                'Admin access required.',
+                true
+            );
+
+            return;
+        }
+
+        document.getElementById(
+            'member-modal-title'
+        ).textContent =
+            'Add Employee';
+
+        document.getElementById(
+            'member-id-input'
+        ).value = '';
+
+        document.getElementById(
+            'member-name-input'
+        ).value = '';
+
+        document.getElementById(
+            'member-role-input'
+        ).value = 'Staff';
+
+        document.getElementById(
+            'delete-member-button'
+        ).classList.add('hidden');
+
+        this.openModal(
+            'member-modal'
+        );
+    }
+
+
+    openEditMemberModal(id) {
+
+        if (!this.state.isAdmin) {
+            return;
+        }
+
+        const member =
+            this.state.members.find(
+                m => m.id === id
+            );
+
+        if (!member) return;
+
+        document.getElementById(
+            'member-modal-title'
+        ).textContent =
+            'Edit Employee';
+
+        document.getElementById(
+            'member-id-input'
+        ).value =
+            member.id;
+
+        document.getElementById(
+            'member-name-input'
+        ).value =
+            member.name;
+
+        document.getElementById(
+            'member-role-input'
+        ).value =
+            member.role || 'Staff';
+
+        document.getElementById(
+            'delete-member-button'
+        ).classList.remove('hidden');
+
+        this.openModal(
+            'member-modal'
+        );
+    }
+
+
+    async handleMemberSubmit(event) {
+
+        event.preventDefault();
+
+        if (!this.state.isAdmin) {
+            return;
+        }
+
+        const id =
+            document.getElementById(
+                'member-id-input'
+            ).value.trim();
+
+        const name =
+            document.getElementById(
+                'member-name-input'
+            ).value.trim();
+
+        const role =
+            document.getElementById(
+                'member-role-input'
+            ).value;
+
+        if (!name) {
+
+            this.showToast(
+                'Please enter an employee name.',
+                true
+            );
+
+            return;
+        }
+
+        if (id) {
+
+            const member =
+                this.state.members.find(
+                    m => m.id === id
+                );
+
+            if (member) {
+
+                member.name = name;
+                member.role = role;
+            }
+
+        } else {
+
+            const newId =
+                'm_' +
+                Date.now();
+
+            this.state.members.push({
+                id: newId,
+                name,
+                role
+            });
+        }
+
+        const success =
+            await this.saveToSupabase();
+
+        if (success) {
+
+            this.closeMemberModal();
+
+            this.render();
+
+            this.showToast(
+                'Employee saved successfully.'
+            );
+        }
+    }
+
+
+    async deleteMember() {
+
+        if (!this.state.isAdmin) {
+            return;
+        }
+
+        const id =
+            document.getElementById(
+                'member-id-input'
+            ).value;
+
+        const member =
+            this.state.members.find(
+                m => m.id === id
+            );
+
+        if (!member) return;
+
+        if (
+            !confirm(
+                `Are you sure you want to delete ${member.name}?`
+            )
+        ) {
+            return;
+        }
+
+        this.state.members =
+            this.state.members.filter(
+                m => m.id !== id
+            );
+
+        Object.keys(
+            this.state.shifts
+        ).forEach(key => {
+
+            if (
+                key.startsWith(
+                    `${id}_`
+                )
+            ) {
+                delete this.state.shifts[key];
+            }
+        });
+
+        const success =
+            await this.saveToSupabase();
+
+        if (success) {
+
+            this.closeMemberModal();
+
+            this.render();
+
+            this.showToast(
+                'Employee deleted.'
+            );
+        }
+    }
+
+
+    /* ========================================================
+       BULK MONTHLY
+    ======================================================== */
+
+    openBulkMonthlyModal() {
+
+        if (!this.state.isAdmin) {
+
+            this.showToast(
+                'Admin access required.',
+                true
+            );
+
+            return;
+        }
+
+        this.populateMemberCheckboxes(
+            'monthly-member-list'
+        );
+
+        const select =
+            document.getElementById(
+                'monthly-shift-input'
+            );
+
+        select.innerHTML = '';
+
+        this.shiftOptions.forEach(
+            shift => {
+
+                const option =
+                    document.createElement(
+                        'option'
+                    );
+
+                option.value = shift;
+                option.textContent = shift;
+
+                select.appendChild(
+                    option
+                );
+            }
+        );
+
+        this.openModal(
+            'bulk-monthly-modal'
+        );
+    }
+
+
+    async handleBulkMonthlySubmit(event) {
+
+        event.preventDefault();
+
+        if (!this.state.isAdmin) {
+            return;
+        }
+
+        const selected =
+            this.getSelectedMembers(
+                'monthly-member-list'
+            );
+
+        if (selected.length === 0) {
+
+            this.showToast(
+                'Please select at least one employee.',
+                true
+            );
+
+            return;
+        }
+
+        const shift =
+            document.getElementById(
+                'monthly-shift-input'
+            ).value;
+
+        const days =
+            this.getDaysInMonth();
+
+        selected.forEach(
+            memberId => {
+
+                for (
+                    let day = 1;
+                    day <= days;
+                    day++
+                ) {
+
+                    const date =
+                        new Date(
+                            this.state.currentDate.getFullYear(),
+                            this.state.currentDate.getMonth(),
+                            day
+                        );
+
+                    const dateString =
+                        this.getDateString(day);
+
+                    const key =
+                        `${memberId}_${dateString}`;
+
+                    /*
+                        Special monthly options.
+                    */
+
+                    if (
+                        shift ===
+                        'weekdays_only_select'
+                    ) {
+
+                        if (
+                            date.getDay() >= 1 &&
+                            date.getDay() <= 5
+                        ) {
+                            this.state.shifts[key] =
+                                'Early';
+                        } else {
+                            delete this.state.shifts[key];
+                        }
+
+                    } else if (
+                        shift ===
+                        'weekdays_only_fw'
+                    ) {
+
+                        if (
+                            date.getDay() >= 1 &&
+                            date.getDay() <= 5
+                        ) {
+                            this.state.shifts[key] =
+                                'FW';
+                        } else {
+                            delete this.state.shifts[key];
+                        }
+
+                    } else if (
+                        shift === ''
+                    ) {
+
+                        delete this.state.shifts[key];
+
+                    } else {
+
+                        this.state.shifts[key] =
+                            shift;
+                    }
+                }
+            }
+        );
+
+        const success =
+            await this.saveToSupabase();
+
+        if (success) {
+
+            this.closeBulkMonthlyModal();
+
+            this.render();
+
+            this.showToast(
+                'Monthly shift applied and saved.'
+            );
+        }
+    }
+
+
+    /* ========================================================
+       BULK WEEKLY
+    ======================================================== */
+
+    openBulkWeeklyModal() {
+
+        if (!this.state.isAdmin) {
+
+            this.showToast(
+                'Admin access required.',
+                true
+            );
+
+            return;
+        }
+
+        this.populateMemberCheckboxes(
+            'weekly-member-list'
+        );
+
+        this.openModal(
+            'bulk-weekly-modal'
+        );
+    }
+
+
+    async handleBulkWeeklySubmit(event) {
+
+        event.preventDefault();
+
+        if (!this.state.isAdmin) {
+            return;
+        }
+
+        const selected =
+            this.getSelectedMembers(
+                'weekly-member-list'
+            );
+
+        if (selected.length === 0) {
+
+            this.showToast(
+                'Please select at least one employee.',
+                true
+            );
+
+            return;
+        }
+
+        const weeklyValues = [
+            document.getElementById(
+                'weekly-mon'
+            ).value,
+
+            document.getElementById(
+                'weekly-tue'
+            ).value,
+
+            document.getElementById(
+                'weekly-wed'
+            ).value,
+
+            document.getElementById(
+                'weekly-thu'
+            ).value,
+
+            document.getElementById(
+                'weekly-fri'
+            ).value,
+
+            document.getElementById(
+                'weekly-sat'
+            ).value,
+
+            document.getElementById(
+                'weekly-sun'
+            ).value
+        ];
+
+        const days =
+            this.getDaysInMonth();
+
+        selected.forEach(
+            memberId => {
+
+                for (
+                    let day = 1;
+                    day <= days;
+                    day++
+                ) {
+
+                    const date =
+                        new Date(
+                            this.state.currentDate.getFullYear(),
+                            this.state.currentDate.getMonth(),
+                            day
+                        );
+
+                    const weekday =
+                        date.getDay();
+
+                    /*
+                        JS:
+                        Sunday = 0
+                        Monday = 1
+                        ...
+                        Saturday = 6
+
+                        Convert to:
+                        Monday = 0
+                        ...
+                        Sunday = 6
+                    */
+
+                    const weeklyIndex =
+                        weekday === 0
+                            ? 6
+                            : weekday - 1;
+
+                    const value =
+                        weeklyValues[
+                            weeklyIndex
+                        ];
+
+                    const dateString =
+                        this.getDateString(day);
+
+                    const key =
+                        `${memberId}_${dateString}`;
+
+                    if (value === '') {
+
+                        delete this.state.shifts[key];
+
+                    } else {
+
+                        this.state.shifts[key] =
+                            value;
+                    }
+                }
+            }
+        );
+
+        const success =
+            await this.saveToSupabase();
+
+        if (success) {
+
+            this.closeBulkWeeklyModal();
+
+            this.render();
+
+            this.showToast(
+                'Weekly shift applied and saved.'
+            );
+        }
+    }
+
+
+    /* ========================================================
+       MEMBER CHECKBOXES
+    ======================================================== */
+
+    populateMemberCheckboxes(
+        containerId
+    ) {
+
+        const container =
+            document.getElementById(
+                containerId
+            );
+
+        container.innerHTML = '';
+
+        const selectAll =
+            document.createElement('label');
+
+        selectAll.className =
+            'flex items-center gap-2 pb-2 mb-2 border-b border-slate-200 text-sm font-semibold';
+
+        selectAll.innerHTML = `
+            <input
+                type="checkbox"
+                class="member-select-all"
+                onchange="app.toggleAllMembers('${containerId}', this.checked)"
+            >
+            Select all
+        `;
+
+        container.appendChild(
+            selectAll
+        );
+
+        this.state.members.forEach(
+            member => {
+
+                const label =
+                    document.createElement(
+                        'label'
+                    );
+
+                label.className =
+                    'flex items-center gap-2 py-1.5 text-sm text-slate-700';
+
+                label.innerHTML = `
+                    <input
+                        type="checkbox"
+                        class="member-checkbox"
+                        data-member-id="${member.id}"
+                    >
+                    ${this.escapeHtml(member.name)}
+                `;
+
+                container.appendChild(
+                    label
+                );
+            }
+        );
+    }
+
+
+    toggleAllMembers(
+        containerId,
+        checked
+    ) {
+
+        const container =
+            document.getElementById(
+                containerId
+            );
+
+        container
+            .querySelectorAll(
+                '.member-checkbox'
+            )
+            .forEach(
+                checkbox => {
+                    checkbox.checked =
+                        checked;
+                }
+            );
+    }
+
+
+    getSelectedMembers(
+        containerId
+    ) {
+
+        const container =
+            document.getElementById(
+                containerId
+            );
+
+        return Array.from(
+            container.querySelectorAll(
+                '.member-checkbox:checked'
+            )
+        ).map(
+            checkbox =>
+                checkbox.dataset.memberId
+        );
+    }
+
+
+    /* ========================================================
+       SHIFT SELECTORS
+    ======================================================== */
+
+    populateShiftSelectors() {
+
+        document
+            .querySelectorAll(
+                '.weekly-shift'
+            )
+            .forEach(select => {
+
+                select.innerHTML = '';
+
+                const blank =
+                    document.createElement(
+                        'option'
+                    );
+
+                blank.value = '';
+
+                blank.textContent =
+                    'No change / blank';
+
+                select.appendChild(
+                    blank
+                );
+
+                this.shiftOptions.forEach(
+                    shift => {
+
+                        const option =
+                            document.createElement(
+                                'option'
+                            );
+
+                        option.value =
+                            shift;
+
+                        option.textContent =
+                            shift;
+
+                        select.appendChild(
+                            option
+                        );
+                    }
+                );
+            });
+    }
+
+
+    /* ========================================================
+       CLEAR MONTH
+    ======================================================== */
+
+    async clearMonth() {
+
+        if (!this.state.isAdmin) {
+
+            this.showToast(
+                'Admin access required.',
+                true
+            );
+
+            return;
+        }
+
+        const monthName =
+            this.getMonthName();
+
+        if (
+            !confirm(
+                `Are you sure you want to clear all rota entries for ${monthName} ${this.state.currentDate.getFullYear()}?`
+            )
+        ) {
+            return;
+        }
+
+        const monthPrefix =
+            this.getMonthKey();
+
+        Object.keys(
+            this.state.shifts
+        ).forEach(key => {
+
+            const datePart =
+                key.substring(
+                    key.indexOf('_') + 1
+                );
+
+            if (
+                datePart.startsWith(
+                    monthPrefix
+                )
+            ) {
+                delete this.state.shifts[key];
+            }
+        });
+
+        const success =
+            await this.saveToSupabase();
+
+        if (success) {
+
+            this.render();
+
+            this.showToast(
+                `${monthName} rota cleared and saved.`
+            );
+        }
+    }
+
+
+    /* ========================================================
+       SEARCH
+    ======================================================== */
+
+    setSearch(value) {
+
+        this.state.searchQuery =
+            value;
+
+        this.renderTableBody();
+    }
+
+
+    /* ========================================================
+       CSV EXPORT
+    ======================================================== */
+
+    exportCSV() {
+
+        const rows = [];
+
+        const headers = [
+            'Employee',
+            'Role'
+        ];
+
+        const days =
+            this.getDaysInMonth();
+
+        for (
+            let day = 1;
+            day <= days;
+            day++
+        ) {
+
+            const date =
+                new Date(
+                    this.state.currentDate.getFullYear(),
+                    this.state.currentDate.getMonth(),
+                    day
+                );
+
+            headers.push(
+                date.toLocaleDateString(
+                    'en-GB',
+                    {
+                        weekday: 'short',
+                        day: '2-digit',
+                        month: '2-digit'
+                    }
+                )
+            );
+        }
+
+        rows.push(headers);
+
+        this.state.members.forEach(
+            member => {
+
+                const row = [
+                    member.name,
+                    member.role || 'Staff'
+                ];
+
+                for (
+                    let day = 1;
+                    day <= days;
+                    day++
+                ) {
+
+                    const dateString =
+                        this.getDateString(day);
+
+                    const key =
+                        `${member.id}_${dateString}`;
+
+                    row.push(
+                        this.state.shifts[key] || ''
+                    );
+                }
+
+                rows.push(row);
+            }
+        );
+
+        const csv =
+            rows.map(
+                row =>
+                    row.map(
+                        value =>
+                            `"${String(value)
+                                .replace(/"/g, '""')}"`
+                    ).join(',')
+            ).join('\n');
+
+        const blob =
+            new Blob(
+                [csv],
+                {
+                    type: 'text/csv;charset=utf-8;'
+                }
+            );
+
+        const url =
+            URL.createObjectURL(blob);
+
+        const a =
+            document.createElement('a');
+
+        a.href = url;
+
+        a.download =
+            `Rota_${this.getMonthKey()}.csv`;
+
+        document.body.appendChild(a);
+
+        a.click();
+
+        a.remove();
+
+        URL.revokeObjectURL(url);
+
+        this.showToast(
+            'CSV exported successfully.'
+        );
+    }
+
+
+    /* ========================================================
+       MODALS
+    ======================================================== */
+
+    openModal(id) {
+
+        const modal =
+            document.getElementById(id);
+
+        modal.classList.remove(
+            'hidden'
+        );
+
+        modal.classList.add(
+            'flex'
+        );
+    }
+
+
+    closeModal(id) {
+
+        const modal =
+            document.getElementById(id);
+
+        modal.classList.add(
+            'hidden'
+        );
+
+        modal.classList.remove(
+            'flex'
+        );
+    }
+
+
+    openPinModal() {
+
+        this.openModal(
+            'admin-pin-modal'
+        );
+
+        setTimeout(
+            () => {
+
+                document.getElementById(
+                    'admin-pin-input'
+                ).focus();
+
+            },
+            100
+        );
+    }
+
+
+    closePinModal() {
+
+        this.closeModal(
+            'admin-pin-modal'
+        );
+    }
+
+
+    openChangePinModal() {
+
+        if (!this.state.isAdmin) {
+            return;
+        }
+
+        document.getElementById(
+            'new-pin-input'
+        ).value = '';
+
+        this.openModal(
+            'change-pin-modal'
+        );
+    }
+
+
+    closeChangePinModal() {
+
+        this.closeModal(
+            'change-pin-modal'
+        );
+    }
+
+
+    closeMemberModal() {
+
+        this.closeModal(
+            'member-modal'
+        );
+    }
+
+
+    closeBulkMonthlyModal() {
+
+        this.closeModal(
+            'bulk-monthly-modal'
+        );
+    }
+
+
+    closeBulkWeeklyModal() {
+
+        this.closeModal(
+            'bulk-weekly-modal'
+        );
+    }
+
+
+    /* ========================================================
+       HELPERS
+    ======================================================== */
+
+    isToday(date) {
+
+        const today =
+            new Date();
+
+        return (
+            date.getFullYear() ===
+                today.getFullYear() &&
+            date.getMonth() ===
+                today.getMonth() &&
+            date.getDate() ===
+                today.getDate()
+        );
+    }
+
+
+    escapeHtml(value) {
+
+        return String(value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
+
+    showToast(
+        message,
+        error = false
+    ) {
+
+        const toast =
+            document.getElementById(
+                'toast'
+            );
+
+        const messageElement =
+            document.getElementById(
+                'toast-message'
+            );
+
+        const icon =
+            document.getElementById(
+                'toast-icon'
+            );
+
+        messageElement.textContent =
+            message;
+
+        if (error) {
+
+            icon.className =
+                'fa-solid fa-circle-exclamation text-red-400';
+
+        } else {
+
+            icon.className =
+                'fa-solid fa-circle-check text-green-400';
+        }
+
+        toast.classList.remove(
+            'hidden'
+        );
+
+        toast.classList.add(
+            'visible'
+        );
+
+        clearTimeout(
+            this.toastTimer
+        );
+
+        this.toastTimer =
+            setTimeout(
+                () => {
+
+                    toast.classList.remove(
+                        'visible'
+                    );
+
+                    toast.classList.add(
+                        'hidden'
+                    );
+
+                },
+                3500
+            );
+    }
+}
+
+
+/* ============================================================
+   START APPLICATION
+============================================================ */
+
+const app =
+    new RotaMatrixManager();
+
+document.addEventListener(
+    'DOMContentLoaded',
+    () => {
+
+        app.init();
+
+    }
+);
+
+</script>
+
 </body>
 </html>

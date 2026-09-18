@@ -22,6 +22,7 @@
     >
 
     <style>
+
         * {
             box-sizing: border-box;
         }
@@ -98,20 +99,324 @@
             width: 125px;
         }
 
+        /* =====================================================
+           MAIN ROTA SELECT
+        ===================================================== */
+
         .rota-select {
             width: 100%;
             min-width: 112px;
             padding: 7px 28px 7px 8px;
-            border: 1px solid #cbd5e1;
+            border: 2px solid #cbd5e1;
             border-radius: 6px;
             background: white;
+            color: #475569;
             font-size: 12px;
+            font-weight: 700;
             outline: none;
+            transition: all 0.15s ease;
+            cursor: pointer;
         }
 
         .rota-select:focus {
-            border-color: #2563eb;
-            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+        /* =====================================================
+           VIBRANT SHIFT COLOURS
+        ===================================================== */
+
+        .shift-blank {
+            background: #ffffff !important;
+            color: #475569 !important;
+            border-color: #cbd5e1 !important;
+        }
+
+        .shift-Early {
+            background: #16a34a !important;
+            color: #ffffff !important;
+            border-color: #15803d !important;
+        }
+
+        .shift-Mid {
+            background: #f59e0b !important;
+            color: #ffffff !important;
+            border-color: #d97706 !important;
+        }
+
+        .shift-Late {
+            background: #7c3aed !important;
+            color: #ffffff !important;
+            border-color: #6d28d9 !important;
+        }
+
+        .shift-Early-finish-Early-shift {
+            background: #06b6d4 !important;
+            color: #ffffff !important;
+            border-color: #0891b2 !important;
+        }
+
+        .shift-Late-start-Early-shift {
+            background: #0d9488 !important;
+            color: #ffffff !important;
+            border-color: #0f766e !important;
+        }
+
+        .shift-Early-finish-Late-shift {
+            background: #ec4899 !important;
+            color: #ffffff !important;
+            border-color: #db2777 !important;
+        }
+
+        .shift-Late-start-Late-shift {
+            background: #f43f5e !important;
+            color: #ffffff !important;
+            border-color: #e11d48 !important;
+        }
+
+        .shift-Doctors-appointment {
+            background: #2563eb !important;
+            color: #ffffff !important;
+            border-color: #1d4ed8 !important;
+        }
+
+        .shift-Dont-work {
+            background: #dc2626 !important;
+            color: #ffffff !important;
+            border-color: #b91c1c !important;
+        }
+
+        .shift-Dependancy-leave {
+            background: #ea580c !important;
+            color: #ffffff !important;
+            border-color: #c2410c !important;
+        }
+
+        .shift-Holiday {
+            background: #eab308 !important;
+            color: #ffffff !important;
+            border-color: #ca8a04 !important;
+        }
+
+        .shift-WFH {
+            background: #059669 !important;
+            color: #ffffff !important;
+            border-color: #047857 !important;
+        }
+
+        .shift-FW {
+            background: #0891b2 !important;
+            color: #ffffff !important;
+            border-color: #0e7490 !important;
+        }
+
+        .shift-Flexi-Time-taken {
+            background: #9333ea !important;
+            color: #ffffff !important;
+            border-color: #7e22ce !important;
+        }
+
+        .shift-Flexi-time-redeem {
+            background: #4f46e5 !important;
+            color: #ffffff !important;
+            border-color: #4338ca !important;
+        }
+
+        /* =====================================================
+           MODAL SELECTS
+        ===================================================== */
+
+        .shift-modal-select {
+            width: 100%;
+            padding: 8px 30px 8px 10px;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
+            background: white;
+            color: #475569;
+            font-size: 13px;
+            font-weight: 700;
+            outline: none;
+            transition: all 0.15s ease;
+            cursor: pointer;
+        }
+
+        .shift-modal-select:focus {
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+        /* Modal colours use exactly the same colour scheme */
+
+        .shift-modal-select.shift-blank {
+            background: #ffffff !important;
+            color: #475569 !important;
+            border-color: #cbd5e1 !important;
+        }
+
+        .shift-modal-select.shift-Early {
+            background: #16a34a !important;
+            color: #ffffff !important;
+            border-color: #15803d !important;
+        }
+
+        .shift-modal-select.shift-Mid {
+            background: #f59e0b !important;
+            color: #ffffff !important;
+            border-color: #d97706 !important;
+        }
+
+        .shift-modal-select.shift-Late {
+            background: #7c3aed !important;
+            color: #ffffff !important;
+            border-color: #6d28d9 !important;
+        }
+
+        .shift-modal-select.shift-Early-finish-Early-shift {
+            background: #06b6d4 !important;
+            color: #ffffff !important;
+            border-color: #0891b2 !important;
+        }
+
+        .shift-modal-select.shift-Late-start-Early-shift {
+            background: #0d9488 !important;
+            color: #ffffff !important;
+            border-color: #0f766e !important;
+        }
+
+        .shift-modal-select.shift-Early-finish-Late-shift {
+            background: #ec4899 !important;
+            color: #ffffff !important;
+            border-color: #db2777 !important;
+        }
+
+        .shift-modal-select.shift-Late-start-Late-shift {
+            background: #f43f5e !important;
+            color: #ffffff !important;
+            border-color: #e11d48 !important;
+        }
+
+        .shift-modal-select.shift-Doctors-appointment {
+            background: #2563eb !important;
+            color: #ffffff !important;
+            border-color: #1d4ed8 !important;
+        }
+
+        .shift-modal-select.shift-Dont-work {
+            background: #dc2626 !important;
+            color: #ffffff !important;
+            border-color: #b91c1c !important;
+        }
+
+        .shift-modal-select.shift-Dependancy-leave {
+            background: #ea580c !important;
+            color: #ffffff !important;
+            border-color: #c2410c !important;
+        }
+
+        .shift-modal-select.shift-Holiday {
+            background: #eab308 !important;
+            color: #ffffff !important;
+            border-color: #ca8a04 !important;
+        }
+
+        .shift-modal-select.shift-WFH {
+            background: #059669 !important;
+            color: #ffffff !important;
+            border-color: #047857 !important;
+        }
+
+        .shift-modal-select.shift-FW {
+            background: #0891b2 !important;
+            color: #ffffff !important;
+            border-color: #0e7490 !important;
+        }
+
+        .shift-modal-select.shift-Flexi-Time-taken {
+            background: #9333ea !important;
+            color: #ffffff !important;
+            border-color: #7e22ce !important;
+        }
+
+        .shift-modal-select.shift-Flexi-time-redeem {
+            background: #4f46e5 !important;
+            color: #ffffff !important;
+            border-color: #4338ca !important;
+        }
+
+        /* Native dropdown option colours where browser supports them */
+
+        .shift-option-Early {
+            background: #16a34a;
+            color: white;
+        }
+
+        .shift-option-Mid {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .shift-option-Late {
+            background: #7c3aed;
+            color: white;
+        }
+
+        .shift-option-Early-finish-Early-shift {
+            background: #06b6d4;
+            color: white;
+        }
+
+        .shift-option-Late-start-Early-shift {
+            background: #0d9488;
+            color: white;
+        }
+
+        .shift-option-Early-finish-Late-shift {
+            background: #ec4899;
+            color: white;
+        }
+
+        .shift-option-Late-start-Late-shift {
+            background: #f43f5e;
+            color: white;
+        }
+
+        .shift-option-Doctors-appointment {
+            background: #2563eb;
+            color: white;
+        }
+
+        .shift-option-Dont-work {
+            background: #dc2626;
+            color: white;
+        }
+
+        .shift-option-Dependancy-leave {
+            background: #ea580c;
+            color: white;
+        }
+
+        .shift-option-Holiday {
+            background: #eab308;
+            color: white;
+        }
+
+        .shift-option-WFH {
+            background: #059669;
+            color: white;
+        }
+
+        .shift-option-FW {
+            background: #0891b2;
+            color: white;
+        }
+
+        .shift-option-Flexi-Time-taken {
+            background: #9333ea;
+            color: white;
+        }
+
+        .shift-option-Flexi-time-redeem {
+            background: #4f46e5;
+            color: white;
         }
 
         .weekend-cell {
@@ -143,6 +448,7 @@
         }
 
         @media print {
+
             body {
                 background: white !important;
             }
@@ -164,6 +470,7 @@
                 position: static !important;
             }
         }
+
     </style>
 </head>
 
@@ -172,13 +479,15 @@
 <div id="app" class="min-h-screen">
 
     <!-- HEADER -->
+
     <header class="bg-slate-900 text-white shadow-lg no-print">
+
         <div class="max-w-full mx-auto px-4 py-4">
 
             <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
 
-                <!-- TITLE -->
                 <div>
+
                     <div class="flex items-center gap-3">
 
                         <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center">
@@ -186,6 +495,7 @@
                         </div>
 
                         <div>
+
                             <h1 class="text-xl font-bold">
                                 Team Rota Manager
                             </h1>
@@ -193,6 +503,7 @@
                             <p class="text-xs text-slate-400">
                                 Supabase Connected
                             </p>
+
                         </div>
 
                         <span
@@ -204,9 +515,10 @@
                         </span>
 
                     </div>
+
                 </div>
 
-                <!-- ACTIONS -->
+
                 <div class="flex flex-wrap items-center gap-2">
 
                     <button
@@ -285,9 +597,12 @@
                     </button>
 
                 </div>
+
             </div>
 
+
             <!-- MONTH NAVIGATION -->
+
             <div class="mt-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
 
                 <div class="flex items-center gap-2">
@@ -314,6 +629,7 @@
 
                 </div>
 
+
                 <div class="flex items-center gap-2">
 
                     <div class="relative">
@@ -335,129 +651,108 @@
             </div>
 
         </div>
+
     </header>
 
 
     <!-- MAIN -->
+
     <main class="p-4">
 
         <!-- STATS -->
+
         <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3 mb-4">
 
-            <!-- EARLY -->
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-xs font-semibold text-slate-500 uppercase">
                             Early
                         </p>
-
-                        <p id="stat-early"
-                           class="text-2xl font-bold text-slate-900">
+                        <p id="stat-early" class="text-2xl font-bold text-slate-900">
                             0
                         </p>
                     </div>
-
-                    <div class="w-9 h-9 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center">
+                    <div class="w-9 h-9 rounded-lg bg-green-100 text-green-600 flex items-center justify-center">
                         <i class="fa-solid fa-sun"></i>
                     </div>
                 </div>
             </div>
 
-            <!-- MID -->
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-xs font-semibold text-slate-500 uppercase">
                             Mid
                         </p>
-
-                        <p id="stat-mid"
-                           class="text-2xl font-bold text-slate-900">
+                        <p id="stat-mid" class="text-2xl font-bold text-slate-900">
                             0
                         </p>
                     </div>
-
                     <div class="w-9 h-9 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center">
                         <i class="fa-solid fa-clock"></i>
                     </div>
                 </div>
             </div>
 
-            <!-- LATE -->
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-xs font-semibold text-slate-500 uppercase">
                             Late
                         </p>
-
-                        <p id="stat-late"
-                           class="text-2xl font-bold text-slate-900">
+                        <p id="stat-late" class="text-2xl font-bold text-slate-900">
                             0
                         </p>
                     </div>
-
                     <div class="w-9 h-9 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center">
                         <i class="fa-solid fa-moon"></i>
                     </div>
                 </div>
             </div>
 
-            <!-- DON'T WORK -->
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-xs font-semibold text-slate-500 uppercase">
                             Don't Work
                         </p>
-
-                        <p id="stat-dont-work"
-                           class="text-2xl font-bold text-slate-900">
+                        <p id="stat-dont-work" class="text-2xl font-bold text-slate-900">
                             0
                         </p>
                     </div>
-
                     <div class="w-9 h-9 rounded-lg bg-red-100 text-red-600 flex items-center justify-center">
                         <i class="fa-solid fa-ban"></i>
                     </div>
                 </div>
             </div>
 
-            <!-- DEPENDENCY -->
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-xs font-semibold text-slate-500 uppercase">
                             Dependancy Leave
                         </p>
-
-                        <p id="stat-dependency"
-                           class="text-2xl font-bold text-slate-900">
+                        <p id="stat-dependency" class="text-2xl font-bold text-slate-900">
                             0
                         </p>
                     </div>
-
                     <div class="w-9 h-9 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center">
                         <i class="fa-solid fa-people-arrows"></i>
                     </div>
                 </div>
             </div>
 
-            <!-- WFH -->
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-xs font-semibold text-slate-500 uppercase">
                             WFH
                         </p>
-
-                        <p id="stat-wfh"
-                           class="text-2xl font-bold text-slate-900">
+                        <p id="stat-wfh" class="text-2xl font-bold text-slate-900">
                             0
                         </p>
                     </div>
-
                     <div class="w-9 h-9 rounded-lg bg-green-100 text-green-600 flex items-center justify-center">
                         <i class="fa-solid fa-house-laptop"></i>
                     </div>
@@ -468,14 +763,14 @@
 
 
         <!-- ROTA -->
+
         <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
 
             <div class="px-4 py-3 border-b border-slate-200 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
 
                 <div>
 
-                    <h2 id="rota-title"
-                        class="font-bold text-slate-900">
+                    <h2 id="rota-title" class="font-bold text-slate-900">
                         Rota
                     </h2>
 
@@ -494,6 +789,7 @@
 
             </div>
 
+
             <div class="matrix-container scrollbar-thin">
 
                 <table class="matrix-table w-full">
@@ -509,6 +805,7 @@
                     </tbody>
 
                 </table>
+
 
                 <div
                     id="matrix-empty"
@@ -549,6 +846,7 @@
 
         </div>
 
+
         <form onsubmit="app.handlePinSubmit(event)" class="p-6">
 
             <label class="block text-sm font-semibold text-slate-700 mb-2">
@@ -563,6 +861,7 @@
                 class="w-full border border-slate-300 rounded-lg px-3 py-2 outline-none focus:border-blue-500"
                 placeholder="Enter PIN"
             >
+
 
             <div class="flex justify-end gap-2 mt-5">
 
@@ -609,6 +908,7 @@
 
         </div>
 
+
         <form onsubmit="app.handleChangePinSubmit(event)" class="p-6">
 
             <label class="block text-sm font-semibold text-slate-700 mb-2">
@@ -623,6 +923,7 @@
                 class="w-full border border-slate-300 rounded-lg px-3 py-2 outline-none focus:border-blue-500"
                 placeholder="Enter new PIN"
             >
+
 
             <div class="flex justify-end gap-2 mt-5">
 
@@ -672,12 +973,14 @@
 
         </div>
 
+
         <form onsubmit="app.handleMemberSubmit(event)" class="p-6">
 
             <input
                 id="member-id-input"
                 type="hidden"
             >
+
 
             <div class="mb-4">
 
@@ -694,6 +997,7 @@
                 >
 
             </div>
+
 
             <div class="mb-4">
 
@@ -712,6 +1016,7 @@
 
             </div>
 
+
             <div class="flex justify-between items-center mt-6">
 
                 <button
@@ -723,6 +1028,7 @@
                     <i class="fa-solid fa-trash mr-1"></i>
                     Delete
                 </button>
+
 
                 <div class="ml-auto flex gap-2">
 
@@ -775,6 +1081,7 @@
 
         </div>
 
+
         <form onsubmit="app.handleBulkMonthlySubmit(event)" class="p-6">
 
             <div class="mb-4">
@@ -790,6 +1097,7 @@
 
             </div>
 
+
             <div class="mb-4">
 
                 <label class="block text-sm font-semibold text-slate-700 mb-2">
@@ -798,10 +1106,12 @@
 
                 <select
                     id="monthly-shift-input"
-                    class="w-full border border-slate-300 rounded-lg px-3 py-2"
+                    class="shift-modal-select"
+                    onchange="app.applyShiftColour(this)"
                 ></select>
 
             </div>
+
 
             <div class="flex justify-end gap-2">
 
@@ -852,6 +1162,7 @@
 
         </div>
 
+
         <form onsubmit="app.handleBulkWeeklySubmit(event)" class="p-6">
 
             <div class="mb-4">
@@ -867,58 +1178,108 @@
 
             </div>
 
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
 
                 <div>
+
                     <label class="block text-xs font-semibold text-slate-600 mb-1">
                         Monday
                     </label>
-                    <select id="weekly-mon" class="weekly-shift w-full border rounded-lg px-3 py-2"></select>
+
+                    <select
+                        id="weekly-mon"
+                        class="weekly-shift shift-modal-select"
+                    ></select>
+
                 </div>
 
+
                 <div>
+
                     <label class="block text-xs font-semibold text-slate-600 mb-1">
                         Tuesday
                     </label>
-                    <select id="weekly-tue" class="weekly-shift w-full border rounded-lg px-3 py-2"></select>
+
+                    <select
+                        id="weekly-tue"
+                        class="weekly-shift shift-modal-select"
+                    ></select>
+
                 </div>
 
+
                 <div>
+
                     <label class="block text-xs font-semibold text-slate-600 mb-1">
                         Wednesday
                     </label>
-                    <select id="weekly-wed" class="weekly-shift w-full border rounded-lg px-3 py-2"></select>
+
+                    <select
+                        id="weekly-wed"
+                        class="weekly-shift shift-modal-select"
+                    ></select>
+
                 </div>
 
+
                 <div>
+
                     <label class="block text-xs font-semibold text-slate-600 mb-1">
                         Thursday
                     </label>
-                    <select id="weekly-thu" class="weekly-shift w-full border rounded-lg px-3 py-2"></select>
+
+                    <select
+                        id="weekly-thu"
+                        class="weekly-shift shift-modal-select"
+                    ></select>
+
                 </div>
 
+
                 <div>
+
                     <label class="block text-xs font-semibold text-slate-600 mb-1">
                         Friday
                     </label>
-                    <select id="weekly-fri" class="weekly-shift w-full border rounded-lg px-3 py-2"></select>
+
+                    <select
+                        id="weekly-fri"
+                        class="weekly-shift shift-modal-select"
+                    ></select>
+
                 </div>
 
+
                 <div>
+
                     <label class="block text-xs font-semibold text-slate-600 mb-1">
                         Saturday
                     </label>
-                    <select id="weekly-sat" class="weekly-shift w-full border rounded-lg px-3 py-2"></select>
+
+                    <select
+                        id="weekly-sat"
+                        class="weekly-shift shift-modal-select"
+                    ></select>
+
                 </div>
 
+
                 <div>
+
                     <label class="block text-xs font-semibold text-slate-600 mb-1">
                         Sunday
                     </label>
-                    <select id="weekly-sun" class="weekly-shift w-full border rounded-lg px-3 py-2"></select>
+
+                    <select
+                        id="weekly-sun"
+                        class="weekly-shift shift-modal-select"
+                    ></select>
+
                 </div>
 
             </div>
+
 
             <div class="flex justify-end gap-2">
 
@@ -946,12 +1307,15 @@
 </div>
 
 
+<!-- ========================================================= -->
 <!-- TOAST -->
+<!-- ========================================================= -->
 
 <div
     id="toast"
     class="toast hidden fixed bottom-5 right-5 z-[100] bg-slate-900 text-white px-5 py-3 rounded-xl shadow-xl text-sm"
 >
+
     <div class="flex items-center gap-2">
 
         <i
@@ -964,6 +1328,7 @@
         </span>
 
     </div>
+
 </div>
 
 
@@ -975,17 +1340,17 @@
 
 <script>
 
-    const SUPABASE_URL =
-        'https://lfoumafetmwayteullrg.supabase.co';
+const SUPABASE_URL =
+    'https://lfoumafetmwayteullrg.supabase.co';
 
-    const SUPABASE_ANON_KEY =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmb3VtYWZldG13YXl0ZXVsbHJnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk3Mjg1MzEsImV4cCI6MjEwNTMwNDUzMX0.-mKvr2dYdFPPQgkpIAa6pnFAVYgoRCQHoh33H-1tpgk';
+const SUPABASE_ANON_KEY =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmb3VtYWZldG13YXl0ZXVsbHJnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk3Mjg1MzEsImV4cCI6MjEwNTMwNDUzMX0.-mKvr2dYdFPPQgkpIAa6pnFAVYgoRCQHoh33H-1tpgk';
 
-    const supabaseClient =
-        window.supabase.createClient(
-            SUPABASE_URL,
-            SUPABASE_ANON_KEY
-        );
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
 
 </script>
 
@@ -1344,9 +1709,7 @@ class RotaMatrixManager {
        CONNECTION STATUS
     ======================================================== */
 
-    setConnectionStatus(
-        status
-    ) {
+    setConnectionStatus(status) {
 
         const el =
             document.getElementById(
@@ -2004,6 +2367,10 @@ class RotaMatrixManager {
                         'change',
                         () => {
 
+                            this.applyShiftColour(
+                                select
+                            );
+
                             this.handleCellChange(
                                 member.id,
                                 dateString,
@@ -2028,6 +2395,101 @@ class RotaMatrixManager {
                     row
                 );
             }
+        );
+    }
+
+
+    /* ========================================================
+       SHIFT COLOUR ENGINE
+    ======================================================== */
+
+    getShiftClass(value) {
+
+        if (!value) {
+            return 'shift-blank';
+        }
+
+        const classMap = {
+
+            'Early':
+                'shift-Early',
+
+            'Mid':
+                'shift-Mid',
+
+            'Late':
+                'shift-Late',
+
+            'Early finish - Early shift':
+                'shift-Early-finish-Early-shift',
+
+            'Late start - Early shift':
+                'shift-Late-start-Early-shift',
+
+            'Early finish - Late shift':
+                'shift-Early-finish-Late-shift',
+
+            'Late start - Late shift':
+                'shift-Late-start-Late-shift',
+
+            'Doctors appointment':
+                'shift-Doctors-appointment',
+
+            'Dont work':
+                'shift-Dont-work',
+
+            'Dependancy leave':
+                'shift-Dependancy-leave',
+
+            'Holiday':
+                'shift-Holiday',
+
+            'WFH':
+                'shift-WFH',
+
+            'FW':
+                'shift-FW',
+
+            'Flexi Time taken':
+                'shift-Flexi-Time-taken',
+
+            'Flexi time redeem':
+                'shift-Flexi-time-redeem'
+        };
+
+        return classMap[value] || 'shift-blank';
+    }
+
+
+    applyShiftColour(select) {
+
+        if (!select) {
+            return;
+        }
+
+        const isModal =
+            select.classList.contains(
+                'shift-modal-select'
+            );
+
+        const baseClass =
+            isModal
+                ? 'shift-modal-select'
+                : 'rota-select';
+
+
+        select.className =
+            baseClass;
+
+
+        const shiftClass =
+            this.getShiftClass(
+                select.value
+            );
+
+
+        select.classList.add(
+            shiftClass
         );
     }
 
@@ -2066,6 +2528,20 @@ class RotaMatrixManager {
                     optionValue;
 
 
+                const optionClass =
+                    this.getShiftClass(
+                        optionValue
+                    )
+                        .replace(
+                            'shift-',
+                            'shift-option-'
+                        );
+
+                option.classList.add(
+                    optionClass
+                );
+
+
                 if (
                     optionValue ===
                     selectedValue
@@ -2080,6 +2556,11 @@ class RotaMatrixManager {
                     option
                 );
             }
+        );
+
+
+        this.applyShiftColour(
+            select
         );
     }
 
@@ -2122,11 +2603,6 @@ class RotaMatrixManager {
         }
 
 
-        /*
-            IMPORTANT:
-            Stats are recalculated immediately.
-        */
-
         this.renderStats();
 
 
@@ -2137,7 +2613,7 @@ class RotaMatrixManager {
 
 
     /* ========================================================
-       FIXED STATS
+       STATS
     ======================================================== */
 
     renderStats() {
@@ -2167,18 +2643,6 @@ class RotaMatrixManager {
         ).forEach(
             ([key, value]) => {
 
-                /*
-                    FIX:
-                    Employee IDs contain underscores.
-
-                    Example:
-                    m_1_2026-09-01
-
-                    lastIndexOf('_') correctly finds
-                    the underscore immediately before
-                    the date.
-                */
-
                 const lastUnderscore =
                     key.lastIndexOf('_');
 
@@ -2195,11 +2659,6 @@ class RotaMatrixManager {
                         lastUnderscore + 1
                     );
 
-
-                /*
-                    Only count entries belonging
-                    to the currently selected month.
-                */
 
                 if (
                     !datePart.startsWith(
@@ -2261,66 +2720,35 @@ class RotaMatrixManager {
         );
 
 
-        const early =
-            document.getElementById(
-                'stat-early'
-            );
+        document.getElementById(
+            'stat-early'
+        ).textContent =
+            counts.Early;
 
-        const mid =
-            document.getElementById(
-                'stat-mid'
-            );
+        document.getElementById(
+            'stat-mid'
+        ).textContent =
+            counts.Mid;
 
-        const late =
-            document.getElementById(
-                'stat-late'
-            );
+        document.getElementById(
+            'stat-late'
+        ).textContent =
+            counts.Late;
 
-        const dontWork =
-            document.getElementById(
-                'stat-dont-work'
-            );
+        document.getElementById(
+            'stat-dont-work'
+        ).textContent =
+            counts.DontWork;
 
-        const dependency =
-            document.getElementById(
-                'stat-dependency'
-            );
+        document.getElementById(
+            'stat-dependency'
+        ).textContent =
+            counts.Dependency;
 
-        const wfh =
-            document.getElementById(
-                'stat-wfh'
-            );
-
-
-        if (early) {
-            early.textContent =
-                counts.Early;
-        }
-
-        if (mid) {
-            mid.textContent =
-                counts.Mid;
-        }
-
-        if (late) {
-            late.textContent =
-                counts.Late;
-        }
-
-        if (dontWork) {
-            dontWork.textContent =
-                counts.DontWork;
-        }
-
-        if (dependency) {
-            dependency.textContent =
-                counts.Dependency;
-        }
-
-        if (wfh) {
-            wfh.textContent =
-                counts.WFH;
-        }
+        document.getElementById(
+            'stat-wfh'
+        ).textContent =
+            counts.WFH;
     }
 
 
@@ -2462,9 +2890,7 @@ class RotaMatrixManager {
        PIN CHANGE
     ======================================================== */
 
-    async handleChangePinSubmit(
-        event
-    ) {
+    async handleChangePinSubmit(event) {
 
         event.preventDefault();
 
@@ -2626,9 +3052,7 @@ class RotaMatrixManager {
     }
 
 
-    async handleMemberSubmit(
-        event
-    ) {
+    async handleMemberSubmit(event) {
 
         event.preventDefault();
 
@@ -2826,20 +3250,37 @@ class RotaMatrixManager {
         select.innerHTML = '';
 
 
-        /*
-            Special options
-        */
+        const blank =
+            document.createElement(
+                'option'
+            );
+
+        blank.value = '';
+
+        blank.textContent =
+            'Select shift...';
+
+        select.appendChild(
+            blank
+        );
+
 
         const specialOptions = [
 
             {
-                value: 'weekdays_only_select',
-                label: 'Early - Weekdays only'
+                value:
+                    'weekdays_only_select',
+
+                label:
+                    'Early - Weekdays only'
             },
 
             {
-                value: 'weekdays_only_fw',
-                label: 'FW - Weekdays only'
+                value:
+                    'weekdays_only_fw',
+
+                label:
+                    'FW - Weekdays only'
             }
         ];
 
@@ -2879,10 +3320,28 @@ class RotaMatrixManager {
                 option.textContent =
                     shift;
 
+                const optionClass =
+                    this.getShiftClass(
+                        shift
+                    )
+                        .replace(
+                            'shift-',
+                            'shift-option-'
+                        );
+
+                option.classList.add(
+                    optionClass
+                );
+
                 select.appendChild(
                     option
                 );
             }
+        );
+
+
+        this.applyShiftColour(
+            select
         );
 
 
@@ -2892,9 +3351,7 @@ class RotaMatrixManager {
     }
 
 
-    async handleBulkMonthlySubmit(
-        event
-    ) {
+    async handleBulkMonthlySubmit(event) {
 
         event.preventDefault();
 
@@ -3071,9 +3528,7 @@ class RotaMatrixManager {
     }
 
 
-    async handleBulkWeeklySubmit(
-        event
-    ) {
+    async handleBulkWeeklySubmit(event) {
 
         event.preventDefault();
 
@@ -3340,7 +3795,7 @@ class RotaMatrixManager {
 
 
     /* ========================================================
-       SHIFT SELECTORS
+       WEEKLY SHIFT SELECTORS
     ======================================================== */
 
     populateShiftSelectors() {
@@ -3388,9 +3843,40 @@ class RotaMatrixManager {
                                 shift;
 
 
+                            const optionClass =
+                                this.getShiftClass(
+                                    shift
+                                )
+                                    .replace(
+                                        'shift-',
+                                        'shift-option-'
+                                    );
+
+                            option.classList.add(
+                                optionClass
+                            );
+
+
                             select.appendChild(
                                 option
                             );
+                        }
+                    );
+
+
+                    this.applyShiftColour(
+                        select
+                    );
+
+
+                    select.addEventListener(
+                        'change',
+                        () => {
+
+                            this.applyShiftColour(
+                                select
+                            );
+
                         }
                     );
                 }
@@ -3913,6 +4399,7 @@ class RotaMatrixManager {
                 3500
             );
     }
+
 }
 
 

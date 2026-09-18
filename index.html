@@ -6,16 +6,13 @@
 
     <title>Team Rota Manager</title>
 
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Font Awesome -->
     <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     >
 
-    <!-- Inter Font -->
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
         rel="stylesheet"
@@ -100,15 +97,15 @@
         }
 
         /* =====================================================
-           MAIN ROTA SELECT
+           SELECTS
         ===================================================== */
 
-        .rota-select {
+        .rota-select,
+        .shift-modal-select {
             width: 100%;
-            min-width: 112px;
             padding: 7px 28px 7px 8px;
             border: 2px solid #cbd5e1;
-            border-radius: 6px;
+            border-radius: 7px;
             background: white;
             color: #475569;
             font-size: 12px;
@@ -118,12 +115,19 @@
             cursor: pointer;
         }
 
-        .rota-select:focus {
+        .shift-modal-select {
+            padding: 9px 30px 9px 10px;
+            font-size: 13px;
+            border-radius: 8px;
+        }
+
+        .rota-select:focus,
+        .shift-modal-select:focus {
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
         }
 
         /* =====================================================
-           VIBRANT SHIFT COLOURS
+           SHIFT COLOURS
         ===================================================== */
 
         .shift-blank {
@@ -222,127 +226,7 @@
             border-color: #4338ca !important;
         }
 
-        /* =====================================================
-           MODAL SELECTS
-        ===================================================== */
-
-        .shift-modal-select {
-            width: 100%;
-            padding: 8px 30px 8px 10px;
-            border: 2px solid #cbd5e1;
-            border-radius: 8px;
-            background: white;
-            color: #475569;
-            font-size: 13px;
-            font-weight: 700;
-            outline: none;
-            transition: all 0.15s ease;
-            cursor: pointer;
-        }
-
-        .shift-modal-select:focus {
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-        }
-
-        /* Modal colours use exactly the same colour scheme */
-
-        .shift-modal-select.shift-blank {
-            background: #ffffff !important;
-            color: #475569 !important;
-            border-color: #cbd5e1 !important;
-        }
-
-        .shift-modal-select.shift-Early {
-            background: #16a34a !important;
-            color: #ffffff !important;
-            border-color: #15803d !important;
-        }
-
-        .shift-modal-select.shift-Mid {
-            background: #f59e0b !important;
-            color: #ffffff !important;
-            border-color: #d97706 !important;
-        }
-
-        .shift-modal-select.shift-Late {
-            background: #7c3aed !important;
-            color: #ffffff !important;
-            border-color: #6d28d9 !important;
-        }
-
-        .shift-modal-select.shift-Early-finish-Early-shift {
-            background: #06b6d4 !important;
-            color: #ffffff !important;
-            border-color: #0891b2 !important;
-        }
-
-        .shift-modal-select.shift-Late-start-Early-shift {
-            background: #0d9488 !important;
-            color: #ffffff !important;
-            border-color: #0f766e !important;
-        }
-
-        .shift-modal-select.shift-Early-finish-Late-shift {
-            background: #ec4899 !important;
-            color: #ffffff !important;
-            border-color: #db2777 !important;
-        }
-
-        .shift-modal-select.shift-Late-start-Late-shift {
-            background: #f43f5e !important;
-            color: #ffffff !important;
-            border-color: #e11d48 !important;
-        }
-
-        .shift-modal-select.shift-Doctors-appointment {
-            background: #2563eb !important;
-            color: #ffffff !important;
-            border-color: #1d4ed8 !important;
-        }
-
-        .shift-modal-select.shift-Dont-work {
-            background: #dc2626 !important;
-            color: #ffffff !important;
-            border-color: #b91c1c !important;
-        }
-
-        .shift-modal-select.shift-Dependancy-leave {
-            background: #ea580c !important;
-            color: #ffffff !important;
-            border-color: #c2410c !important;
-        }
-
-        .shift-modal-select.shift-Holiday {
-            background: #eab308 !important;
-            color: #ffffff !important;
-            border-color: #ca8a04 !important;
-        }
-
-        .shift-modal-select.shift-WFH {
-            background: #059669 !important;
-            color: #ffffff !important;
-            border-color: #047857 !important;
-        }
-
-        .shift-modal-select.shift-FW {
-            background: #0891b2 !important;
-            color: #ffffff !important;
-            border-color: #0e7490 !important;
-        }
-
-        .shift-modal-select.shift-Flexi-Time-taken {
-            background: #9333ea !important;
-            color: #ffffff !important;
-            border-color: #7e22ce !important;
-        }
-
-        .shift-modal-select.shift-Flexi-time-redeem {
-            background: #4f46e5 !important;
-            color: #ffffff !important;
-            border-color: #4338ca !important;
-        }
-
-        /* Native dropdown option colours where browser supports them */
+        /* Dropdown option colours where browser supports them */
 
         .shift-option-Early {
             background: #16a34a;
@@ -474,6 +358,7 @@
     </style>
 </head>
 
+
 <body class="h-full">
 
 <div id="app" class="min-h-screen">
@@ -601,8 +486,6 @@
             </div>
 
 
-            <!-- MONTH NAVIGATION -->
-
             <div class="mt-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
 
                 <div class="flex items-center gap-2">
@@ -630,21 +513,17 @@
                 </div>
 
 
-                <div class="flex items-center gap-2">
+                <div class="relative">
 
-                    <div class="relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
 
-                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-
-                        <input
-                            id="search-input"
-                            type="text"
-                            placeholder="Search employee..."
-                            oninput="app.setSearch(this.value)"
-                            class="pl-9 pr-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-sm text-white placeholder-slate-400 outline-none focus:border-blue-500"
-                        >
-
-                    </div>
+                    <input
+                        id="search-input"
+                        type="text"
+                        placeholder="Search employee..."
+                        oninput="app.setSearch(this.value)"
+                        class="pl-9 pr-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-sm text-white placeholder-slate-400 outline-none focus:border-blue-500"
+                    >
 
                 </div>
 
@@ -659,110 +538,40 @@
 
     <main class="p-4">
 
-        <!-- STATS -->
-
         <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3 mb-4">
 
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-xs font-semibold text-slate-500 uppercase">
-                            Early
-                        </p>
-                        <p id="stat-early" class="text-2xl font-bold text-slate-900">
-                            0
-                        </p>
-                    </div>
-                    <div class="w-9 h-9 rounded-lg bg-green-100 text-green-600 flex items-center justify-center">
-                        <i class="fa-solid fa-sun"></i>
-                    </div>
-                </div>
+                <p class="text-xs font-semibold text-slate-500 uppercase">Early</p>
+                <p id="stat-early" class="text-2xl font-bold text-slate-900">0</p>
             </div>
 
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-xs font-semibold text-slate-500 uppercase">
-                            Mid
-                        </p>
-                        <p id="stat-mid" class="text-2xl font-bold text-slate-900">
-                            0
-                        </p>
-                    </div>
-                    <div class="w-9 h-9 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center">
-                        <i class="fa-solid fa-clock"></i>
-                    </div>
-                </div>
+                <p class="text-xs font-semibold text-slate-500 uppercase">Mid</p>
+                <p id="stat-mid" class="text-2xl font-bold text-slate-900">0</p>
             </div>
 
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-xs font-semibold text-slate-500 uppercase">
-                            Late
-                        </p>
-                        <p id="stat-late" class="text-2xl font-bold text-slate-900">
-                            0
-                        </p>
-                    </div>
-                    <div class="w-9 h-9 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center">
-                        <i class="fa-solid fa-moon"></i>
-                    </div>
-                </div>
+                <p class="text-xs font-semibold text-slate-500 uppercase">Late</p>
+                <p id="stat-late" class="text-2xl font-bold text-slate-900">0</p>
             </div>
 
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-xs font-semibold text-slate-500 uppercase">
-                            Don't Work
-                        </p>
-                        <p id="stat-dont-work" class="text-2xl font-bold text-slate-900">
-                            0
-                        </p>
-                    </div>
-                    <div class="w-9 h-9 rounded-lg bg-red-100 text-red-600 flex items-center justify-center">
-                        <i class="fa-solid fa-ban"></i>
-                    </div>
-                </div>
+                <p class="text-xs font-semibold text-slate-500 uppercase">Don't Work</p>
+                <p id="stat-dont-work" class="text-2xl font-bold text-slate-900">0</p>
             </div>
 
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-xs font-semibold text-slate-500 uppercase">
-                            Dependancy Leave
-                        </p>
-                        <p id="stat-dependency" class="text-2xl font-bold text-slate-900">
-                            0
-                        </p>
-                    </div>
-                    <div class="w-9 h-9 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center">
-                        <i class="fa-solid fa-people-arrows"></i>
-                    </div>
-                </div>
+                <p class="text-xs font-semibold text-slate-500 uppercase">Dependancy Leave</p>
+                <p id="stat-dependency" class="text-2xl font-bold text-slate-900">0</p>
             </div>
 
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-xs font-semibold text-slate-500 uppercase">
-                            WFH
-                        </p>
-                        <p id="stat-wfh" class="text-2xl font-bold text-slate-900">
-                            0
-                        </p>
-                    </div>
-                    <div class="w-9 h-9 rounded-lg bg-green-100 text-green-600 flex items-center justify-center">
-                        <i class="fa-solid fa-house-laptop"></i>
-                    </div>
-                </div>
+                <p class="text-xs font-semibold text-slate-500 uppercase">WFH</p>
+                <p id="stat-wfh" class="text-2xl font-bold text-slate-900">0</p>
             </div>
 
         </div>
 
-
-        <!-- ROTA -->
 
         <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
 
@@ -796,13 +605,11 @@
 
                     <thead class="matrix-header">
 
-                        <tr id="matrix-header-row">
-                        </tr>
+                        <tr id="matrix-header-row"></tr>
 
                     </thead>
 
-                    <tbody id="matrix-tbody">
-                    </tbody>
+                    <tbody id="matrix-tbody"></tbody>
 
                 </table>
 
@@ -861,7 +668,6 @@
                 class="w-full border border-slate-300 rounded-lg px-3 py-2 outline-none focus:border-blue-500"
                 placeholder="Enter PIN"
             >
-
 
             <div class="flex justify-end gap-2 mt-5">
 
@@ -924,7 +730,6 @@
                 placeholder="Enter new PIN"
             >
 
-
             <div class="flex justify-end gap-2 mt-5">
 
                 <button
@@ -952,7 +757,7 @@
 
 
 <!-- ========================================================= -->
-<!-- ADD / EDIT EMPLOYEE MODAL -->
+<!-- EMPLOYEE MODAL -->
 <!-- ========================================================= -->
 
 <div
@@ -980,7 +785,6 @@
                 id="member-id-input"
                 type="hidden"
             >
-
 
             <div class="mb-4">
 
@@ -1157,7 +961,7 @@
             </h3>
 
             <p class="text-sm text-slate-500 mt-1">
-                Apply the same weekly pattern to selected employees.
+                Apply a weekly shift pattern to selected employees.
             </p>
 
         </div>
@@ -1307,9 +1111,7 @@
 </div>
 
 
-<!-- ========================================================= -->
 <!-- TOAST -->
-<!-- ========================================================= -->
 
 <div
     id="toast"
@@ -1332,9 +1134,7 @@
 </div>
 
 
-<!-- ========================================================= -->
 <!-- SUPABASE -->
-<!-- ========================================================= -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -1352,14 +1152,6 @@ const supabaseClient =
         SUPABASE_ANON_KEY
     );
 
-</script>
-
-
-<!-- ========================================================= -->
-<!-- APPLICATION -->
-<!-- ========================================================= -->
-
-<script>
 
 class RotaMatrixManager {
 
@@ -1499,10 +1291,6 @@ class RotaMatrixManager {
     }
 
 
-    /* ========================================================
-       INIT
-    ======================================================== */
-
     async init() {
 
         this.state.members =
@@ -1530,10 +1318,6 @@ class RotaMatrixManager {
     }
 
 
-    /* ========================================================
-       SUPABASE LOAD
-    ======================================================== */
-
     async loadFromSupabase() {
 
         try {
@@ -1555,14 +1339,6 @@ class RotaMatrixManager {
                     error.code ===
                     'PGRST116'
                 ) {
-
-                    console.log(
-                        'No existing rota found. Using defaults.'
-                    );
-
-                    this.setConnectionStatus(
-                        'connected'
-                    );
 
                     return;
                 }
@@ -1628,10 +1404,6 @@ class RotaMatrixManager {
         }
     }
 
-
-    /* ========================================================
-       SUPABASE SAVE
-    ======================================================== */
 
     async saveToSupabase() {
 
@@ -1705,10 +1477,6 @@ class RotaMatrixManager {
     }
 
 
-    /* ========================================================
-       CONNECTION STATUS
-    ======================================================== */
-
     setConnectionStatus(status) {
 
         const el =
@@ -1730,9 +1498,7 @@ class RotaMatrixManager {
             el.innerHTML =
                 '<span class="w-2 h-2 rounded-full bg-green-400"></span> Supabase Connected';
 
-        }
-
-        else if (
+        } else if (
             status ===
             'error'
         ) {
@@ -1743,9 +1509,7 @@ class RotaMatrixManager {
             el.innerHTML =
                 '<span class="w-2 h-2 rounded-full bg-red-400"></span> Connection Error';
 
-        }
-
-        else {
+        } else {
 
             el.className =
                 'ml-2 inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-yellow-500/20 text-yellow-300';
@@ -1756,10 +1520,6 @@ class RotaMatrixManager {
     }
 
 
-    /* ========================================================
-       SAVE
-    ======================================================== */
-
     async saveData() {
 
         const button =
@@ -1768,26 +1528,20 @@ class RotaMatrixManager {
             );
 
 
-        if (button) {
+        button.disabled = true;
 
-            button.disabled = true;
-
-            button.innerHTML =
-                '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Saving...';
-        }
+        button.innerHTML =
+            '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Saving...';
 
 
         const success =
             await this.saveToSupabase();
 
 
-        if (button) {
+        button.disabled = false;
 
-            button.disabled = false;
-
-            button.innerHTML =
-                '<i class="fa-solid fa-cloud-arrow-up mr-1"></i> Save';
-        }
+        button.innerHTML =
+            '<i class="fa-solid fa-cloud-arrow-up mr-1"></i> Save';
 
 
         if (success) {
@@ -1798,10 +1552,6 @@ class RotaMatrixManager {
         }
     }
 
-
-    /* ========================================================
-       REFRESH
-    ======================================================== */
 
     async refreshData() {
 
@@ -1814,10 +1564,6 @@ class RotaMatrixManager {
         );
     }
 
-
-    /* ========================================================
-       RENDER
-    ======================================================== */
 
     render() {
 
@@ -1837,21 +1583,12 @@ class RotaMatrixManager {
 
     renderTitle() {
 
-        const title =
-            document.getElementById(
-                'rota-title'
-            );
-
-        if (!title) return;
-
-        title.textContent =
+        document.getElementById(
+            'rota-title'
+        ).textContent =
             `${this.getMonthName()} ${this.state.currentDate.getFullYear()} Rota`;
     }
 
-
-    /* ========================================================
-       MONTH
-    ======================================================== */
 
     getMonthName() {
 
@@ -1886,17 +1623,13 @@ class RotaMatrixManager {
 
     getDaysInMonth() {
 
-        const year =
-            this.state.currentDate
-                .getFullYear();
-
-        const month =
-            this.state.currentDate
-                .getMonth();
-
         return new Date(
-            year,
-            month + 1,
+            this.state.currentDate
+                .getFullYear(),
+
+            this.state.currentDate
+                .getMonth() + 1,
+
             0
         ).getDate();
     }
@@ -1939,6 +1672,7 @@ class RotaMatrixManager {
 
         selector.innerHTML = '';
 
+
         const currentYear =
             this.state.currentDate
                 .getFullYear();
@@ -1958,8 +1692,10 @@ class RotaMatrixManager {
                     1
                 );
 
+
             const year =
                 date.getFullYear();
+
 
             const month =
                 String(
@@ -1969,16 +1705,20 @@ class RotaMatrixManager {
                     '0'
                 );
 
+
             const value =
                 `${year}-${month}`;
+
 
             const option =
                 document.createElement(
                     'option'
                 );
 
+
             option.value =
                 value;
+
 
             option.textContent =
                 date.toLocaleDateString(
@@ -1989,6 +1729,7 @@ class RotaMatrixManager {
                     }
                 );
 
+
             if (
                 value ===
                 this.getMonthKey()
@@ -1997,6 +1738,7 @@ class RotaMatrixManager {
                 option.selected =
                     true;
             }
+
 
             selector.appendChild(
                 option
@@ -2032,6 +1774,7 @@ class RotaMatrixManager {
                 .split('-')
                 .map(Number);
 
+
         this.state.currentDate =
             new Date(
                 year,
@@ -2039,13 +1782,10 @@ class RotaMatrixManager {
                 1
             );
 
+
         this.render();
     }
 
-
-    /* ========================================================
-       TABLE HEADER
-    ======================================================== */
 
     renderTableHeader() {
 
@@ -2054,7 +1794,6 @@ class RotaMatrixManager {
                 'matrix-header-row'
             );
 
-        if (!row) return;
 
         row.innerHTML = '';
 
@@ -2064,11 +1803,14 @@ class RotaMatrixManager {
                 'th'
             );
 
+
         employeeHeader.className =
             'employee-cell px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-slate-600';
 
+
         employeeHeader.textContent =
             'Employee';
+
 
         row.appendChild(
             employeeHeader
@@ -2102,35 +1844,15 @@ class RotaMatrixManager {
                     'th'
                 );
 
+
             th.className =
                 'day-header px-2 py-3 text-center';
 
 
-            const weekday =
-                date.toLocaleDateString(
-                    'en-GB',
-                    {
-                        weekday: 'short'
-                    }
-                );
-
-
-            const dateText =
-                date.toLocaleDateString(
-                    'en-GB',
-                    {
-                        day: '2-digit',
-                        month: '2-digit'
-                    }
-                );
-
-
-            const isWeekend =
+            if (
                 date.getDay() === 0 ||
-                date.getDay() === 6;
-
-
-            if (isWeekend) {
+                date.getDay() === 6
+            ) {
 
                 th.classList.add(
                     'bg-slate-100'
@@ -2139,13 +1861,34 @@ class RotaMatrixManager {
 
 
             th.innerHTML = `
+
                 <div class="text-xs font-bold text-slate-700">
-                    ${weekday}
+
+                    ${
+                        date.toLocaleDateString(
+                            'en-GB',
+                            {
+                                weekday: 'short'
+                            }
+                        )
+                    }
+
                 </div>
 
                 <div class="text-xs text-slate-500 mt-1">
-                    ${dateText}
+
+                    ${
+                        date.toLocaleDateString(
+                            'en-GB',
+                            {
+                                day: '2-digit',
+                                month: '2-digit'
+                            }
+                        )
+                    }
+
                 </div>
+
             `;
 
 
@@ -2156,10 +1899,6 @@ class RotaMatrixManager {
     }
 
 
-    /* ========================================================
-       TABLE BODY
-    ======================================================== */
-
     renderTableBody() {
 
         const tbody =
@@ -2167,12 +1906,12 @@ class RotaMatrixManager {
                 'matrix-tbody'
             );
 
+
         const empty =
             document.getElementById(
                 'matrix-empty'
             );
 
-        if (!tbody) return;
 
         tbody.innerHTML = '';
 
@@ -2228,30 +1967,33 @@ class RotaMatrixManager {
                         'tr'
                     );
 
-                row.className =
-                    'hover:bg-slate-50';
-
 
                 const employeeCell =
                     document.createElement(
                         'td'
                     );
 
+
                 employeeCell.className =
                     'employee-cell px-3 py-2';
 
 
                 employeeCell.innerHTML = `
+
                     <div class="flex items-center justify-between gap-2">
 
                         <div>
 
                             <div class="font-semibold text-sm text-slate-900">
+
                                 ${this.escapeHtml(member.name)}
+
                             </div>
 
                             <div class="text-xs text-slate-400">
+
                                 ${this.escapeHtml(member.role || 'Staff')}
+
                             </div>
 
                         </div>
@@ -2260,13 +2002,13 @@ class RotaMatrixManager {
                             this.state.isAdmin
                             ?
                             `
-                            <button
-                                onclick="app.openEditMemberModal('${member.id}')"
-                                class="w-7 h-7 rounded-md hover:bg-slate-200 text-slate-500"
-                                title="Edit employee"
-                            >
-                                <i class="fa-solid fa-pen text-xs"></i>
-                            </button>
+                                <button
+                                    onclick="app.openEditMemberModal('${member.id}')"
+                                    class="w-7 h-7 rounded-md hover:bg-slate-200 text-slate-500"
+                                    title="Edit employee"
+                                >
+                                    <i class="fa-solid fa-pen text-xs"></i>
+                                </button>
                             `
                             :
                             ''
@@ -2319,6 +2061,7 @@ class RotaMatrixManager {
                             'td'
                         );
 
+
                     cell.className =
                         'px-1.5 py-1.5 align-middle';
 
@@ -2349,6 +2092,7 @@ class RotaMatrixManager {
                             'select'
                         );
 
+
                     select.className =
                         'rota-select';
 
@@ -2371,12 +2115,12 @@ class RotaMatrixManager {
                                 select
                             );
 
+
                             this.handleCellChange(
                                 member.id,
                                 dateString,
                                 select.value
                             );
-
                         }
                     );
 
@@ -2384,6 +2128,7 @@ class RotaMatrixManager {
                     cell.appendChild(
                         select
                     );
+
 
                     row.appendChild(
                         cell
@@ -2400,16 +2145,15 @@ class RotaMatrixManager {
 
 
     /* ========================================================
-       SHIFT COLOUR ENGINE
+       SHIFT COLOURS
     ======================================================== */
 
     getShiftClass(value) {
 
-        if (!value) {
-            return 'shift-blank';
-        }
+        const map = {
 
-        const classMap = {
+            '':
+                'shift-blank',
 
             'Early':
                 'shift-Early',
@@ -2457,39 +2201,62 @@ class RotaMatrixManager {
                 'shift-Flexi-time-redeem'
         };
 
-        return classMap[value] || 'shift-blank';
+
+        return map[value] ||
+            'shift-blank';
     }
 
 
     applyShiftColour(select) {
 
-        if (!select) {
-            return;
-        }
-
-        const isModal =
-            select.classList.contains(
-                'shift-modal-select'
-            );
-
-        const baseClass =
-            isModal
-                ? 'shift-modal-select'
-                : 'rota-select';
+        if (!select) return;
 
 
-        select.className =
-            baseClass;
+        const classes = [
+
+            'shift-blank',
+
+            'shift-Early',
+
+            'shift-Mid',
+
+            'shift-Late',
+
+            'shift-Early-finish-Early-shift',
+
+            'shift-Late-start-Early-shift',
+
+            'shift-Early-finish-Late-shift',
+
+            'shift-Late-start-Late-shift',
+
+            'shift-Doctors-appointment',
+
+            'shift-Dont-work',
+
+            'shift-Dependancy-leave',
+
+            'shift-Holiday',
+
+            'shift-WFH',
+
+            'shift-FW',
+
+            'shift-Flexi-Time-taken',
+
+            'shift-Flexi-time-redeem'
+        ];
 
 
-        const shiftClass =
-            this.getShiftClass(
-                select.value
-            );
+        select.classList.remove(
+            ...classes
+        );
 
 
         select.classList.add(
-            shiftClass
+            this.getShiftClass(
+                select.value
+            )
         );
     }
 
@@ -2499,14 +2266,19 @@ class RotaMatrixManager {
         selectedValue
     ) {
 
+        select.innerHTML = '';
+
+
         const blank =
             document.createElement(
                 'option'
             );
 
+
         blank.value = '';
 
         blank.textContent = '—';
+
 
         select.appendChild(
             blank
@@ -2514,28 +2286,31 @@ class RotaMatrixManager {
 
 
         this.shiftOptions.forEach(
-            optionValue => {
+            shift => {
 
                 const option =
                     document.createElement(
                         'option'
                     );
 
+
                 option.value =
-                    optionValue;
+                    shift;
+
 
                 option.textContent =
-                    optionValue;
+                    shift;
 
 
                 const optionClass =
                     this.getShiftClass(
-                        optionValue
+                        shift
                     )
                         .replace(
                             'shift-',
                             'shift-option-'
                         );
+
 
                 option.classList.add(
                     optionClass
@@ -2543,7 +2318,7 @@ class RotaMatrixManager {
 
 
                 if (
-                    optionValue ===
+                    shift ===
                     selectedValue
                 ) {
 
@@ -2565,23 +2340,15 @@ class RotaMatrixManager {
     }
 
 
-    /* ========================================================
-       CELL CHANGE
-    ======================================================== */
-
     handleCellChange(
         memberId,
         dateString,
         value
     ) {
 
-        if (!this.state.isAdmin) {
-
-            this.showToast(
-                'Restricted: Admin access required.',
-                true
-            );
-
+        if (
+            !this.state.isAdmin
+        ) {
             return;
         }
 
@@ -2634,7 +2401,7 @@ class RotaMatrixManager {
         };
 
 
-        const monthPrefix =
+        const prefix =
             this.getMonthKey();
 
 
@@ -2643,79 +2410,56 @@ class RotaMatrixManager {
         ).forEach(
             ([key, value]) => {
 
-                const lastUnderscore =
+                const index =
                     key.lastIndexOf('_');
 
 
                 if (
-                    lastUnderscore === -1
-                ) {
-                    return;
-                }
+                    index === -1
+                ) return;
 
 
-                const datePart =
+                const date =
                     key.substring(
-                        lastUnderscore + 1
+                        index + 1
                     );
 
 
                 if (
-                    !datePart.startsWith(
-                        monthPrefix
+                    !date.startsWith(
+                        prefix
                     )
-                ) {
-
-                    return;
-                }
+                ) return;
 
 
                 if (
                     value === 'Early'
-                ) {
-
-                    counts.Early++;
-                }
+                ) counts.Early++;
 
 
                 if (
                     value === 'Mid'
-                ) {
-
-                    counts.Mid++;
-                }
+                ) counts.Mid++;
 
 
                 if (
                     value === 'Late'
-                ) {
-
-                    counts.Late++;
-                }
+                ) counts.Late++;
 
 
                 if (
                     value === 'Dont work'
-                ) {
-
-                    counts.DontWork++;
-                }
+                ) counts.DontWork++;
 
 
                 if (
                     value === 'Dependancy leave'
-                ) {
-
-                    counts.Dependency++;
-                }
+                ) counts.Dependency++;
 
 
                 if (
                     value === 'WFH'
-                ) {
-
-                    counts.WFH++;
-                }
+                ) counts.WFH++;
             }
         );
 
@@ -2725,25 +2469,30 @@ class RotaMatrixManager {
         ).textContent =
             counts.Early;
 
+
         document.getElementById(
             'stat-mid'
         ).textContent =
             counts.Mid;
+
 
         document.getElementById(
             'stat-late'
         ).textContent =
             counts.Late;
 
+
         document.getElementById(
             'stat-dont-work'
         ).textContent =
             counts.DontWork;
 
+
         document.getElementById(
             'stat-dependency'
         ).textContent =
             counts.Dependency;
+
 
         document.getElementById(
             'stat-wfh'
@@ -2784,30 +2533,30 @@ class RotaMatrixManager {
         event.preventDefault();
 
 
-        const input =
+        const pin =
             document.getElementById(
                 'admin-pin-input'
-            );
-
-
-        const enteredPin =
-            input.value.trim();
+            ).value.trim();
 
 
         if (
-            enteredPin ===
-            this.state.adminPin ||
-            enteredPin === '0426'
+            pin === this.state.adminPin ||
+            pin === '0426'
         ) {
 
             this.state.isAdmin =
                 true;
 
-            input.value = '';
+
+            document.getElementById(
+                'admin-pin-input'
+            ).value = '';
+
 
             this.closePinModal();
 
             this.render();
+
 
             this.showToast(
                 'Admin mode enabled.'
@@ -2830,10 +2579,12 @@ class RotaMatrixManager {
                 'admin-mode-button'
             );
 
+
         const status =
             document.getElementById(
                 'admin-status'
             );
+
 
         const changePin =
             document.getElementById(
@@ -2848,12 +2599,14 @@ class RotaMatrixManager {
             button.className =
                 'px-3 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-sm font-medium';
 
+
             button.innerHTML =
                 '<i class="fa-solid fa-unlock mr-1"></i> Admin Mode: ON';
 
 
             status.className =
                 'text-xs px-3 py-1.5 rounded-full bg-green-100 text-green-700';
+
 
             status.textContent =
                 'Admin Editing Enabled';
@@ -2868,12 +2621,14 @@ class RotaMatrixManager {
             button.className =
                 'px-3 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-sm font-medium';
 
+
             button.innerHTML =
                 '<i class="fa-solid fa-lock mr-1"></i> Admin Mode';
 
 
             status.className =
                 'text-xs px-3 py-1.5 rounded-full bg-slate-100 text-slate-500';
+
 
             status.textContent =
                 'View Only';
@@ -2887,7 +2642,7 @@ class RotaMatrixManager {
 
 
     /* ========================================================
-       PIN CHANGE
+       PIN
     ======================================================== */
 
     async handleChangePinSubmit(event) {
@@ -2895,21 +2650,10 @@ class RotaMatrixManager {
         event.preventDefault();
 
 
-        if (
-            !this.state.isAdmin
-        ) {
-            return;
-        }
-
-
-        const input =
+        const newPin =
             document.getElementById(
                 'new-pin-input'
-            );
-
-
-        const newPin =
-            input.value.trim();
+            ).value.trim();
 
 
         if (!newPin) {
@@ -2933,26 +2677,28 @@ class RotaMatrixManager {
 
         if (success) {
 
-            input.value = '';
+            document.getElementById(
+                'new-pin-input'
+            ).value = '';
+
 
             this.closeChangePinModal();
 
+
             this.showToast(
-                'Admin PIN updated successfully!'
+                'Admin PIN updated successfully.'
             );
         }
     }
 
 
     /* ========================================================
-       EMPLOYEES
+       EMPLOYEE MODAL
     ======================================================== */
 
     openAddMemberModal() {
 
-        if (
-            !this.state.isAdmin
-        ) {
+        if (!this.state.isAdmin) {
 
             this.showToast(
                 'Admin access required.',
@@ -2981,7 +2727,8 @@ class RotaMatrixManager {
 
         document.getElementById(
             'member-role-input'
-        ).value = 'Staff';
+        ).value =
+            'Staff';
 
 
         document.getElementById(
@@ -2998,13 +2745,6 @@ class RotaMatrixManager {
 
 
     openEditMemberModal(id) {
-
-        if (
-            !this.state.isAdmin
-        ) {
-            return;
-        }
-
 
         const member =
             this.state.members.find(
@@ -3036,7 +2776,8 @@ class RotaMatrixManager {
         document.getElementById(
             'member-role-input'
         ).value =
-            member.role || 'Staff';
+            member.role ||
+            'Staff';
 
 
         document.getElementById(
@@ -3057,17 +2798,10 @@ class RotaMatrixManager {
         event.preventDefault();
 
 
-        if (
-            !this.state.isAdmin
-        ) {
-            return;
-        }
-
-
         const id =
             document.getElementById(
                 'member-id-input'
-            ).value.trim();
+            ).value;
 
 
         const name =
@@ -3082,15 +2816,7 @@ class RotaMatrixManager {
             ).value;
 
 
-        if (!name) {
-
-            this.showToast(
-                'Please enter an employee name.',
-                true
-            );
-
-            return;
-        }
+        if (!name) return;
 
 
         if (id) {
@@ -3112,18 +2838,16 @@ class RotaMatrixManager {
 
         } else {
 
-            const newId =
-                'm_' +
-                Date.now();
+            this.state.members.push({
 
+                id:
+                    'm_' +
+                    Date.now(),
 
-            this.state.members.push(
-                {
-                    id: newId,
-                    name,
-                    role
-                }
-            );
+                name,
+
+                role
+            });
         }
 
 
@@ -3138,20 +2862,13 @@ class RotaMatrixManager {
             this.render();
 
             this.showToast(
-                'Employee saved successfully.'
+                'Employee saved.'
             );
         }
     }
 
 
     async deleteMember() {
-
-        if (
-            !this.state.isAdmin
-        ) {
-            return;
-        }
-
 
         const id =
             document.getElementById(
@@ -3172,9 +2889,7 @@ class RotaMatrixManager {
             !confirm(
                 `Are you sure you want to delete ${member.name}?`
             )
-        ) {
-            return;
-        }
+        ) return;
 
 
         this.state.members =
@@ -3218,14 +2933,12 @@ class RotaMatrixManager {
 
 
     /* ========================================================
-       BULK MONTHLY
+       MONTHLY SHIFT
     ======================================================== */
 
     openBulkMonthlyModal() {
 
-        if (
-            !this.state.isAdmin
-        ) {
+        if (!this.state.isAdmin) {
 
             this.showToast(
                 'Admin access required.',
@@ -3255,24 +2968,53 @@ class RotaMatrixManager {
                 'option'
             );
 
+
         blank.value = '';
 
         blank.textContent =
             'Select shift...';
+
 
         select.appendChild(
             blank
         );
 
 
+        /* SPECIAL WEEKDAY OPTIONS */
+
         const specialOptions = [
 
             {
                 value:
-                    'weekdays_only_select',
+                    'weekdays_only_early',
 
                 label:
-                    'Early - Weekdays only'
+                    'Early - Weekdays only',
+
+                colour:
+                    'shift-Early'
+            },
+
+            {
+                value:
+                    'weekdays_only_mid',
+
+                label:
+                    'Mids - Weekdays only',
+
+                colour:
+                    'shift-Mid'
+            },
+
+            {
+                value:
+                    'weekdays_only_late',
+
+                label:
+                    'Lates - Weekdays only',
+
+                colour:
+                    'shift-Late'
             },
 
             {
@@ -3280,7 +3022,10 @@ class RotaMatrixManager {
                     'weekdays_only_fw',
 
                 label:
-                    'FW - Weekdays only'
+                    'FW - Weekdays only',
+
+                colour:
+                    'shift-FW'
             }
         ];
 
@@ -3293,11 +3038,23 @@ class RotaMatrixManager {
                         'option'
                     );
 
+
                 option.value =
                     item.value;
 
+
                 option.textContent =
                     item.label;
+
+
+                option.classList.add(
+                    item.colour
+                        .replace(
+                            'shift-',
+                            'shift-option-'
+                        )
+                );
+
 
                 select.appendChild(
                     option
@@ -3305,6 +3062,8 @@ class RotaMatrixManager {
             }
         );
 
+
+        /* NORMAL SHIFTS */
 
         this.shiftOptions.forEach(
             shift => {
@@ -3314,24 +3073,25 @@ class RotaMatrixManager {
                         'option'
                     );
 
+
                 option.value =
                     shift;
+
 
                 option.textContent =
                     shift;
 
-                const optionClass =
+
+                option.classList.add(
                     this.getShiftClass(
                         shift
                     )
                         .replace(
                             'shift-',
                             'shift-option-'
-                        );
-
-                option.classList.add(
-                    optionClass
+                        )
                 );
+
 
                 select.appendChild(
                     option
@@ -3354,13 +3114,6 @@ class RotaMatrixManager {
     async handleBulkMonthlySubmit(event) {
 
         event.preventDefault();
-
-
-        if (
-            !this.state.isAdmin
-        ) {
-            return;
-        }
 
 
         const selected =
@@ -3386,6 +3139,29 @@ class RotaMatrixManager {
             document.getElementById(
                 'monthly-shift-input'
             ).value;
+
+
+        const weekdayMap = {
+
+            'weekdays_only_early':
+                'Early',
+
+            'weekdays_only_mid':
+                'Mid',
+
+            'weekdays_only_late':
+                'Late',
+
+            'weekdays_only_fw':
+                'FW'
+        };
+
+
+        const isWeekdayOnly =
+            Object.prototype.hasOwnProperty.call(
+                weekdayMap,
+                shift
+            );
 
 
         const days =
@@ -3424,9 +3200,8 @@ class RotaMatrixManager {
 
 
                     if (
-                        shift ===
-                        'weekdays_only_select'
-                    ) {
+                        isWeekdayOnly
+                    {
 
                         if (
                             date.getDay() >= 1 &&
@@ -3434,44 +3209,20 @@ class RotaMatrixManager {
                         ) {
 
                             this.state.shifts[key] =
-                                'Early';
+                                weekdayMap[shift];
 
                         } else {
 
                             delete this.state.shifts[key];
                         }
 
-                    }
-
-                    else if (
-                        shift ===
-                        'weekdays_only_fw'
-                    ) {
-
-                        if (
-                            date.getDay() >= 1 &&
-                            date.getDay() <= 5
-                        ) {
-
-                            this.state.shifts[key] =
-                                'FW';
-
-                        } else {
-
-                            delete this.state.shifts[key];
-                        }
-
-                    }
-
-                    else if (
+                    } else if (
                         shift === ''
                     ) {
 
                         delete this.state.shifts[key];
 
-                    }
-
-                    else {
+                    } else {
 
                         this.state.shifts[key] =
                             shift;
@@ -3499,14 +3250,12 @@ class RotaMatrixManager {
 
 
     /* ========================================================
-       BULK WEEKLY
+       WEEKLY SHIFT
     ======================================================== */
 
     openBulkWeeklyModal() {
 
-        if (
-            !this.state.isAdmin
-        ) {
+        if (!this.state.isAdmin) {
 
             this.showToast(
                 'Admin access required.',
@@ -3531,13 +3280,6 @@ class RotaMatrixManager {
     async handleBulkWeeklySubmit(event) {
 
         event.preventDefault();
-
-
-        if (
-            !this.state.isAdmin
-        ) {
-            return;
-        }
 
 
         const selected =
@@ -3620,16 +3362,14 @@ class RotaMatrixManager {
                         date.getDay();
 
 
-                    const weeklyIndex =
+                    const index =
                         weekday === 0
                             ? 6
                             : weekday - 1;
 
 
                     const value =
-                        weeklyValues[
-                            weeklyIndex
-                        ];
+                        weeklyValues[index];
 
 
                     const dateString =
@@ -3676,126 +3416,7 @@ class RotaMatrixManager {
 
 
     /* ========================================================
-       MEMBER CHECKBOXES
-    ======================================================== */
-
-    populateMemberCheckboxes(
-        containerId
-    ) {
-
-        const container =
-            document.getElementById(
-                containerId
-            );
-
-
-        container.innerHTML = '';
-
-
-        const selectAll =
-            document.createElement(
-                'label'
-            );
-
-
-        selectAll.className =
-            'flex items-center gap-2 pb-2 mb-2 border-b border-slate-200 text-sm font-semibold';
-
-
-        selectAll.innerHTML = `
-            <input
-                type="checkbox"
-                class="member-select-all"
-                onchange="app.toggleAllMembers('${containerId}', this.checked)"
-            >
-            Select all
-        `;
-
-
-        container.appendChild(
-            selectAll
-        );
-
-
-        this.state.members.forEach(
-            member => {
-
-                const label =
-                    document.createElement(
-                        'label'
-                    );
-
-
-                label.className =
-                    'flex items-center gap-2 py-1.5 text-sm text-slate-700';
-
-
-                label.innerHTML = `
-                    <input
-                        type="checkbox"
-                        class="member-checkbox"
-                        data-member-id="${member.id}"
-                    >
-                    ${this.escapeHtml(member.name)}
-                `;
-
-
-                container.appendChild(
-                    label
-                );
-            }
-        );
-    }
-
-
-    toggleAllMembers(
-        containerId,
-        checked
-    ) {
-
-        const container =
-            document.getElementById(
-                containerId
-            );
-
-
-        container
-            .querySelectorAll(
-                '.member-checkbox'
-            )
-            .forEach(
-                checkbox => {
-
-                    checkbox.checked =
-                        checked;
-                }
-            );
-    }
-
-
-    getSelectedMembers(
-        containerId
-    ) {
-
-        const container =
-            document.getElementById(
-                containerId
-            );
-
-
-        return Array.from(
-            container.querySelectorAll(
-                '.member-checkbox:checked'
-            )
-        ).map(
-            checkbox =>
-                checkbox.dataset.memberId
-        );
-    }
-
-
-    /* ========================================================
-       WEEKLY SHIFT SELECTORS
+       WEEKLY SELECTS
     ======================================================== */
 
     populateShiftSelectors() {
@@ -3839,21 +3460,19 @@ class RotaMatrixManager {
                             option.value =
                                 shift;
 
+
                             option.textContent =
                                 shift;
 
 
-                            const optionClass =
+                            option.classList.add(
                                 this.getShiftClass(
                                     shift
                                 )
                                     .replace(
                                         'shift-',
                                         'shift-option-'
-                                    );
-
-                            option.classList.add(
-                                optionClass
+                                    )
                             );
 
 
@@ -3876,11 +3495,130 @@ class RotaMatrixManager {
                             this.applyShiftColour(
                                 select
                             );
-
                         }
                     );
                 }
             );
+    }
+
+
+    /* ========================================================
+       MEMBERS
+    ======================================================== */
+
+    populateMemberCheckboxes(
+        containerId
+    ) {
+
+        const container =
+            document.getElementById(
+                containerId
+            );
+
+
+        container.innerHTML = '';
+
+
+        const selectAll =
+            document.createElement(
+                'label'
+            );
+
+
+        selectAll.className =
+            'flex items-center gap-2 pb-2 mb-2 border-b border-slate-200 text-sm font-semibold';
+
+
+        selectAll.innerHTML = `
+
+            <input
+                type="checkbox"
+                class="member-select-all"
+                onchange="app.toggleAllMembers('${containerId}', this.checked)"
+            >
+
+            Select all
+
+        `;
+
+
+        container.appendChild(
+            selectAll
+        );
+
+
+        this.state.members.forEach(
+            member => {
+
+                const label =
+                    document.createElement(
+                        'label'
+                    );
+
+
+                label.className =
+                    'flex items-center gap-2 py-1.5 text-sm text-slate-700';
+
+
+                label.innerHTML = `
+
+                    <input
+                        type="checkbox"
+                        class="member-checkbox"
+                        data-member-id="${member.id}"
+                    >
+
+                    ${this.escapeHtml(member.name)}
+
+                `;
+
+
+                container.appendChild(
+                    label
+                );
+            }
+        );
+    }
+
+
+    toggleAllMembers(
+        containerId,
+        checked
+    ) {
+
+        document
+            .getElementById(
+                containerId
+            )
+            .querySelectorAll(
+                '.member-checkbox'
+            )
+            .forEach(
+                checkbox => {
+
+                    checkbox.checked =
+                        checked;
+                }
+            );
+    }
+
+
+    getSelectedMembers(
+        containerId
+    ) {
+
+        return Array.from(
+            document
+                .getElementById(
+                    containerId
+                )
+                .querySelectorAll(
+                    '.member-checkbox:checked'
+                )
+        ).map(
+            checkbox =>
+                checkbox.dataset.memberId
+        );
     }
 
 
@@ -3890,9 +3628,7 @@ class RotaMatrixManager {
 
     async clearMonth() {
 
-        if (
-            !this.state.isAdmin
-        ) {
+        if (!this.state.isAdmin) {
 
             this.showToast(
                 'Admin access required.',
@@ -3903,20 +3639,14 @@ class RotaMatrixManager {
         }
 
 
-        const monthName =
-            this.getMonthName();
-
-
         if (
             !confirm(
-                `Are you sure you want to clear all rota entries for ${monthName} ${this.state.currentDate.getFullYear()}?`
+                `Are you sure you want to clear ${this.getMonthName()} ${this.state.currentDate.getFullYear()}?`
             )
-        ) {
-            return;
-        }
+        ) return;
 
 
-        const monthPrefix =
+        const prefix =
             this.getMonthKey();
 
 
@@ -3925,26 +3655,22 @@ class RotaMatrixManager {
         ).forEach(
             key => {
 
-                const lastUnderscore =
+                const index =
                     key.lastIndexOf('_');
 
 
-                if (
-                    lastUnderscore === -1
-                ) {
-                    return;
-                }
+                if (index === -1) return;
 
 
-                const datePart =
+                const date =
                     key.substring(
-                        lastUnderscore + 1
+                        index + 1
                     );
 
 
                 if (
-                    datePart.startsWith(
-                        monthPrefix
+                    date.startsWith(
+                        prefix
                     )
                 ) {
 
@@ -3963,27 +3689,14 @@ class RotaMatrixManager {
             this.render();
 
             this.showToast(
-                `${monthName} rota cleared and saved.`
+                'Month cleared and saved.'
             );
         }
     }
 
 
     /* ========================================================
-       SEARCH
-    ======================================================== */
-
-    setSearch(value) {
-
-        this.state.searchQuery =
-            value;
-
-        this.renderTableBody();
-    }
-
-
-    /* ========================================================
-       CSV EXPORT
+       CSV
     ======================================================== */
 
     exportCSV() {
@@ -4055,14 +3768,8 @@ class RotaMatrixManager {
                     day++
                 ) {
 
-                    const dateString =
-                        this.getDateString(
-                            day
-                        );
-
-
                     const key =
-                        `${member.id}_${dateString}`;
+                        `${member.id}_${this.getDateString(day)}`;
 
 
                     row.push(
@@ -4133,6 +3840,7 @@ class RotaMatrixManager {
 
 
         a.click();
+
 
         a.remove();
 
@@ -4220,11 +3928,7 @@ class RotaMatrixManager {
 
     openChangePinModal() {
 
-        if (
-            !this.state.isAdmin
-        ) {
-            return;
-        }
+        if (!this.state.isAdmin) return;
 
 
         document.getElementById(
@@ -4356,16 +4060,10 @@ class RotaMatrixManager {
             message;
 
 
-        if (error) {
-
-            icon.className =
-                'fa-solid fa-circle-exclamation text-red-400';
-
-        } else {
-
-            icon.className =
-                'fa-solid fa-circle-check text-green-400';
-        }
+        icon.className =
+            error
+                ? 'fa-solid fa-circle-exclamation text-red-400'
+                : 'fa-solid fa-circle-check text-green-400';
 
 
         toast.classList.remove(
@@ -4402,10 +4100,6 @@ class RotaMatrixManager {
 
 }
 
-
-/* ============================================================
-   START APPLICATION
-============================================================ */
 
 const app =
     new RotaMatrixManager();

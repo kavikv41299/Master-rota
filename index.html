@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en" class="h-full">
 <head>
@@ -12,7 +13,7 @@
     <!-- Font Awesome -->
     <link
         rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     >
 
     <!-- Inter -->
@@ -20,9 +21,6 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
         rel="stylesheet"
     >
-
-    <!-- Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
 
@@ -33,99 +31,6 @@
         body {
             font-family: 'Inter', sans-serif;
             background: #f8fafc;
-            color: #0f172a;
-        }
-
-        .shadow-soft {
-            box-shadow:
-                0 4px 6px -1px rgba(15,23,42,.05),
-                0 10px 20px -5px rgba(15,23,42,.06);
-        }
-
-        .rota-table {
-            border-collapse: separate;
-            border-spacing: 0;
-            min-width: max-content;
-        }
-
-        .rota-table th,
-        .rota-table td {
-            border-right: 1px solid #e2e8f0;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .rota-table th:first-child,
-        .rota-table td:first-child {
-            border-left: 1px solid #e2e8f0;
-        }
-
-        .employee-column {
-            position: sticky;
-            left: 0;
-            z-index: 20;
-            background: white;
-            min-width: 250px;
-        }
-
-        .header-employee {
-            position: sticky;
-            left: 0;
-            z-index: 30;
-            background: #0f172a;
-            min-width: 250px;
-        }
-
-        .day-header {
-            min-width: 145px;
-            width: 145px;
-        }
-
-        .weekend-header {
-            background: #f1f5f9 !important;
-        }
-
-        .weekend-cell {
-            background: #fafafa;
-        }
-
-        .shift-select {
-            width: 100%;
-            min-width: 125px;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            padding: 7px 30px 7px 9px;
-            font-size: 12px;
-            font-weight: 600;
-            outline: none;
-            cursor: pointer;
-            transition: all .15s ease;
-            background: white;
-        }
-
-        .shift-select:focus {
-            border-color: #2563eb;
-            box-shadow: 0 0 0 3px rgba(37,99,235,.12);
-        }
-
-        .modal-backdrop {
-            background: rgba(15,23,42,.55);
-            backdrop-filter: blur(4px);
-        }
-
-        .modal {
-            animation: modalIn .18s ease-out;
-        }
-
-        @keyframes modalIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px) scale(.98);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
         }
 
         .scrollbar-thin::-webkit-scrollbar {
@@ -139,173 +44,424 @@
 
         .scrollbar-thin::-webkit-scrollbar-thumb {
             background: #cbd5e1;
-            border-radius: 999px;
+            border-radius: 10px;
         }
 
         .scrollbar-thin::-webkit-scrollbar-thumb:hover {
             background: #94a3b8;
         }
 
+        .matrix-container {
+            overflow-x: auto;
+            overflow-y: auto;
+            max-height: calc(100vh - 280px);
+        }
+
+        .matrix-table {
+            border-collapse: separate;
+            border-spacing: 0;
+            min-width: max-content;
+        }
+
+        .matrix-table th,
+        .matrix-table td {
+            border-right: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .matrix-table th:first-child,
+        .matrix-table td:first-child {
+            border-left: 1px solid #e2e8f0;
+        }
+
+        .matrix-header {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: #f8fafc;
+        }
+
+        .employee-cell {
+            position: sticky;
+            left: 0;
+            z-index: 15;
+            background: white;
+            min-width: 220px;
+            width: 220px;
+        }
+
+        .matrix-header .employee-cell {
+            z-index: 30;
+            background: #f1f5f9;
+        }
+
+        .day-header {
+            min-width: 125px;
+            width: 125px;
+        }
+
+        /* =====================================================
+           MANAGEMENT SHIFT TABLE
+        ====================================================== */
+
+        .management-shift-container {
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+
+        .management-shift-table {
+            border-collapse: separate;
+            border-spacing: 0;
+            min-width: max-content;
+            width: 100%;
+        }
+
+        .management-shift-table th,
+        .management-shift-table td {
+            border-right: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .management-shift-table th:first-child,
+        .management-shift-table td:first-child {
+            border-left: 1px solid #e2e8f0;
+        }
+
+        .management-shift-table .management-name-cell {
+            position: sticky;
+            left: 0;
+            z-index: 10;
+            background: white;
+            min-width: 220px;
+            width: 220px;
+        }
+
+        .management-shift-table thead th {
+            position: sticky;
+            top: 0;
+            z-index: 5;
+            background: #f8fafc;
+        }
+
+        .management-shift-table thead th:first-child {
+            z-index: 15;
+            background: #f1f5f9;
+        }
+
+        .management-day-header {
+            min-width: 125px;
+            width: 125px;
+        }
+
+        .management-shift-cell {
+            min-width: 125px;
+            width: 125px;
+            padding: 6px;
+        }
+
+        /* =====================================================
+           SELECTS
+        ====================================================== */
+
+        .rota-select,
+        .shift-modal-select {
+            width: 100%;
+            padding: 7px 28px 7px 8px;
+            border: 2px solid #cbd5e1;
+            border-radius: 7px;
+            background: white;
+            color: #475569;
+            font-size: 12px;
+            font-weight: 700;
+            outline: none;
+            transition: all 0.15s ease;
+            cursor: pointer;
+        }
+
+        .shift-modal-select {
+            padding: 9px 30px 9px 10px;
+            font-size: 13px;
+            border-radius: 8px;
+        }
+
+        .rota-select:focus,
+        .shift-modal-select:focus {
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
         /* =====================================================
            SHIFT COLOURS
-        ===================================================== */
+        ====================================================== */
 
-        .shift-early {
-            background: #dbeafe !important;
-            color: #1e40af !important;
-            border-color: #93c5fd !important;
-        }
-
-        .shift-mid {
-            background: #ede9fe !important;
-            color: #6d28d9 !important;
-            border-color: #c4b5fd !important;
-        }
-
-        .shift-late {
-            background: #ffedd5 !important;
-            color: #c2410c !important;
-            border-color: #fdba74 !important;
-        }
-
-        .shift-dont-work {
-            background: #f1f5f9 !important;
+        .shift-blank {
+            background: #ffffff !important;
             color: #475569 !important;
             border-color: #cbd5e1 !important;
         }
 
-        .shift-holiday {
-            background: #dcfce7 !important;
-            color: #166534 !important;
-            border-color: #86efac !important;
+        .shift-Early {
+            background: #16a34a !important;
+            color: #ffffff !important;
+            border-color: #15803d !important;
         }
 
-        .shift-dependancy {
-            background: #fef3c7 !important;
-            color: #92400e !important;
-            border-color: #fcd34d !important;
+        .shift-Mid {
+            background: #f59e0b !important;
+            color: #ffffff !important;
+            border-color: #d97706 !important;
         }
 
-        .shift-doctor {
-            background: #fce7f3 !important;
-            color: #9d174d !important;
-            border-color: #f9a8d4 !important;
+        .shift-Late {
+            background: #7c3aed !important;
+            color: #ffffff !important;
+            border-color: #6d28d9 !important;
         }
 
-        .shift-wfh {
-            background: #cffafe !important;
-            color: #155e75 !important;
-            border-color: #67e8f9 !important;
+        .shift-Early-finish-Early-shift {
+            background: #06b6d4 !important;
+            color: #ffffff !important;
+            border-color: #0891b2 !important;
         }
 
-        .shift-fw {
-            background: #e0e7ff !important;
-            color: #3730a3 !important;
-            border-color: #a5b4fc !important;
+        .shift-Late-start-Early-shift {
+            background: #0d9488 !important;
+            color: #ffffff !important;
+            border-color: #0f766e !important;
         }
 
-        .shift-flexi-taken {
-            background: #fef9c3 !important;
-            color: #854d0e !important;
-            border-color: #fde047 !important;
+        .shift-Early-finish-Late-shift {
+            background: #ec4899 !important;
+            color: #ffffff !important;
+            border-color: #db2777 !important;
         }
 
-        .shift-flexi-redeem {
-            background: #ccfbf1 !important;
-            color: #115e59 !important;
-            border-color: #5eead4 !important;
+        .shift-Late-start-Late-shift {
+            background: #f43f5e !important;
+            color: #ffffff !important;
+            border-color: #e11d48 !important;
         }
 
-        .shift-early-finish {
-            background: #dbeafe !important;
-            color: #1d4ed8 !important;
-            border-color: #93c5fd !important;
+        .shift-Doctors-appointment {
+            background: #2563eb !important;
+            color: #ffffff !important;
+            border-color: #1d4ed8 !important;
         }
 
-        .shift-late-start {
-            background: #e0f2fe !important;
-            color: #0369a1 !important;
-            border-color: #7dd3fc !important;
+        .shift-Dont-work {
+            background: #dc2626 !important;
+            color: #ffffff !important;
+            border-color: #b91c1c !important;
+        }
+
+        .shift-Dependancy-leave {
+            background: #ea580c !important;
+            color: #ffffff !important;
+            border-color: #c2410c !important;
+        }
+
+        .shift-Holiday {
+            background: #eab308 !important;
+            color: #ffffff !important;
+            border-color: #ca8a04 !important;
+        }
+
+        .shift-WFH {
+            background: #059669 !important;
+            color: #ffffff !important;
+            border-color: #047857 !important;
+        }
+
+        .shift-FW {
+            background: #0891b2 !important;
+            color: #ffffff !important;
+            border-color: #0e7490 !important;
+        }
+
+        .shift-Flexi-Time-taken {
+            background: #9333ea !important;
+            color: #ffffff !important;
+            border-color: #7e22ce !important;
+        }
+
+        .shift-Flexi-time-redeem {
+            background: #4f46e5 !important;
+            color: #ffffff !important;
+            border-color: #4338ca !important;
+        }
+
+        .weekend-cell {
+            background: #f8fafc;
+        }
+
+        .today-cell {
+            background: #eff6ff;
         }
 
         /* =====================================================
-           ROTA SECTION DIVIDERS
-        ===================================================== */
+           MANAGEMENT TABLE
+        ====================================================== */
 
-        .rota-section-row td {
-            position: sticky;
-            left: 0;
+        .management-card {
+            border: 1px solid #e2e8f0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .management-header {
+            background: #0f172a;
+            color: white;
+        }
+
+        .management-section-header {
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .management-person {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+        }
+
+        .management-avatar {
+            width: 34px;
+            height: 34px;
+            min-width: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        /* =====================================================
+           WEEKEND TABLE
+        ====================================================== */
+
+        .weekend-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .weekend-table th,
+        .weekend-table td {
+            border-bottom: 1px solid #e2e8f0;
+            padding: 10px 14px;
+            text-align: left;
+        }
+
+        .weekend-table th {
             background: #f8fafc;
             color: #475569;
             font-size: 11px;
-            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: .08em;
-            padding: 9px 16px;
-            border-top: 2px solid #cbd5e1;
-            border-bottom: 1px solid #cbd5e1;
+            letter-spacing: 0.04em;
+            font-weight: 800;
         }
 
-        .rota-section-row td:not(:first-child) {
-            background: #f8fafc;
+        .weekend-table td {
+            font-size: 13px;
+            color: #334155;
         }
 
-        .senior-section td:first-child {
-            color: #7c3aed;
-            background: #f5f3ff;
-            border-top-color: #c4b5fd;
-        }
-
-        .manager-section td:first-child {
-            color: #2563eb;
-            background: #eff6ff;
-            border-top-color: #93c5fd;
-        }
-
-        .staff-section td:first-child {
-            color: #475569;
-            background: #f8fafc;
-            border-top-color: #cbd5e1;
-        }
-
-        .section-label {
-            display: flex;
+        .weekend-count {
+            display: inline-flex;
+            min-width: 32px;
+            height: 28px;
             align-items: center;
-            gap: 8px;
+            justify-content: center;
+            border-radius: 7px;
+            font-weight: 800;
+        }
+
+        .saturday-count {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .sunday-count {
+            background: #ede9fe;
+            color: #6d28d9;
+        }
+
+        .total-weekend-count {
+            background: #f1f5f9;
+            color: #334155;
         }
 
         /* =====================================================
-           STATUS
-        ===================================================== */
+           DATE INPUT
+        ====================================================== */
 
-        .status-message {
-            animation: fadeMessage .25s ease-out;
+        .date-input {
+            width: 100%;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 9px 10px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #334155;
+            outline: none;
         }
 
-        @keyframes fadeMessage {
-
-            from {
-                opacity: 0;
-                transform: translateY(-4px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-
+        .date-input:focus {
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.12);
         }
 
-        @media (max-width: 768px) {
+        /* =====================================================
+           MODALS
+        ====================================================== */
 
-            .employee-column,
-            .header-employee {
-                min-width: 200px;
+        .modal-backdrop {
+            background: rgba(15, 23, 42, 0.55);
+            backdrop-filter: blur(3px);
+        }
+
+        /* =====================================================
+           TOAST
+        ====================================================== */
+
+        .toast {
+            transition: all 0.3s ease;
+        }
+
+        .toast.hidden {
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+        }
+
+        .toast.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media print {
+
+            body {
+                background: white !important;
             }
 
-            .day-header {
-                min-width: 130px;
-                width: 130px;
+            header,
+            .no-print,
+            button,
+            input,
+            select {
+                display: none !important;
+            }
+
+            .matrix-container {
+                max-height: none !important;
+                overflow: visible !important;
+            }
+
+            .employee-cell,
+            .management-name-cell {
+                position: static !important;
             }
 
         }
@@ -314,7 +470,7 @@
 </head>
 
 
-<body class="min-h-full">
+<body class="h-full">
 
 <div id="app" class="min-h-screen">
 
@@ -322,33 +478,39 @@
          HEADER
     ====================================================== -->
 
-    <header class="bg-slate-900 text-white shadow-lg">
+    <header class="bg-slate-900 text-white shadow-lg no-print">
 
-        <div class="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-full mx-auto px-4 py-4">
 
-            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 py-5">
+            <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
 
                 <div>
 
                     <div class="flex items-center gap-3">
 
-                        <div class="w-11 h-11 rounded-xl bg-blue-600 flex items-center justify-center shadow-lg">
-
-                            <i class="fa-solid fa-calendar-days text-xl"></i>
-
+                        <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center">
+                            <i class="fa-solid fa-calendar-days text-lg"></i>
                         </div>
 
                         <div>
 
-                            <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight">
+                            <h1 class="text-xl font-bold">
                                 Team Rota Manager
                             </h1>
 
-                            <p class="text-slate-400 text-sm">
-                                Technical Support Team
+                            <p class="text-xs text-slate-400">
+                                Supabase Connected
                             </p>
 
                         </div>
+
+                        <span
+                            id="connection-status"
+                            class="ml-2 inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-yellow-500/20 text-yellow-300"
+                        >
+                            <span class="w-2 h-2 rounded-full bg-yellow-400"></span>
+                            Connecting...
+                        </span>
 
                     </div>
 
@@ -358,4651 +520,48 @@
                 <div class="flex flex-wrap items-center gap-2">
 
                     <button
-                        onclick="app.openEmployeeModal()"
-                        class="px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition"
+                        onclick="app.openBulkMonthlyModal()"
+                        class="px-3 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-sm font-medium"
                     >
-                        <i class="fa-solid fa-user-plus mr-2"></i>
-                        Add Employee
+                        <i class="fa-solid fa-calendar-plus mr-1"></i>
+                        Apply Monthly Shift
                     </button>
 
                     <button
                         onclick="app.openBulkWeeklyModal()"
-                        class="px-4 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold transition"
+                        class="px-3 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-sm font-medium"
                     >
-                        <i class="fa-solid fa-calendar-week mr-2"></i>
-                        Weekly Shift
+                        <i class="fa-solid fa-repeat mr-1"></i>
+                        Apply Weekly Shift
                     </button>
 
                     <button
-                        onclick="app.openBulkMonthlyModal()"
-                        class="px-4 py-2.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-sm font-semibold transition"
+                        onclick="app.openAddMemberModal()"
+                        class="px-3 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-sm font-medium"
                     >
-                        <i class="fa-solid fa-calendar-days mr-2"></i>
-                        Monthly Shift
+                        <i class="fa-solid fa-user-plus mr-1"></i>
+                        Add Employee
+                    </button>
+
+                    <button
+                        onclick="app.saveData()"
+                        id="save-button"
+                        class="px-3 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-sm font-semibold"
+                    >
+                        <i class="fa-solid fa-cloud-arrow-up mr-1"></i>
+                        Save
+                    </button>
+
+                    <button
+                        onclick="app.refreshData()"
+                        class="px-3 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-sm font-medium"
+                    >
+                        <i class="fa-solid fa-rotate mr-1"></i>
+                        Refresh Data
                     </button>
 
                     <button
                         onclick="app.exportCSV()"
-                        class="px-4 py-2.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-white text-sm font-semibold transition"
+                        class="px-3 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-sm font-medium"
                     >
-                        <i class="fa-solid fa-file-csv mr-2"></i>
-                        Export
-                    </button>
-
-                    <button
-                        onclick="app.openAdminModal()"
-                        class="px-4 py-2.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-white text-sm font-semibold transition"
-                    >
-                        <i class="fa-solid fa-lock mr-2"></i>
-                        Admin
-                    </button>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </header>
-
-
-    <!-- =====================================================
-         STATUS BAR
-    ====================================================== -->
-
-    <div class="bg-white border-b border-slate-200">
-
-        <div class="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 py-3">
-
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-
-                <div class="flex items-center gap-3">
-
-                    <div
-                        id="connectionIndicator"
-                        class="flex items-center gap-2 text-sm font-medium text-slate-600"
-                    >
-                        <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
-                        Connecting to Supabase...
-                    </div>
-
-                    <div
-                        id="statusMessage"
-                        class="hidden status-message text-sm font-medium"
-                    ></div>
-
-                </div>
-
-                <div class="text-xs text-slate-400">
-
-                    Last saved:
-                    <span id="lastSaved">
-                        Not saved yet
-                    </span>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- =====================================================
-         MAIN
-    ====================================================== -->
-
-    <main class="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
-
-
-        <!-- =================================================
-             CONTROLS
-        ================================================== -->
-
-        <section class="bg-white rounded-2xl shadow-soft border border-slate-200 p-4 mb-6">
-
-            <div class="flex flex-col lg:flex-row lg:items-end gap-4">
-
-                <div>
-
-                    <label class="block text-xs font-bold uppercase tracking-wide text-slate-500 mb-1.5">
-                        Month
-                    </label>
-
-                    <input
-                        id="monthSelector"
-                        type="month"
-                        onchange="app.changeMonth(this.value)"
-                        class="border border-slate-300 rounded-lg px-3 py-2.5 text-sm font-semibold outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-
-                </div>
-
-
-                <div class="flex-1 max-w-md">
-
-                    <label class="block text-xs font-bold uppercase tracking-wide text-slate-500 mb-1.5">
-                        Search employee
-                    </label>
-
-                    <div class="relative">
-
-                        <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-
-                        <input
-                            id="employeeSearch"
-                            type="text"
-                            placeholder="Search by employee name..."
-                            oninput="app.setSearch(this.value)"
-                            class="w-full border border-slate-300 rounded-lg pl-9 pr-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-500"
-                        >
-
-                    </div>
-
-                </div>
-
-
-                <button
-                    onclick="app.clearCurrentMonth()"
-                    class="px-4 py-2.5 rounded-lg border border-red-200 text-red-600 hover:bg-red-50 text-sm font-semibold transition"
-                >
-                    <i class="fa-solid fa-trash-can mr-2"></i>
-                    Clear Month
-                </button>
-
-            </div>
-
-        </section>
-
-
-        <!-- =================================================
-             MAIN ROTA
-        ================================================== -->
-
-        <section class="bg-white rounded-2xl shadow-soft border border-slate-200 overflow-hidden">
-
-            <div class="px-5 py-4 border-b border-slate-200 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-
-                <div>
-
-                    <h2 id="rotaTitle"
-                        class="text-lg font-extrabold text-slate-900">
-                        Rota
-                    </h2>
-
-                    <p class="text-sm text-slate-500">
-                        Management is shown at the top of the rota.
-                    </p>
-
-                </div>
-
-                <div class="text-sm text-slate-500">
-
-                    <span id="employeeCount">
-                        0
-                    </span>
-
-                    employees
-
-                </div>
-
-            </div>
-
-
-            <div class="overflow-auto scrollbar-thin">
-
-                <table class="rota-table w-full text-sm">
-
-                    <thead id="rotaHead"></thead>
-
-                    <tbody id="rotaBody"></tbody>
-
-                </table>
-
-            </div>
-
-        </section>
-
-
-        <!-- =================================================
-             MONTHLY SUMMARY
-        ================================================== -->
-
-        <section class="mt-6">
-
-            <div class="flex items-center justify-between mb-3">
-
-                <div>
-
-                    <h2 class="text-lg font-extrabold text-slate-900">
-                        Monthly Shift Summary
-                    </h2>
-
-                    <p class="text-sm text-slate-500">
-                        Shift allocation for the selected month.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div
-                id="summaryCards"
-                class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3"
-            ></div>
-
-        </section>
-
-
-        <!-- =================================================
-             WEEKEND COVERAGE
-        ================================================== -->
-
-        <section class="mt-6 bg-white rounded-2xl shadow-soft border border-slate-200 overflow-hidden">
-
-            <div class="px-5 py-4 border-b border-slate-200">
-
-                <h2 class="text-lg font-extrabold text-slate-900">
-                    Weekend Coverage
-                </h2>
-
-                <p class="text-sm text-slate-500">
-                    Saturday and Sunday coverage for the selected month.
-                </p>
-
-            </div>
-
-
-            <div class="overflow-auto scrollbar-thin">
-
-                <table class="w-full text-sm">
-
-                    <thead class="bg-slate-50">
-
-                        <tr>
-
-                            <th class="text-left px-5 py-3 font-bold text-slate-600">
-                                Employee
-                            </th>
-
-                            <th class="text-left px-5 py-3 font-bold text-slate-600">
-                                Role
-                            </th>
-
-                            <th class="text-center px-5 py-3 font-bold text-slate-600">
-                                Saturdays
-                            </th>
-
-                            <th class="text-center px-5 py-3 font-bold text-slate-600">
-                                Sundays
-                            </th>
-
-                            <th class="text-center px-5 py-3 font-bold text-slate-600">
-                                Total Weekend Days
-                            </th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody id="weekendCoverageBody"></tbody>
-
-                </table>
-
-            </div>
-
-        </section>
-
-    </main>
-
-</div>
-
-
-<!-- =========================================================
-     EMPLOYEE MODAL
-========================================================== -->
-
-<div
-    id="employeeModal"
-    class="hidden fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-4"
->
-
-    <div class="modal bg-white rounded-2xl shadow-2xl w-full max-w-lg">
-
-        <div class="px-6 py-5 border-b border-slate-200 flex items-center justify-between">
-
-            <div>
-
-                <h3
-                    id="employeeModalTitle"
-                    class="text-lg font-extrabold text-slate-900"
-                >
-                    Add Employee
-                </h3>
-
-                <p class="text-sm text-slate-500">
-                    Manage team member details.
-                </p>
-
-            </div>
-
-            <button
-                onclick="app.closeModal('employeeModal')"
-                class="w-9 h-9 rounded-lg hover:bg-slate-100 text-slate-500"
-            >
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-
-        </div>
-
-
-        <div class="p-6 space-y-4">
-
-            <input
-                id="employeeId"
-                type="hidden"
-            >
-
-
-            <div>
-
-                <label class="block text-sm font-semibold text-slate-700 mb-1.5">
-                    Name
-                </label>
-
-                <input
-                    id="employeeName"
-                    type="text"
-                    placeholder="Employee name"
-                    class="w-full border border-slate-300 rounded-lg px-3 py-2.5 outline-none focus:ring-2 focus:ring-blue-500"
-                >
-
-            </div>
-
-
-            <div>
-
-                <label class="block text-sm font-semibold text-slate-700 mb-1.5">
-                    Role
-                </label>
-
-                <select
-                    id="employeeRole"
-                    class="w-full border border-slate-300 rounded-lg px-3 py-2.5 outline-none focus:ring-2 focus:ring-blue-500"
-                >
-
-                    <option value="Staff">
-                        Staff
-                    </option>
-
-                    <option value="Senior Manager">
-                        Senior Manager
-                    </option>
-
-                    <option value="Manager">
-                        Manager
-                    </option>
-
-                </select>
-
-            </div>
-
-        </div>
-
-
-        <div class="px-6 py-4 bg-slate-50 border-t border-slate-200 flex justify-between gap-3">
-
-            <button
-                id="deleteEmployeeButton"
-                onclick="app.deleteEmployee()"
-                class="hidden px-4 py-2.5 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 text-sm font-semibold"
-            >
-                <i class="fa-solid fa-trash mr-2"></i>
-                Delete
-            </button>
-
-
-            <div class="ml-auto flex gap-3">
-
-                <button
-                    onclick="app.closeModal('employeeModal')"
-                    class="px-4 py-2.5 rounded-lg border border-slate-300 text-slate-700 hover:bg-white text-sm font-semibold"
-                >
-                    Cancel
-                </button>
-
-                <button
-                    onclick="app.saveEmployee()"
-                    class="px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold"
-                >
-                    Save Employee
-                </button>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- =========================================================
-     MONTHLY SHIFT MODAL
-========================================================== -->
-
-<div
-    id="monthlyModal"
-    class="hidden fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-4"
->
-
-    <div class="modal bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-
-        <div class="px-6 py-5 border-b border-slate-200 flex items-center justify-between">
-
-            <div>
-
-                <h3 class="text-lg font-extrabold text-slate-900">
-                    Apply Monthly Shift
-                </h3>
-
-                <p class="text-sm text-slate-500">
-                    Apply a shift to selected employees for the whole month.
-                </p>
-
-            </div>
-
-            <button
-                onclick="app.closeModal('monthlyModal')"
-                class="w-9 h-9 rounded-lg hover:bg-slate-100 text-slate-500"
-            >
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-
-        </div>
-
-
-        <div class="p-6 space-y-5">
-
-            <div>
-
-                <label class="block text-sm font-semibold text-slate-700 mb-1.5">
-                    Employees
-                </label>
-
-                <div
-                    id="monthlyEmployees"
-                    class="border border-slate-300 rounded-lg max-h-48 overflow-y-auto p-3 space-y-2"
-                ></div>
-
-            </div>
-
-
-            <div>
-
-                <label class="block text-sm font-semibold text-slate-700 mb-1.5">
-                    Shift
-                </label>
-
-                <select
-                    id="monthlyShift"
-                    onchange="app.applyShiftColour(this)"
-                    class="w-full border border-slate-300 rounded-lg px-3 py-2.5 font-semibold outline-none focus:ring-2 focus:ring-purple-500"
-                >
-
-                    <option value="">
-                        — Select shift —
-                    </option>
-
-                    <optgroup label="Weekdays Only">
-
-                        <option value="weekdays_only_early">
-                            Early - Weekdays only
-                        </option>
-
-                        <option value="weekdays_only_mid">
-                            Mid - Weekdays only
-                        </option>
-
-                        <option value="weekdays_only_late">
-                            Lates - Weekdays only
-                        </option>
-
-                        <option value="weekdays_only_fw">
-                            FW - Weekdays only
-                        </option>
-
-                    </optgroup>
-
-
-                    <optgroup label="Regular Shifts">
-
-                        <option value="Early">
-                            Early
-                        </option>
-
-                        <option value="Mid">
-                            Mid
-                        </option>
-
-                        <option value="Late">
-                            Late
-                        </option>
-
-                        <option value="Early finish - Early shift">
-                            Early finish - Early shift
-                        </option>
-
-                        <option value="Late start - Early shift">
-                            Late start - Early shift
-                        </option>
-
-                        <option value="Early finish - Late shift">
-                            Early finish - Late shift
-                        </option>
-
-                        <option value="Late start - Late shift">
-                            Late start - Late shift
-                        </option>
-
-                        <option value="Doctors appointment">
-                            Doctors appointment
-                        </option>
-
-                        <option value="Dont work">
-                            Dont work
-                        </option>
-
-                        <option value="Dependancy leave">
-                            Dependancy leave
-                        </option>
-
-                        <option value="Holiday">
-                            Holiday
-                        </option>
-
-                        <option value="WFH">
-                            WFH
-                        </option>
-
-                        <option value="FW">
-                            FW
-                        </option>
-
-                        <option value="Flexi Time taken">
-                            Flexi Time taken
-                        </option>
-
-                        <option value="Flexi time redeem">
-                            Flexi time redeem
-                        </option>
-
-                    </optgroup>
-
-                </select>
-
-            </div>
-
-
-            <div class="bg-purple-50 border border-purple-100 rounded-xl p-4 text-sm text-purple-800">
-
-                <i class="fa-solid fa-circle-info mr-2"></i>
-
-                Weekday-only options apply Monday to Friday only.
-                Existing weekend shifts remain unchanged.
-
-            </div>
-
-        </div>
-
-
-        <div class="px-6 py-4 bg-slate-50 border-t border-slate-200 flex justify-end gap-3">
-
-            <button
-                onclick="app.closeModal('monthlyModal')"
-                class="px-4 py-2.5 rounded-lg border border-slate-300 text-slate-700 hover:bg-white text-sm font-semibold"
-            >
-                Cancel
-            </button>
-
-            <button
-                onclick="app.applyMonthlyShift()"
-                class="px-5 py-2.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-sm font-semibold"
-            >
-                Apply Monthly Shift
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- =========================================================
-     WEEKLY SHIFT MODAL
-========================================================== -->
-
-<div
-    id="weeklyModal"
-    class="hidden fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-4"
->
-
-    <div class="modal bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
-
-        <div class="px-6 py-5 border-b border-slate-200 flex items-center justify-between">
-
-            <div>
-
-                <h3 class="text-lg font-extrabold text-slate-900">
-                    Apply Weekly Shift
-                </h3>
-
-                <p class="text-sm text-slate-500">
-                    Create a repeating Monday–Sunday pattern over a date range.
-                </p>
-
-            </div>
-
-            <button
-                onclick="app.closeModal('weeklyModal')"
-                class="w-9 h-9 rounded-lg hover:bg-slate-100 text-slate-500"
-            >
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-
-        </div>
-
-
-        <div class="p-6 space-y-5">
-
-
-            <!-- Employees -->
-
-            <div>
-
-                <label class="block text-sm font-semibold text-slate-700 mb-1.5">
-                    Employees
-                </label>
-
-                <div
-                    id="weeklyEmployees"
-                    class="border border-slate-300 rounded-lg max-h-48 overflow-y-auto p-3 space-y-2"
-                ></div>
-
-            </div>
-
-
-            <!-- Dates -->
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-                <div>
-
-                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">
-                        Start Date
-                    </label>
-
-                    <input
-                        id="weeklyStartDate"
-                        type="date"
-                        class="w-full border border-slate-300 rounded-lg px-3 py-2.5 outline-none focus:ring-2 focus:ring-indigo-500"
-                    >
-
-                </div>
-
-
-                <div>
-
-                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">
-                        End Date
-                    </label>
-
-                    <input
-                        id="weeklyEndDate"
-                        type="date"
-                        class="w-full border border-slate-300 rounded-lg px-3 py-2.5 outline-none focus:ring-2 focus:ring-indigo-500"
-                    >
-
-                </div>
-
-            </div>
-
-
-            <!-- Pattern -->
-
-            <div>
-
-                <label class="block text-sm font-semibold text-slate-700 mb-3">
-                    Weekly Pattern
-                </label>
-
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-
-
-                    <div class="flex items-center gap-3">
-
-                        <label class="w-24 text-sm font-semibold text-slate-600">
-                            Monday
-                        </label>
-
-                        <select
-                            id="weekly-mon"
-                            onchange="app.applyShiftColour(this)"
-                            class="weekly-shift-select flex-1 shift-select"
-                        ></select>
-
-                    </div>
-
-
-                    <div class="flex items-center gap-3">
-
-                        <label class="w-24 text-sm font-semibold text-slate-600">
-                            Tuesday
-                        </label>
-
-                        <select
-                            id="weekly-tue"
-                            onchange="app.applyShiftColour(this)"
-                            class="weekly-shift-select flex-1 shift-select"
-                        ></select>
-
-                    </div>
-
-
-                    <div class="flex items-center gap-3">
-
-                        <label class="w-24 text-sm font-semibold text-slate-600">
-                            Wednesday
-                        </label>
-
-                        <select
-                            id="weekly-wed"
-                            onchange="app.applyShiftColour(this)"
-                            class="weekly-shift-select flex-1 shift-select"
-                        ></select>
-
-                    </div>
-
-
-                    <div class="flex items-center gap-3">
-
-                        <label class="w-24 text-sm font-semibold text-slate-600">
-                            Thursday
-                        </label>
-
-                        <select
-                            id="weekly-thu"
-                            onchange="app.applyShiftColour(this)"
-                            class="weekly-shift-select flex-1 shift-select"
-                        ></select>
-
-                    </div>
-
-
-                    <div class="flex items-center gap-3">
-
-                        <label class="w-24 text-sm font-semibold text-slate-600">
-                            Friday
-                        </label>
-
-                        <select
-                            id="weekly-fri"
-                            onchange="app.applyShiftColour(this)"
-                            class="weekly-shift-select flex-1 shift-select"
-                        ></select>
-
-                    </div>
-
-
-                    <div class="flex items-center gap-3">
-
-                        <label class="w-24 text-sm font-semibold text-slate-600">
-                            Saturday
-                        </label>
-
-                        <select
-                            id="weekly-sat"
-                            onchange="app.applyShiftColour(this)"
-                            class="weekly-shift-select flex-1 shift-select"
-                        ></select>
-
-                    </div>
-
-
-                    <div class="flex items-center gap-3 md:col-span-2">
-
-                        <label class="w-24 text-sm font-semibold text-slate-600">
-                            Sunday
-                        </label>
-
-                        <select
-                            id="weekly-sun"
-                            onchange="app.applyShiftColour(this)"
-                            class="weekly-shift-select flex-1 shift-select"
-                        ></select>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-4 text-sm text-indigo-800">
-
-                <div class="font-bold mb-1">
-
-                    <i class="fa-solid fa-rotate mr-2"></i>
-
-                    How this works
-
-                </div>
-
-                The selected Monday–Sunday pattern repeats according to the
-                actual weekday throughout the selected date range.
-
-            </div>
-
-        </div>
-
-
-        <div class="px-6 py-4 bg-slate-50 border-t border-slate-200 flex justify-end gap-3">
-
-            <button
-                onclick="app.closeModal('weeklyModal')"
-                class="px-4 py-2.5 rounded-lg border border-slate-300 text-slate-700 hover:bg-white text-sm font-semibold"
-            >
-                Cancel
-            </button>
-
-            <button
-                onclick="app.applyWeeklyShift()"
-                class="px-5 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold"
-            >
-                Apply Weekly Shift
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- =========================================================
-     ADMIN MODAL
-========================================================== -->
-
-<div
-    id="adminModal"
-    class="hidden fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-4"
->
-
-    <div class="modal bg-white rounded-2xl shadow-2xl w-full max-w-md">
-
-        <div class="px-6 py-5 border-b border-slate-200 flex items-center justify-between">
-
-            <div>
-
-                <h3 class="text-lg font-extrabold text-slate-900">
-                    Admin Access
-                </h3>
-
-                <p class="text-sm text-slate-500">
-                    Enter the admin PIN.
-                </p>
-
-            </div>
-
-            <button
-                onclick="app.closeModal('adminModal')"
-                class="w-9 h-9 rounded-lg hover:bg-slate-100 text-slate-500"
-            >
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-
-        </div>
-
-
-        <div class="p-6">
-
-            <label class="block text-sm font-semibold text-slate-700 mb-1.5">
-                Admin PIN
-            </label>
-
-            <input
-                id="adminPinInput"
-                type="password"
-                maxlength="20"
-                onkeydown="if(event.key === 'Enter') app.loginAdmin()"
-                class="w-full border border-slate-300 rounded-lg px-3 py-2.5 outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter PIN"
-            >
-
-            <p
-                id="adminError"
-                class="hidden mt-2 text-sm text-red-600 font-medium"
-            >
-                Incorrect PIN.
-            </p>
-
-        </div>
-
-
-        <div class="px-6 py-4 bg-slate-50 border-t border-slate-200 flex justify-end gap-3">
-
-            <button
-                onclick="app.closeModal('adminModal')"
-                class="px-4 py-2.5 rounded-lg border border-slate-300 text-slate-700 hover:bg-white text-sm font-semibold"
-            >
-                Cancel
-            </button>
-
-            <button
-                onclick="app.loginAdmin()"
-                class="px-5 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold"
-            >
-                Unlock
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<script>
-
-/* =========================================================
-   SUPABASE CONFIG
-========================================================= */
-
-const SUPABASE_URL =
-    'https://lfoumafetmwayteullrg.supabase.co';
-
-const SUPABASE_ANON_KEY =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmb3VtYWZldG13YXl0ZXVsbHJnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk3Mjg1MzEsImV4cCI6MjEwNTMwNDUzMX0.-mKvr2dYdFPPQgkpIAa6pnFAVYgoRCQHoh33H-1tpgk';
-
-const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_ANON_KEY
-    );
-
-
-/* =========================================================
-   ROTA MANAGER
-========================================================= */
-
-class RotaMatrixManager {
-
-    constructor() {
-
-        this.state = {
-
-            members: [],
-
-            shifts: {},
-
-            currentDate:
-                new Date(
-                    2026,
-                    8,
-                    1
-                ),
-
-            searchQuery: '',
-
-            isAdmin: false,
-
-            adminPin: '9999'
-
-        };
-
-
-        this.shiftOptions = [
-
-            'Early',
-
-            'Mid',
-
-            'Late',
-
-            'Early finish - Early shift',
-
-            'Late start - Early shift',
-
-            'Early finish - Late shift',
-
-            'Late start - Late shift',
-
-            'Doctors appointment',
-
-            'Dont work',
-
-            'Dependancy leave',
-
-            'Holiday',
-
-            'WFH',
-
-            'FW',
-
-            'Flexi Time taken',
-
-            'Flexi time redeem'
-
-        ];
-
-
-        this.defaultMembers = [
-
-            {
-                id: 'm_1',
-                name: 'Angelo Rizon',
-                role: 'Staff'
-            },
-
-            {
-                id: 'm_2',
-                name: 'Daniel Prince',
-                role: 'Staff'
-            },
-
-            {
-                id: 'm_3',
-                name: 'Jay Fraser',
-                role: 'Staff'
-            },
-
-            {
-                id: 'm_4',
-                name: 'Jed Dickinson',
-                role: 'Staff'
-            },
-
-            {
-                id: 'm_5',
-                name: 'Kai Wright',
-                role: 'Staff'
-            },
-
-            {
-                id: 'm_6',
-                name: 'Paul Psomiadis',
-                role: 'Staff'
-            },
-
-            {
-                id: 'm_7',
-                name: 'Rachel Alexander-Martin',
-                role: 'Staff'
-            },
-
-            {
-                id: 'm_8',
-                name: 'Rahib Hossain',
-                role: 'Staff'
-            },
-
-            {
-                id: 'm_9',
-                name: 'Rebeca Garcia',
-                role: 'Staff'
-            },
-
-            {
-                id: 'm_10',
-                name: 'Ricky Johnson',
-                role: 'Staff'
-            },
-
-            {
-                id: 'm_11',
-                name: 'Robert Easom',
-                role: 'Staff'
-            },
-
-            {
-                id: 'm_12',
-                name: 'Ruth McVicar',
-                role: 'Staff'
-            },
-
-            {
-                id: 'm_13',
-                name: 'Shawn Kurian',
-                role: 'Staff'
-            }
-
-        ];
-
-    }
-
-
-    /* =====================================================
-       INIT
-    ===================================================== */
-
-    async init() {
-
-        document.getElementById(
-            'monthSelector'
-        ).value =
-            this.formatMonthInput(
-                this.state.currentDate
-            );
-
-
-        /*
-         * FIX:
-         * This method now exists.
-         */
-
-        this.populateShiftSelectors();
-
-
-        await this.loadFromSupabase();
-
-
-        this.normalizeMembers();
-
-
-        this.render();
-
-
-        this.setConnectionStatus(
-            true,
-            'Connected to Supabase'
-        );
-
-    }
-
-
-    /* =====================================================
-       SUPABASE LOAD
-    ===================================================== */
-
-    async loadFromSupabase() {
-
-        try {
-
-            const {
-                data,
-                error
-            } =
-                await supabaseClient
-                    .from('rota_data')
-                    .select(
-                        'data, updated_at'
-                    )
-                    .eq('id', 1)
-                    .single();
-
-
-            if (error) {
-
-                console.error(
-                    'Supabase load error:',
-                    error
-                );
-
-
-                if (
-                    error.code ===
-                    'PGRST116'
-                ) {
-
-                    this.state.members =
-                        [
-                            ...this.defaultMembers
-                        ];
-
-                    await this.saveToSupabase();
-
-                    return;
-
-                }
-
-                throw error;
-
-            }
-
-
-            if (
-                data &&
-                data.data
-            ) {
-
-                const saved =
-                    data.data;
-
-
-                if (
-                    Array.isArray(
-                        saved.members
-                    ) &&
-                    saved.members.length > 0
-                ) {
-
-                    this.state.members =
-                        saved.members;
-
-                } else {
-
-                    this.state.members =
-                        [
-                            ...this.defaultMembers
-                        ];
-
-                }
-
-
-                this.state.shifts =
-                    saved.shifts || {};
-
-
-                if (
-                    saved.adminPin
-                ) {
-
-                    this.state.adminPin =
-                        saved.adminPin;
-
-                }
-
-
-                if (
-                    data.updated_at
-                ) {
-
-                    document.getElementById(
-                        'lastSaved'
-                    ).textContent =
-                        new Date(
-                            data.updated_at
-                        ).toLocaleString(
-                            'en-GB'
-                        );
-
-                }
-
-            } else {
-
-                this.state.members =
-                    [
-                        ...this.defaultMembers
-                    ];
-
-            }
-
-        }
-
-        catch (error) {
-
-            console.error(error);
-
-
-            this.state.members =
-                [
-                    ...this.defaultMembers
-                ];
-
-
-            this.setConnectionStatus(
-                false,
-                'Unable to load Supabase data'
-            );
-
-        }
-
-    }
-
-
-    /* =====================================================
-       SUPABASE SAVE
-    ===================================================== */
-
-    async saveToSupabase() {
-
-        try {
-
-            const dataToSave = {
-
-                members:
-                    this.state.members,
-
-                shifts:
-                    this.state.shifts,
-
-                adminPin:
-                    this.state.adminPin
-
-            };
-
-
-            const {
-                data,
-                error
-            } =
-                await supabaseClient
-                    .from('rota_data')
-                    .upsert(
-                        {
-                            id: 1,
-
-                            data:
-                                dataToSave,
-
-                            updated_at:
-                                new Date()
-                                    .toISOString()
-
-                        },
-                        {
-                            onConflict:
-                                'id'
-                        }
-                    )
-                    .select()
-                    .single();
-
-
-            if (error) {
-
-                throw error;
-
-            }
-
-
-            document.getElementById(
-                'lastSaved'
-            ).textContent =
-                new Date()
-                    .toLocaleString(
-                        'en-GB'
-                    );
-
-
-            this.showStatus(
-                'Saved successfully',
-                'success'
-            );
-
-
-            return data;
-
-        }
-
-        catch (error) {
-
-            console.error(
-                'Supabase save error:',
-                error
-            );
-
-
-            this.showStatus(
-                'Unable to save to Supabase',
-                'error'
-            );
-
-
-            throw error;
-
-        }
-
-    }
-
-
-    /* =====================================================
-       FIXED SHIFT SELECTOR FUNCTION
-    ===================================================== */
-
-    populateShiftSelectors() {
-
-        const ids = [
-
-            'weekly-mon',
-            'weekly-tue',
-            'weekly-wed',
-            'weekly-thu',
-            'weekly-fri',
-            'weekly-sat',
-            'weekly-sun'
-
-        ];
-
-
-        ids.forEach(
-            id => {
-
-                const select =
-                    document.getElementById(
-                        id
-                    );
-
-
-                if (!select) {
-                    return;
-                }
-
-
-                select.innerHTML = '';
-
-
-                const blankOption =
-                    document.createElement(
-                        'option'
-                    );
-
-                blankOption.value = '';
-
-                blankOption.textContent =
-                    '—';
-
-
-                select.appendChild(
-                    blankOption
-                );
-
-
-                this.shiftOptions.forEach(
-                    shift => {
-
-                        const option =
-                            document.createElement(
-                                'option'
-                            );
-
-
-                        option.value =
-                            shift;
-
-                        option.textContent =
-                            shift;
-
-
-                        select.appendChild(
-                            option
-                        );
-
-                    }
-                );
-
-
-                this.applyShiftColour(
-                    select
-                );
-
-            }
-        );
-
-    }
-
-
-    /* =====================================================
-       NORMALISE ROLES
-    ===================================================== */
-
-    normalizeMembers() {
-
-        this.state.members.forEach(
-            member => {
-
-                if (
-                    member.role ===
-                    'Senior'
-                ) {
-
-                    member.role =
-                        'Senior Manager';
-
-                }
-
-            }
-        );
-
-    }
-
-
-    /* =====================================================
-       DATE HELPERS
-    ===================================================== */
-
-    parseLocalDate(
-        dateString
-    ) {
-
-        const [
-            year,
-            month,
-            day
-        ] =
-            dateString
-                .split('-')
-                .map(Number);
-
-
-        return new Date(
-            year,
-            month - 1,
-            day
-        );
-
-    }
-
-
-    formatDateForInput(
-        date
-    ) {
-
-        const year =
-            date.getFullYear();
-
-
-        const month =
-            String(
-                date.getMonth() + 1
-            ).padStart(
-                2,
-                '0'
-            );
-
-
-        const day =
-            String(
-                date.getDate()
-            ).padStart(
-                2,
-                '0'
-            );
-
-
-        return `${year}-${month}-${day}`;
-
-    }
-
-
-    formatMonthInput(
-        date
-    ) {
-
-        return `${date.getFullYear()}-${String(
-            date.getMonth() + 1
-        ).padStart(
-            2,
-            '0'
-        )}`;
-
-    }
-
-
-    getDaysInMonth(
-        year,
-        month
-    ) {
-
-        return new Date(
-            year,
-            month + 1,
-            0
-        ).getDate();
-
-    }
-
-
-    getDateKey(
-        year,
-        month,
-        day
-    ) {
-
-        return `${year}-${String(
-            month + 1
-        ).padStart(
-            2,
-            '0'
-        )}-${String(
-            day
-        ).padStart(
-            2,
-            '0'
-        )}`;
-
-    }
-
-
-    /* =====================================================
-       RENDER
-    ===================================================== */
-
-    render() {
-
-        this.renderRota();
-
-        this.renderSummary();
-
-        this.renderWeekendCoverage();
-
-
-        document.getElementById(
-            'employeeCount'
-        ).textContent =
-            this.getFilteredMembers()
-                .length;
-
-    }
-
-
-    /* =====================================================
-       GET MEMBERS
-       MANAGEMENT FIRST
-    ===================================================== */
-
-    getFilteredMembers() {
-
-        const query =
-            this.state.searchQuery
-                .trim()
-                .toLowerCase();
-
-
-        let members =
-            [
-                ...this.state.members
-            ];
-
-
-        /*
-         * Search
-         */
-
-        if (query) {
-
-            members =
-                members.filter(
-                    member =>
-                        member.name
-                            .toLowerCase()
-                            .includes(
-                                query
-                            )
-                );
-
-        }
-
-
-        /*
-         * IMPORTANT:
-         *
-         * Senior Managers first
-         * Managers second
-         * Staff third
-         */
-
-        const roleOrder = {
-
-            'Senior Manager': 1,
-
-            'Manager': 2,
-
-            'Staff': 3
-
-        };
-
-
-        members.sort(
-            (a, b) => {
-
-                const roleA =
-                    roleOrder[
-                        a.role
-                    ] ?? 99;
-
-
-                const roleB =
-                    roleOrder[
-                        b.role
-                    ] ?? 99;
-
-
-                if (
-                    roleA !== roleB
-                ) {
-
-                    return roleA -
-                        roleB;
-
-                }
-
-
-                /*
-                 * Alphabetical
-                 * within each group
-                 */
-
-                return a.name.localeCompare(
-                    b.name
-                );
-
-            }
-        );
-
-
-        return members;
-
-    }
-
-
-    /* =====================================================
-       RENDER MAIN ROTA
-    ===================================================== */
-
-    renderRota() {
-
-        const year =
-            this.state.currentDate
-                .getFullYear();
-
-
-        const month =
-            this.state.currentDate
-                .getMonth();
-
-
-        const days =
-            this.getDaysInMonth(
-                year,
-                month
-            );
-
-
-        const members =
-            this.getFilteredMembers();
-
-
-        document.getElementById(
-            'rotaTitle'
-        ).textContent =
-            this.state.currentDate
-                .toLocaleDateString(
-                    'en-GB',
-                    {
-                        month: 'long',
-                        year: 'numeric'
-                    }
-                ) +
-                ' Rota';
-
-
-        /* ================================================
-           HEADER
-        ================================================= */
-
-        let headerHtml = `
-
-            <tr>
-
-                <th class="
-                    header-employee
-                    px-4
-                    py-3
-                    text-left
-                    text-white
-                    font-bold
-                ">
-                    Employee
-                </th>
-
-        `;
-
-
-        for (
-            let day = 1;
-            day <= days;
-            day++
-        ) {
-
-            const date =
-                new Date(
-                    year,
-                    month,
-                    day
-                );
-
-
-            const weekday =
-                date.toLocaleDateString(
-                    'en-GB',
-                    {
-                        weekday:
-                            'short'
-                    }
-                );
-
-
-            const isWeekend =
-                date.getDay() === 0 ||
-                date.getDay() === 6;
-
-
-            headerHtml += `
-
-                <th class="
-                    day-header
-                    px-3
-                    py-3
-                    text-center
-                    font-bold
-                    ${
-                        isWeekend
-                            ? 'weekend-header'
-                            : 'bg-slate-50'
-                    }
-                    text-slate-700
-                ">
-
-                    <div class="text-xs uppercase">
-                        ${weekday}
-                    </div>
-
-                    <div class="text-base mt-0.5">
-                        ${day}
-                    </div>
-
-                </th>
-
-            `;
-
-        }
-
-
-        headerHtml += `
-            </tr>
-        `;
-
-
-        document.getElementById(
-            'rotaHead'
-        ).innerHTML =
-            headerHtml;
-
-
-        /* ================================================
-           BODY
-        ================================================= */
-
-        const body =
-            document.getElementById(
-                'rotaBody'
-            );
-
-
-        let bodyHtml = '';
-
-
-        let previousRole =
-            null;
-
-
-        members.forEach(
-            member => {
-
-
-                /*
-                 * Add section header
-                 * whenever the role changes.
-                 */
-
-                if (
-                    member.role !==
-                    previousRole
-                ) {
-
-                    let sectionClass =
-                        'staff-section';
-
-                    let icon =
-                        'fa-users';
-
-                    let label =
-                        'Technical Support Team';
-
-
-                    if (
-                        member.role ===
-                        'Senior Manager'
-                    ) {
-
-                        sectionClass =
-                            'senior-section';
-
-                        icon =
-                            'fa-user-tie';
-
-                        label =
-                            'Senior Managers';
-
-                    }
-
-
-                    else if (
-                        member.role ===
-                        'Manager'
-                    ) {
-
-                        sectionClass =
-                            'manager-section';
-
-                        icon =
-                            'fa-user-gear';
-
-                        label =
-                            'Managers';
-
-                    }
-
-
-                    bodyHtml += `
-
-                        <tr class="
-                            rota-section-row
-                            ${sectionClass}
-                        ">
-
-                            <td colspan="${days + 1}">
-
-                                <div class="section-label">
-
-                                    <i class="
-                                        fa-solid
-                                        ${icon}
-                                    "></i>
-
-                                    ${label}
-
-                                </div>
-
-                            </td>
-
-                        </tr>
-
-                    `;
-
-
-                    previousRole =
-                        member.role;
-
-                }
-
-
-                /* ========================================
-                   EMPLOYEE ROW
-                ======================================== */
-
-                bodyHtml += `
-
-                    <tr class="
-                        hover:bg-slate-50/70
-                    ">
-
-                        <td class="
-                            employee-column
-                            px-4
-                            py-3
-                        ">
-
-                            <div class="
-                                flex
-                                items-center
-                                justify-between
-                                gap-3
-                            ">
-
-                                <div class="min-w-0">
-
-                                    <div class="
-                                        font-bold
-                                        text-slate-800
-                                        truncate
-                                    ">
-                                        ${this.escapeHtml(
-                                            member.name
-                                        )}
-                                    </div>
-
-                                    <div class="
-                                        text-xs
-                                        text-slate-400
-                                    ">
-                                        ${this.escapeHtml(
-                                            member.role
-                                        )}
-                                    </div>
-
-                                </div>
-
-
-                                ${
-                                    this.state.isAdmin
-                                    ?
-                                    `
-                                        <button
-                                            onclick="app.openEmployeeModal('${member.id}')"
-                                            class="
-                                                flex-shrink-0
-                                                text-slate-400
-                                                hover:text-blue-600
-                                            "
-                                            title="Edit employee"
-                                        >
-                                            <i class="
-                                                fa-solid
-                                                fa-pen-to-square
-                                            "></i>
-                                        </button>
-                                    `
-                                    :
-                                    ''
-                                }
-
-                            </div>
-
-                        </td>
-
-                `;
-
-
-                /* ========================================
-                   DAYS
-                ======================================== */
-
-                for (
-                    let day = 1;
-                    day <= days;
-                    day++
-                ) {
-
-                    const date =
-                        new Date(
-                            year,
-                            month,
-                            day
-                        );
-
-
-                    const dateKey =
-                        this.getDateKey(
-                            year,
-                            month,
-                            day
-                        );
-
-
-                    const shift =
-                        this.getShift(
-                            member.id,
-                            dateKey
-                        );
-
-
-                    const isWeekend =
-                        date.getDay() === 0 ||
-                        date.getDay() === 6;
-
-
-                    bodyHtml += `
-
-                        <td class="
-                            px-2
-                            py-2
-                            ${
-                                isWeekend
-                                    ? 'weekend-cell'
-                                    : ''
-                            }
-                        ">
-
-                            <select
-                                class="shift-select"
-                                data-member="${this.escapeHtml(member.id)}"
-                                data-date="${dateKey}"
-                                onchange="app.updateShift(this)"
-                            >
-
-                                <option value="">
-                                    —
-                                </option>
-
-                                ${
-                                    this.shiftOptions
-                                        .map(
-                                            option => `
-
-                                                <option
-                                                    value="${this.escapeHtml(option)}"
-                                                    ${
-                                                        shift ===
-                                                        option
-                                                            ? 'selected'
-                                                            : ''
-                                                    }
-                                                >
-                                                    ${this.escapeHtml(
-                                                        option
-                                                    )}
-                                                </option>
-
-                                            `
-                                        )
-                                        .join('')
-                                }
-
-                            </select>
-
-                        </td>
-
-                    `;
-
-                }
-
-
-                bodyHtml += `
-                    </tr>
-                `;
-
-            }
-        );
-
-
-        body.innerHTML =
-            bodyHtml;
-
-
-        this.refreshAllShiftColours();
-
-    }
-
-
-    /* =====================================================
-       GET SHIFT
-    ===================================================== */
-
-    getShift(
-        memberId,
-        dateKey
-    ) {
-
-        if (
-            !this.state.shifts[
-                memberId
-            ]
-        ) {
-
-            return '';
-
-        }
-
-
-        return this.state.shifts[
-            memberId
-        ][
-            dateKey
-        ] || '';
-
-    }
-
-
-    /* =====================================================
-       SET SHIFT
-    ===================================================== */
-
-    setShift(
-        memberId,
-        dateKey,
-        shift
-    ) {
-
-        if (
-            !this.state.shifts[
-                memberId
-            ]
-        ) {
-
-            this.state.shifts[
-                memberId
-            ] = {};
-
-        }
-
-
-        if (shift) {
-
-            this.state.shifts[
-                memberId
-            ][
-                dateKey
-            ] =
-                shift;
-
-        } else {
-
-            delete this.state.shifts[
-                memberId
-            ][
-                dateKey
-            ];
-
-        }
-
-    }
-
-
-    /* =====================================================
-       UPDATE SHIFT
-    ===================================================== */
-
-    async updateShift(
-        select
-    ) {
-
-        const memberId =
-            select.dataset.member;
-
-
-        const dateKey =
-            select.dataset.date;
-
-
-        const shift =
-            select.value;
-
-
-        this.setShift(
-            memberId,
-            dateKey,
-            shift
-        );
-
-
-        this.applyShiftColour(
-            select
-        );
-
-
-        await this.saveToSupabase();
-
-
-        this.renderSummary();
-
-        this.renderWeekendCoverage();
-
-    }
-
-
-    /* =====================================================
-       SHIFT COLOUR
-    ===================================================== */
-
-    applyShiftColour(
-        element
-    ) {
-
-        if (!element) {
-            return;
-        }
-
-
-        const value =
-            element.value;
-
-
-        const classes = [
-
-            'shift-early',
-
-            'shift-mid',
-
-            'shift-late',
-
-            'shift-dont-work',
-
-            'shift-holiday',
-
-            'shift-dependancy',
-
-            'shift-doctor',
-
-            'shift-wfh',
-
-            'shift-fw',
-
-            'shift-flexi-taken',
-
-            'shift-flexi-redeem',
-
-            'shift-early-finish',
-
-            'shift-late-start'
-
-        ];
-
-
-        element.classList.remove(
-            ...classes
-        );
-
-
-        if (!value) {
-            return;
-        }
-
-
-        if (
-            value === 'Early'
-        ) {
-
-            element.classList.add(
-                'shift-early'
-            );
-
-        }
-
-
-        else if (
-            value === 'Mid'
-        ) {
-
-            element.classList.add(
-                'shift-mid'
-            );
-
-        }
-
-
-        else if (
-            value === 'Late'
-        ) {
-
-            element.classList.add(
-                'shift-late'
-            );
-
-        }
-
-
-        else if (
-            value === 'Dont work'
-        ) {
-
-            element.classList.add(
-                'shift-dont-work'
-            );
-
-        }
-
-
-        else if (
-            value === 'Holiday'
-        ) {
-
-            element.classList.add(
-                'shift-holiday'
-            );
-
-        }
-
-
-        else if (
-            value ===
-            'Dependancy leave'
-        ) {
-
-            element.classList.add(
-                'shift-dependancy'
-            );
-
-        }
-
-
-        else if (
-            value ===
-            'Doctors appointment'
-        ) {
-
-            element.classList.add(
-                'shift-doctor'
-            );
-
-        }
-
-
-        else if (
-            value === 'WFH'
-        ) {
-
-            element.classList.add(
-                'shift-wfh'
-            );
-
-        }
-
-
-        else if (
-            value === 'FW'
-        ) {
-
-            element.classList.add(
-                'shift-fw'
-            );
-
-        }
-
-
-        else if (
-            value ===
-            'Flexi Time taken'
-        ) {
-
-            element.classList.add(
-                'shift-flexi-taken'
-            );
-
-        }
-
-
-        else if (
-            value ===
-            'Flexi time redeem'
-        ) {
-
-            element.classList.add(
-                'shift-flexi-redeem'
-            );
-
-        }
-
-
-        else if (
-            value.includes(
-                'Early finish'
-            )
-        ) {
-
-            element.classList.add(
-                'shift-early-finish'
-            );
-
-        }
-
-
-        else if (
-            value.includes(
-                'Late start'
-            )
-        ) {
-
-            element.classList.add(
-                'shift-late-start'
-            );
-
-        }
-
-    }
-
-
-    refreshAllShiftColours() {
-
-        document
-            .querySelectorAll(
-                '.shift-select'
-            )
-            .forEach(
-                select =>
-                    this.applyShiftColour(
-                        select
-                    )
-            );
-
-    }
-
-
-    /* =====================================================
-       SEARCH
-    ===================================================== */
-
-    setSearch(
-        value
-    ) {
-
-        this.state.searchQuery =
-            value || '';
-
-
-        this.renderRota();
-
-
-        document.getElementById(
-            'employeeCount'
-        ).textContent =
-            this.getFilteredMembers()
-                .length;
-
-    }
-
-
-    /* =====================================================
-       CHANGE MONTH
-    ===================================================== */
-
-    changeMonth(
-        value
-    ) {
-
-        if (!value) {
-            return;
-        }
-
-
-        const [
-            year,
-            month
-        ] =
-            value
-                .split('-')
-                .map(Number);
-
-
-        this.state.currentDate =
-            new Date(
-                year,
-                month - 1,
-                1
-            );
-
-
-        this.render();
-
-    }
-
-
-    /* =====================================================
-       MONTHLY SUMMARY
-    ===================================================== */
-
-    renderSummary() {
-
-        const container =
-            document.getElementById(
-                'summaryCards'
-            );
-
-
-        const counts = {
-
-            'Early': 0,
-
-            'Mid': 0,
-
-            'Late': 0,
-
-            'Dont work': 0,
-
-            'Dependancy leave': 0,
-
-            'WFH': 0
-
-        };
-
-
-        const year =
-            this.state.currentDate
-                .getFullYear();
-
-
-        const month =
-            this.state.currentDate
-                .getMonth();
-
-
-        const days =
-            this.getDaysInMonth(
-                year,
-                month
-            );
-
-
-        this.state.members.forEach(
-            member => {
-
-                for (
-                    let day = 1;
-                    day <= days;
-                    day++
-                ) {
-
-                    const dateKey =
-                        this.getDateKey(
-                            year,
-                            month,
-                            day
-                        );
-
-
-                    const shift =
-                        this.getShift(
-                            member.id,
-                            dateKey
-                        );
-
-
-                    if (
-                        Object.prototype
-                            .hasOwnProperty
-                            .call(
-                                counts,
-                                shift
-                            )
-                    ) {
-
-                        counts[
-                            shift
-                        ]++;
-
-                    }
-
-                }
-
-            }
-        );
-
-
-        const cards = [
-
-            {
-                label: 'Early',
-                value: counts['Early'],
-                icon: 'fa-sun',
-                className: 'shift-early'
-            },
-
-            {
-                label: 'Mid',
-                value: counts['Mid'],
-                icon: 'fa-cloud-sun',
-                className: 'shift-mid'
-            },
-
-            {
-                label: 'Late',
-                value: counts['Late'],
-                icon: 'fa-moon',
-                className: 'shift-late'
-            },
-
-            {
-                label: "Don't Work",
-                value: counts['Dont work'],
-                icon: 'fa-ban',
-                className: 'shift-dont-work'
-            },
-
-            {
-                label: 'Dependancy Leave',
-                value: counts['Dependancy leave'],
-                icon: 'fa-person-circle-exclamation',
-                className: 'shift-dependancy'
-            },
-
-            {
-                label: 'WFH',
-                value: counts['WFH'],
-                icon: 'fa-house-laptop',
-                className: 'shift-wfh'
-            }
-
-        ];
-
-
-        container.innerHTML =
-            cards
-                .map(
-                    card => `
-
-                        <div class="
-                            rounded-xl
-                            border
-                            border-slate-200
-                            overflow-hidden
-                            bg-white
-                            shadow-soft
-                        ">
-
-                            <div class="p-4">
-
-                                <div class="
-                                    flex
-                                    items-center
-                                    justify-between
-                                ">
-
-                                    <div>
-
-                                        <div class="
-                                            text-xs
-                                            font-bold
-                                            uppercase
-                                            tracking-wide
-                                            text-slate-400
-                                        ">
-                                            ${card.label}
-                                        </div>
-
-                                        <div class="
-                                            text-2xl
-                                            font-extrabold
-                                            text-slate-900
-                                            mt-1
-                                        ">
-                                            ${card.value}
-                                        </div>
-
-                                    </div>
-
-
-                                    <div class="
-                                        w-10
-                                        h-10
-                                        rounded-lg
-                                        flex
-                                        items-center
-                                        justify-center
-                                        ${card.className}
-                                    ">
-
-                                        <i class="
-                                            fa-solid
-                                            ${card.icon}
-                                        "></i>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    `
-                )
-                .join('');
-
-    }
-
-
-    /* =====================================================
-       WEEKEND COVERAGE
-    ===================================================== */
-
-    renderWeekendCoverage() {
-
-        const body =
-            document.getElementById(
-                'weekendCoverageBody'
-            );
-
-
-        const year =
-            this.state.currentDate
-                .getFullYear();
-
-
-        const month =
-            this.state.currentDate
-                .getMonth();
-
-
-        const days =
-            this.getDaysInMonth(
-                year,
-                month
-            );
-
-
-        body.innerHTML =
-            this.state.members
-                .map(
-                    member => {
-
-                        let saturdayCount =
-                            0;
-
-
-                        let sundayCount =
-                            0;
-
-
-                        for (
-                            let day = 1;
-                            day <= days;
-                            day++
-                        ) {
-
-                            const date =
-                                new Date(
-                                    year,
-                                    month,
-                                    day
-                                );
-
-
-                            const dateKey =
-                                this.getDateKey(
-                                    year,
-                                    month,
-                                    day
-                                );
-
-
-                            const shift =
-                                this.getShift(
-                                    member.id,
-                                    dateKey
-                                );
-
-
-                            if (!shift) {
-                                continue;
-                            }
-
-
-                            if (
-                                date.getDay() ===
-                                6
-                            ) {
-
-                                saturdayCount++;
-
-                            }
-
-
-                            if (
-                                date.getDay() ===
-                                0
-                            ) {
-
-                                sundayCount++;
-
-                            }
-
-                        }
-
-
-                        const total =
-                            saturdayCount +
-                            sundayCount;
-
-
-                        return `
-
-                            <tr class="
-                                border-t
-                                border-slate-100
-                                hover:bg-slate-50
-                            ">
-
-                                <td class="
-                                    px-5
-                                    py-3
-                                    font-semibold
-                                    text-slate-800
-                                ">
-                                    ${this.escapeHtml(
-                                        member.name
-                                    )}
-                                </td>
-
-
-                                <td class="
-                                    px-5
-                                    py-3
-                                    text-slate-500
-                                ">
-                                    ${this.escapeHtml(
-                                        member.role
-                                    )}
-                                </td>
-
-
-                                <td class="
-                                    px-5
-                                    py-3
-                                    text-center
-                                    font-bold
-                                    text-slate-700
-                                ">
-                                    ${saturdayCount}
-                                </td>
-
-
-                                <td class="
-                                    px-5
-                                    py-3
-                                    text-center
-                                    font-bold
-                                    text-slate-700
-                                ">
-                                    ${sundayCount}
-                                </td>
-
-
-                                <td class="
-                                    px-5
-                                    py-3
-                                    text-center
-                                ">
-
-                                    <span class="
-                                        inline-flex
-                                        min-w-9
-                                        justify-center
-                                        px-2.5
-                                        py-1
-                                        rounded-full
-                                        bg-blue-50
-                                        text-blue-700
-                                        font-extrabold
-                                    ">
-                                        ${total}
-                                    </span>
-
-                                </td>
-
-                            </tr>
-
-                        `;
-
-                    }
-                )
-                .join('');
-
-    }
-
-
-    /* =====================================================
-       EMPLOYEE MODAL
-    ===================================================== */
-
-    openEmployeeModal(
-        id = null
-    ) {
-
-        if (!this.state.isAdmin) {
-
-            this.showStatus(
-                'Admin access required to manage employees.',
-                'error'
-            );
-
-            return;
-        }
-
-
-        const modal =
-            document.getElementById(
-                'employeeModal'
-            );
-
-
-        const title =
-            document.getElementById(
-                'employeeModalTitle'
-            );
-
-
-        const deleteButton =
-            document.getElementById(
-                'deleteEmployeeButton'
-            );
-
-
-        document.getElementById(
-            'employeeId'
-        ).value = '';
-
-
-        document.getElementById(
-            'employeeName'
-        ).value = '';
-
-
-        document.getElementById(
-            'employeeRole'
-        ).value =
-            'Staff';
-
-
-        if (id) {
-
-            const member =
-                this.state.members.find(
-                    item =>
-                        item.id === id
-                );
-
-
-            if (!member) {
-                return;
-            }
-
-
-            title.textContent =
-                'Edit Employee';
-
-
-            document.getElementById(
-                'employeeId'
-            ).value =
-                member.id;
-
-
-            document.getElementById(
-                'employeeName'
-            ).value =
-                member.name;
-
-
-            document.getElementById(
-                'employeeRole'
-            ).value =
-                member.role === 'Senior'
-                    ? 'Senior Manager'
-                    : member.role;
-
-
-            deleteButton.classList.remove(
-                'hidden'
-            );
-
-        }
-
-        else {
-
-            title.textContent =
-                'Add Employee';
-
-
-            deleteButton.classList.add(
-                'hidden'
-            );
-
-        }
-
-
-        modal.classList.remove(
-            'hidden'
-        );
-
-    }
-
-
-    /* =====================================================
-       SAVE EMPLOYEE
-    ===================================================== */
-
-    async saveEmployee() {
-
-        if (!this.state.isAdmin) {
-            return;
-        }
-
-
-        const id =
-            document.getElementById(
-                'employeeId'
-            ).value;
-
-
-        const name =
-            document.getElementById(
-                'employeeName'
-            ).value.trim();
-
-
-        const role =
-            document.getElementById(
-                'employeeRole'
-            ).value;
-
-
-        if (!name) {
-
-            this.showStatus(
-                'Please enter an employee name.',
-                'error'
-            );
-
-            return;
-        }
-
-
-        if (id) {
-
-            const member =
-                this.state.members.find(
-                    item =>
-                        item.id === id
-                );
-
-
-            if (member) {
-
-                member.name =
-                    name;
-
-                member.role =
-                    role;
-
-            }
-
-        }
-
-        else {
-
-            this.state.members.push({
-
-                id:
-                    'm_' +
-                    Date.now(),
-
-                name:
-                    name,
-
-                role:
-                    role
-
-            });
-
-        }
-
-
-        await this.saveToSupabase();
-
-
-        this.closeModal(
-            'employeeModal'
-        );
-
-
-        this.render();
-
-    }
-
-
-    /* =====================================================
-       DELETE EMPLOYEE
-    ===================================================== */
-
-    async deleteEmployee() {
-
-        if (!this.state.isAdmin) {
-            return;
-        }
-
-
-        const id =
-            document.getElementById(
-                'employeeId'
-            ).value;
-
-
-        if (!id) {
-            return;
-        }
-
-
-        const member =
-            this.state.members.find(
-                item =>
-                    item.id === id
-            );
-
-
-        if (!member) {
-            return;
-        }
-
-
-        const confirmed =
-            confirm(
-                `Delete ${member.name}? This will also remove their rota data.`
-            );
-
-
-        if (!confirmed) {
-            return;
-        }
-
-
-        this.state.members =
-            this.state.members.filter(
-                item =>
-                    item.id !== id
-            );
-
-
-        delete this.state.shifts[id];
-
-
-        await this.saveToSupabase();
-
-
-        this.closeModal(
-            'employeeModal'
-        );
-
-
-        this.render();
-
-    }
-
-
-    /* =====================================================
-       MONTHLY MODAL
-    ===================================================== */
-
-    openBulkMonthlyModal() {
-
-        if (!this.state.isAdmin) {
-
-            this.showStatus(
-                'Admin access required.',
-                'error'
-            );
-
-            return;
-        }
-
-
-        this.populateEmployeeChecklist(
-            'monthlyEmployees'
-        );
-
-
-        const shift =
-            document.getElementById(
-                'monthlyShift'
-            );
-
-
-        shift.value = '';
-
-
-        this.applyShiftColour(
-            shift
-        );
-
-
-        document.getElementById(
-            'monthlyModal'
-        ).classList.remove(
-            'hidden'
-        );
-
-    }
-
-
-    /* =====================================================
-       EMPLOYEE CHECKLIST
-    ===================================================== */
-
-    populateEmployeeChecklist(
-        containerId
-    ) {
-
-        const container =
-            document.getElementById(
-                containerId
-            );
-
-
-        container.innerHTML = `
-
-            <label class="
-                flex
-                items-center
-                gap-3
-                p-2
-                rounded-lg
-                hover:bg-slate-50
-                cursor-pointer
-                border-b
-                border-slate-100
-            ">
-
-                <input
-                    type="checkbox"
-                    value="__all__"
-                    onchange="app.toggleAllEmployees('${containerId}', this.checked)"
-                    class="
-                        w-4
-                        h-4
-                        rounded
-                        border-slate-300
-                        text-blue-600
-                    "
-                >
-
-                <span class="
-                    font-bold
-                    text-slate-800
-                ">
-                    Select all
-                </span>
-
-            </label>
-
-        `;
-
-
-        this.state.members.forEach(
-            member => {
-
-                container.innerHTML += `
-
-                    <label class="
-                        flex
-                        items-center
-                        gap-3
-                        p-2
-                        rounded-lg
-                        hover:bg-slate-50
-                        cursor-pointer
-                    ">
-
-                        <input
-                            type="checkbox"
-                            value="${this.escapeHtml(
-                                member.id
-                            )}"
-                            class="
-                                employee-checkbox
-                                w-4
-                                h-4
-                                rounded
-                                border-slate-300
-                                text-blue-600
-                            "
-                        >
-
-                        <span class="
-                            text-sm
-                            font-medium
-                            text-slate-700
-                        ">
-                            ${this.escapeHtml(
-                                member.name
-                            )}
-                        </span>
-
-                        <span class="
-                            ml-auto
-                            text-xs
-                            text-slate-400
-                        ">
-                            ${this.escapeHtml(
-                                member.role
-                            )}
-                        </span>
-
-                    </label>
-
-                `;
-
-            }
-        );
-
-    }
-
-
-    toggleAllEmployees(
-        containerId,
-        checked
-    ) {
-
-        const container =
-            document.getElementById(
-                containerId
-            );
-
-
-        container
-            .querySelectorAll(
-                '.employee-checkbox'
-            )
-            .forEach(
-                checkbox =>
-                    checkbox.checked =
-                        checked
-            );
-
-    }
-
-
-    /* =====================================================
-       APPLY MONTHLY
-    ===================================================== */
-
-    async applyMonthlyShift() {
-
-        if (!this.state.isAdmin) {
-            return;
-        }
-
-
-        const container =
-            document.getElementById(
-                'monthlyEmployees'
-            );
-
-
-        const selected =
-            Array.from(
-                container.querySelectorAll(
-                    '.employee-checkbox:checked'
-                )
-            )
-            .map(
-                checkbox =>
-                    checkbox.value
-            );
-
-
-        const shift =
-            document.getElementById(
-                'monthlyShift'
-            ).value;
-
-
-        if (
-            selected.length === 0
-        ) {
-
-            this.showStatus(
-                'Please select at least one employee.',
-                'error'
-            );
-
-            return;
-        }
-
-
-        if (!shift) {
-
-            this.showStatus(
-                'Please select a shift.',
-                'error'
-            );
-
-            return;
-        }
-
-
-        const year =
-            this.state.currentDate
-                .getFullYear();
-
-
-        const month =
-            this.state.currentDate
-                .getMonth();
-
-
-        const days =
-            this.getDaysInMonth(
-                year,
-                month
-            );
-
-
-        selected.forEach(
-            memberId => {
-
-                for (
-                    let day = 1;
-                    day <= days;
-                    day++
-                ) {
-
-                    const date =
-                        new Date(
-                            year,
-                            month,
-                            day
-                        );
-
-
-                    const dayOfWeek =
-                        date.getDay();
-
-
-                    let actualShift =
-                        shift;
-
-
-                    if (
-                        shift ===
-                        'weekdays_only_early'
-                    ) {
-
-                        if (
-                            dayOfWeek >= 1 &&
-                            dayOfWeek <= 5
-                        ) {
-
-                            actualShift =
-                                'Early';
-
-                        }
-
-                        else {
-
-                            continue;
-
-                        }
-
-                    }
-
-
-                    else if (
-                        shift ===
-                        'weekdays_only_mid'
-                    ) {
-
-                        if (
-                            dayOfWeek >= 1 &&
-                            dayOfWeek <= 5
-                        ) {
-
-                            actualShift =
-                                'Mid';
-
-                        }
-
-                        else {
-
-                            continue;
-
-                        }
-
-                    }
-
-
-                    else if (
-                        shift ===
-                        'weekdays_only_late'
-                    ) {
-
-                        if (
-                            dayOfWeek >= 1 &&
-                            dayOfWeek <= 5
-                        ) {
-
-                            actualShift =
-                                'Late';
-
-                        }
-
-                        else {
-
-                            continue;
-
-                        }
-
-                    }
-
-
-                    else if (
-                        shift ===
-                        'weekdays_only_fw'
-                    ) {
-
-                        if (
-                            dayOfWeek >= 1 &&
-                            dayOfWeek <= 5
-                        ) {
-
-                            actualShift =
-                                'FW';
-
-                        }
-
-                        else {
-
-                            continue;
-
-                        }
-
-                    }
-
-
-                    const dateKey =
-                        this.getDateKey(
-                            year,
-                            month,
-                            day
-                        );
-
-
-                    this.setShift(
-                        memberId,
-                        dateKey,
-                        actualShift
-                    );
-
-                }
-
-            }
-        );
-
-
-        await this.saveToSupabase();
-
-
-        this.closeModal(
-            'monthlyModal'
-        );
-
-
-        this.render();
-
-    }
-
-
-    /* =====================================================
-       WEEKLY MODAL
-    ===================================================== */
-
-    openBulkWeeklyModal() {
-
-        if (!this.state.isAdmin) {
-
-            this.showStatus(
-                'Admin access required.',
-                'error'
-            );
-
-            return;
-        }
-
-
-        /*
-         * Populate again every time.
-         */
-
-        this.populateShiftSelectors();
-
-
-        this.populateEmployeeChecklist(
-            'weeklyEmployees'
-        );
-
-
-        const firstDay =
-            new Date(
-                this.state.currentDate
-                    .getFullYear(),
-
-                this.state.currentDate
-                    .getMonth(),
-
-                1
-            );
-
-
-        const lastDay =
-            new Date(
-                this.state.currentDate
-                    .getFullYear(),
-
-                this.state.currentDate
-                    .getMonth() + 1,
-
-                0
-            );
-
-
-        document.getElementById(
-            'weeklyStartDate'
-        ).value =
-            this.formatDateForInput(
-                firstDay
-            );
-
-
-        document.getElementById(
-            'weeklyEndDate'
-        ).value =
-            this.formatDateForInput(
-                lastDay
-            );
-
-
-        [
-            'weekly-mon',
-            'weekly-tue',
-            'weekly-wed',
-            'weekly-thu',
-            'weekly-fri',
-            'weekly-sat',
-            'weekly-sun'
-
-        ].forEach(
-            id => {
-
-                const select =
-                    document.getElementById(
-                        id
-                    );
-
-
-                select.value = '';
-
-
-                this.applyShiftColour(
-                    select
-                );
-
-            }
-        );
-
-
-        document.getElementById(
-            'weeklyModal'
-        ).classList.remove(
-            'hidden'
-        );
-
-    }
-
-
-    /* =====================================================
-       APPLY WEEKLY
-    ===================================================== */
-
-    async applyWeeklyShift() {
-
-        if (!this.state.isAdmin) {
-            return;
-        }
-
-
-        const container =
-            document.getElementById(
-                'weeklyEmployees'
-            );
-
-
-        const selected =
-            Array.from(
-                container.querySelectorAll(
-                    '.employee-checkbox:checked'
-                )
-            )
-            .map(
-                checkbox =>
-                    checkbox.value
-            );
-
-
-        if (
-            selected.length === 0
-        ) {
-
-            this.showStatus(
-                'Please select at least one employee.',
-                'error'
-            );
-
-            return;
-        }
-
-
-        const startString =
-            document.getElementById(
-                'weeklyStartDate'
-            ).value;
-
-
-        const endString =
-            document.getElementById(
-                'weeklyEndDate'
-            ).value;
-
-
-        if (
-            !startString ||
-            !endString
-        ) {
-
-            this.showStatus(
-                'Please select both start and end dates.',
-                'error'
-            );
-
-            return;
-        }
-
-
-        const startDate =
-            this.parseLocalDate(
-                startString
-            );
-
-
-        const endDate =
-            this.parseLocalDate(
-                endString
-            );
-
-
-        if (
-            startDate >
-            endDate
-        ) {
-
-            this.showStatus(
-                'End date must be on or after the start date.',
-                'error'
-            );
-
-            return;
-        }
-
-
-        const pattern = [
-
-            document.getElementById(
-                'weekly-mon'
-            ).value,
-
-            document.getElementById(
-                'weekly-tue'
-            ).value,
-
-            document.getElementById(
-                'weekly-wed'
-            ).value,
-
-            document.getElementById(
-                'weekly-thu'
-            ).value,
-
-            document.getElementById(
-                'weekly-fri'
-            ).value,
-
-            document.getElementById(
-                'weekly-sat'
-            ).value,
-
-            document.getElementById(
-                'weekly-sun'
-            ).value
-
-        ];
-
-
-        selected.forEach(
-            memberId => {
-
-                const cursor =
-                    new Date(
-                        startDate
-                    );
-
-
-                while (
-                    cursor <= endDate
-                ) {
-
-                    const weekday =
-                        cursor.getDay();
-
-
-                    /*
-                     * JavaScript:
-                     * Sunday = 0
-                     *
-                     * Convert:
-                     * Monday = 0
-                     * ...
-                     * Sunday = 6
-                     */
-
-                    const patternIndex =
-                        weekday === 0
-                            ? 6
-                            : weekday - 1;
-
-
-                    const shift =
-                        pattern[
-                            patternIndex
-                        ];
-
-
-                    const dateKey =
-                        this.formatDateForInput(
-                            cursor
-                        );
-
-
-                    if (shift) {
-
-                        this.setShift(
-                            memberId,
-                            dateKey,
-                            shift
-                        );
-
-                    }
-
-                    else {
-
-                        if (
-                            this.state.shifts[
-                                memberId
-                            ]
-                        ) {
-
-                            delete this.state.shifts[
-                                memberId
-                            ][
-                                dateKey
-                            ];
-
-                        }
-
-                    }
-
-
-                    cursor.setDate(
-                        cursor.getDate() + 1
-                    );
-
-                }
-
-            }
-        );
-
-
-        await this.saveToSupabase();
-
-
-        this.closeModal(
-            'weeklyModal'
-        );
-
-
-        this.render();
-
-    }
-
-
-    /* =====================================================
-       CLEAR MONTH
-    ===================================================== */
-
-    async clearCurrentMonth() {
-
-        if (!this.state.isAdmin) {
-
-            this.showStatus(
-                'Admin access required.',
-                'error'
-            );
-
-            return;
-        }
-
-
-        const monthName =
-            this.state.currentDate
-                .toLocaleDateString(
-                    'en-GB',
-                    {
-                        month:
-                            'long',
-
-                        year:
-                            'numeric'
-                    }
-                );
-
-
-        const confirmed =
-            confirm(
-                `Clear all rota shifts for ${monthName}?`
-            );
-
-
-        if (!confirmed) {
-            return;
-        }
-
-
-        const year =
-            this.state.currentDate
-                .getFullYear();
-
-
-        const month =
-            this.state.currentDate
-                .getMonth();
-
-
-        const days =
-            this.getDaysInMonth(
-                year,
-                month
-            );
-
-
-        this.state.members.forEach(
-            member => {
-
-                if (
-                    !this.state.shifts[
-                        member.id
-                    ]
-                ) {
-
-                    return;
-
-                }
-
-
-                for (
-                    let day = 1;
-                    day <= days;
-                    day++
-                ) {
-
-                    const dateKey =
-                        this.getDateKey(
-                            year,
-                            month,
-                            day
-                        );
-
-
-                    delete this.state.shifts[
-                        member.id
-                    ][
-                        dateKey
-                    ];
-
-                }
-
-            }
-        );
-
-
-        await this.saveToSupabase();
-
-
-        this.render();
-
-    }
-
-
-    /* =====================================================
-       ADMIN
-    ===================================================== */
-
-    openAdminModal() {
-
-        document.getElementById(
-            'adminPinInput'
-        ).value = '';
-
-
-        document.getElementById(
-            'adminError'
-        ).classList.add(
-            'hidden'
-        );
-
-
-        document.getElementById(
-            'adminModal'
-        ).classList.remove(
-            'hidden'
-        );
-
-
-        setTimeout(
-            () => {
-
-                document.getElementById(
-                    'adminPinInput'
-                ).focus();
-
-            },
-            100
-        );
-
-    }
-
-
-    loginAdmin() {
-
-        const pin =
-            document.getElementById(
-                'adminPinInput'
-            ).value;
-
-
-        const valid =
-            pin ===
-            this.state.adminPin ||
-            pin === '0426';
-
-
-        if (!valid) {
-
-            document.getElementById(
-                'adminError'
-            ).classList.remove(
-                'hidden'
-            );
-
-            return;
-        }
-
-
-        this.state.isAdmin =
-            true;
-
-
-        this.closeModal(
-            'adminModal'
-        );
-
-
-        this.showStatus(
-            'Admin mode enabled',
-            'success'
-        );
-
-
-        this.render();
-
-    }
-
-
-    /* =====================================================
-       CSV EXPORT
-    ===================================================== */
-
-    exportCSV() {
-
-        const year =
-            this.state.currentDate
-                .getFullYear();
-
-
-        const month =
-            this.state.currentDate
-                .getMonth();
-
-
-        const days =
-            this.getDaysInMonth(
-                year,
-                month
-            );
-
-
-        const rows = [];
-
-
-        const headers = [
-
-            'Employee',
-
-            'Role'
-
-        ];
-
-
-        for (
-            let day = 1;
-            day <= days;
-            day++
-        ) {
-
-            const date =
-                new Date(
-                    year,
-                    month,
-                    day
-                );
-
-
-            headers.push(
-                this.formatDateForInput(
-                    date
-                )
-            );
-
-        }
-
-
-        rows.push(
-            headers
-        );
-
-
-        this.getFilteredMembers()
-            .forEach(
-                member => {
-
-                    const row = [
-
-                        member.name,
-
-                        member.role
-
-                    ];
-
-
-                    for (
-                        let day = 1;
-                        day <= days;
-                        day++
-                    ) {
-
-                        const dateKey =
-                            this.getDateKey(
-                                year,
-                                month,
-                                day
-                            );
-
-
-                        row.push(
-                            this.getShift(
-                                member.id,
-                                dateKey
-                            )
-                        );
-
-                    }
-
-
-                    rows.push(
-                        row
-                    );
-
-                }
-            );
-
-
-        const csv =
-            rows
-                .map(
-                    row =>
-                        row
-                            .map(
-                                value =>
-                                    `"${String(
-                                        value ?? ''
-                                    ).replace(
-                                        /"/g,
-                                        '""'
-                                    )}"`
-                            )
-                            .join(',')
-                )
-                .join('\n');
-
-
-        const blob =
-            new Blob(
-                [csv],
-                {
-                    type:
-                        'text/csv;charset=utf-8;'
-                }
-            );
-
-
-        const url =
-            URL.createObjectURL(
-                blob
-            );
-
-
-        const link =
-            document.createElement(
-                'a'
-            );
-
-
-        link.href =
-            url;
-
-
-        link.download =
-            `Team_Rota_${year}-${String(
-                month + 1
-            ).padStart(
-                2,
-                '0'
-            )}.csv`;
-
-
-        document.body.appendChild(
-            link
-        );
-
-
-        link.click();
-
-
-        document.body.removeChild(
-            link
-        );
-
-
-        URL.revokeObjectURL(
-            url
-        );
-
-    }
-
-
-    /* =====================================================
-       MODAL
-    ===================================================== */
-
-    closeModal(
-        id
-    ) {
-
-        document.getElementById(
-            id
-        ).classList.add(
-            'hidden'
-        );
-
-    }
-
-
-    /* =====================================================
-       CONNECTION
-    ===================================================== */
-
-    setConnectionStatus(
-        connected,
-        message
-    ) {
-
-        const indicator =
-            document.getElementById(
-                'connectionIndicator'
-            );
-
-
-        if (connected) {
-
-            indicator.innerHTML = `
-
-                <span class="
-                    w-2.5
-                    h-2.5
-                    rounded-full
-                    bg-emerald-500
-                "></span>
-
-                <span class="
-                    text-emerald-700
-                ">
-                    ${message}
-                </span>
-
-            `;
-
-        }
-
-        else {
-
-            indicator.innerHTML = `
-
-                <span class="
-                    w-2.5
-                    h-2.5
-                    rounded-full
-                    bg-red-500
-                "></span>
-
-                <span class="
-                    text-red-700
-                ">
-                    ${message}
-                </span>
-
-            `;
-
-        }
-
-    }
-
-
-    /* =====================================================
-       STATUS MESSAGE
-    ===================================================== */
-
-    showStatus(
-        message,
-        type = 'success'
-    ) {
-
-        const element =
-            document.getElementById(
-                'statusMessage'
-            );
-
-
-        element.classList.remove(
-            'hidden',
-            'text-emerald-600',
-            'text-red-600',
-            'text-blue-600'
-        );
-
-
-        if (
-            type === 'error'
-        ) {
-
-            element.classList.add(
-                'text-red-600'
-            );
-
-        }
-
-        else if (
-            type === 'info'
-        ) {
-
-            element.classList.add(
-                'text-blue-600'
-            );
-
-        }
-
-        else {
-
-            element.classList.add(
-                'text-emerald-600'
-            );
-
-        }
-
-
-        element.innerHTML = `
-
-            <i class="
-                fa-solid
-                ${
-                    type === 'error'
-                        ? 'fa-circle-exclamation'
-                        : 'fa-circle-check'
-                }
-                mr-1
-            "></i>
-
-            ${this.escapeHtml(
-                message
-            )}
-
-        `;
-
-
-        clearTimeout(
-            this.statusTimeout
-        );
-
-
-        this.statusTimeout =
-            setTimeout(
-                () => {
-
-                    element.classList.add(
-                        'hidden'
-                    );
-
-                },
-                3500
-            );
-
-    }
-
-
-    /* =====================================================
-       HTML ESCAPE
-    ===================================================== */
-
-    escapeHtml(
-        value
-    ) {
-
-        return String(
-            value ?? ''
-        )
-        .replace(
-            /&/g,
-            '&amp;'
-        )
-        .replace(
-            /</g,
-            '&lt;'
-        )
-        .replace(
-            />/g,
-            '&gt;'
-        )
-        .replace(
-            /"/g,
-            '&quot;'
-        )
-        .replace(
-            /'/g,
-            '&#039;'
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   START
-========================================================= */
-
-let app;
-
-
-document.addEventListener(
-    'DOMContentLoaded',
-    async () => {
-
-        app =
-            new RotaMatrixManager();
-
-        await app.init();
-
-    }
-);
-
-
-/* =========================================================
-   CLOSE MODALS BY CLICKING BACKDROP
-========================================================= */
-
-document.addEventListener(
-    'click',
-    event => {
-
-        const modals = [
-
-            'employeeModal',
-
-            'monthlyModal',
-
-            'weeklyModal',
-
-            'adminModal'
-
-        ];
-
-
-        modals.forEach(
-            id => {
-
-                const modal =
-                    document.getElementById(
-                        id
-                    );
-
-
-                if (
-                    event.target ===
-                    modal
-                ) {
-
-                    app.closeModal(
-                        id
-                    );
-
-                }
-
-            }
-        );
-
-    }
-);
-
-</script>
-
-</body>
-</html>
+```

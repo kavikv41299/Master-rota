@@ -210,6 +210,13 @@
             border-color: #15803d !important;
         }
 
+        /* NEW 09:30 - 18:00 SHIFT */
+        .shift-Early930 {
+            background: #14b8a6 !important;
+            color: #ffffff !important;
+            border-color: #0f766e !important;
+        }
+
         .shift-Mid {
             background: #f59e0b !important;
             color: #ffffff !important;
@@ -475,7 +482,6 @@
 
 </head>
 
-
 <body class="h-full">
 
 <div id="app" class="min-h-screen">
@@ -521,7 +527,6 @@
                     </div>
 
                 </div>
-
 
                 <div class="flex flex-wrap items-center gap-2">
 
@@ -604,7 +609,6 @@
 
             </div>
 
-
             <div class="mt-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
 
                 <div class="flex items-center gap-2">
@@ -631,7 +635,6 @@
 
                 </div>
 
-
                 <div class="relative">
 
                     <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
@@ -652,10 +655,9 @@
 
     </header>
 
-
     <!-- =====================================================
          MAIN
-    ===================================================== -->
+    ====================================================== -->
 
     <main class="p-4 space-y-5">
 
@@ -698,7 +700,6 @@
 
             </div>
 
-
             <!-- SENIOR MANAGERS -->
 
             <div>
@@ -728,7 +729,6 @@
 
                 </div>
 
-
                 <div class="management-shift-container scrollbar-thin">
 
                     <table class="management-shift-table">
@@ -744,7 +744,6 @@
                 </div>
 
             </div>
-
 
             <!-- MANAGERS -->
 
@@ -775,7 +774,6 @@
 
                 </div>
 
-
                 <div class="management-shift-container scrollbar-thin">
 
                     <table class="management-shift-table">
@@ -793,7 +791,6 @@
             </div>
 
         </section>
-
 
         <!-- MAIN ROTA -->
 
@@ -816,7 +813,6 @@
 
                 </div>
 
-
                 <div
                     id="admin-status"
                     class="text-xs px-3 py-1.5 rounded-full bg-slate-100 text-slate-500"
@@ -825,7 +821,6 @@
                 </div>
 
             </div>
-
 
             <div class="matrix-container scrollbar-thin">
 
@@ -839,7 +834,6 @@
 
                 </table>
 
-
                 <div
                     id="matrix-empty"
                     class="hidden p-10 text-center text-slate-500"
@@ -850,7 +844,6 @@
             </div>
 
         </section>
-
 
         <!-- MONTHLY SUMMARY -->
 
@@ -868,15 +861,29 @@
 
             </div>
 
-
-            <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
+            <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-7 gap-3">
 
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
                     <p class="text-xs font-semibold text-slate-500 uppercase">
                         09:00 - 17:30
                     </p>
+
                     <p
                         id="stat-early"
+                        class="text-2xl font-bold text-slate-900"
+                    >
+                        0
+                    </p>
+                </div>
+
+                <!-- NEW 09:30 - 18:00 -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+                    <p class="text-xs font-semibold text-slate-500 uppercase">
+                        09:30 - 18:00
+                    </p>
+
+                    <p
+                        id="stat-early930"
                         class="text-2xl font-bold text-slate-900"
                     >
                         0
@@ -887,6 +894,7 @@
                     <p class="text-xs font-semibold text-slate-500 uppercase">
                         10:00 - 18:30
                     </p>
+
                     <p
                         id="stat-mid"
                         class="text-2xl font-bold text-slate-900"
@@ -899,6 +907,7 @@
                     <p class="text-xs font-semibold text-slate-500 uppercase">
                         11:30 - 20:00
                     </p>
+
                     <p
                         id="stat-late"
                         class="text-2xl font-bold text-slate-900"
@@ -911,6 +920,7 @@
                     <p class="text-xs font-semibold text-slate-500 uppercase">
                         Don't Work
                     </p>
+
                     <p
                         id="stat-dont-work"
                         class="text-2xl font-bold text-slate-900"
@@ -923,6 +933,7 @@
                     <p class="text-xs font-semibold text-slate-500 uppercase">
                         Dependancy Leave
                     </p>
+
                     <p
                         id="stat-dependency"
                         class="text-2xl font-bold text-slate-900"
@@ -935,6 +946,7 @@
                     <p class="text-xs font-semibold text-slate-500 uppercase">
                         WFH
                     </p>
+
                     <p
                         id="stat-wfh"
                         class="text-2xl font-bold text-slate-900"
@@ -946,7 +958,6 @@
             </div>
 
         </section>
-
 
         <!-- WEEKEND COVERAGE -->
 
@@ -981,7 +992,6 @@
 
             </div>
 
-
             <div class="overflow-x-auto">
 
                 <table class="weekend-table">
@@ -1009,7 +1019,6 @@
     </main>
 
 </div>
-
 
 <!-- ADMIN PIN MODAL -->
 
@@ -1075,7 +1084,6 @@
 
 </div>
 
-
 <!-- CHANGE PIN MODAL -->
 
 <div
@@ -1135,7 +1143,6 @@
     </div>
 
 </div>
-
 
 <!-- EMPLOYEE MODAL -->
 
@@ -1241,7 +1248,6 @@
 
 </div>
 
-
 <!-- MONTHLY SHIFT MODAL -->
 
 <div
@@ -1319,7 +1325,6 @@
     </div>
 
 </div>
-
 
 <!-- WEEKLY SHIFT MODAL -->
 
@@ -1414,6 +1419,7 @@
                         <label class="block text-xs font-semibold text-slate-600 mb-1">
                             Monday
                         </label>
+
                         <select
                             id="weekly-mon"
                             class="weekly-shift shift-modal-select"
@@ -1424,6 +1430,7 @@
                         <label class="block text-xs font-semibold text-slate-600 mb-1">
                             Tuesday
                         </label>
+
                         <select
                             id="weekly-tue"
                             class="weekly-shift shift-modal-select"
@@ -1434,6 +1441,7 @@
                         <label class="block text-xs font-semibold text-slate-600 mb-1">
                             Wednesday
                         </label>
+
                         <select
                             id="weekly-wed"
                             class="weekly-shift shift-modal-select"
@@ -1444,6 +1452,7 @@
                         <label class="block text-xs font-semibold text-slate-600 mb-1">
                             Thursday
                         </label>
+
                         <select
                             id="weekly-thu"
                             class="weekly-shift shift-modal-select"
@@ -1454,6 +1463,7 @@
                         <label class="block text-xs font-semibold text-slate-600 mb-1">
                             Friday
                         </label>
+
                         <select
                             id="weekly-fri"
                             class="weekly-shift shift-modal-select"
@@ -1464,6 +1474,7 @@
                         <label class="block text-xs font-semibold text-slate-600 mb-1">
                             Saturday
                         </label>
+
                         <select
                             id="weekly-sat"
                             class="weekly-shift shift-modal-select"
@@ -1474,6 +1485,7 @@
                         <label class="block text-xs font-semibold text-slate-600 mb-1">
                             Sunday
                         </label>
+
                         <select
                             id="weekly-sun"
                             class="weekly-shift shift-modal-select"
@@ -1525,7 +1537,6 @@
 
 </div>
 
-
 <!-- TOAST -->
 
 <div
@@ -1547,7 +1558,6 @@
     </div>
 
 </div>
-
 
 <!-- SUPABASE -->
 
@@ -1589,25 +1599,27 @@ class RotaMatrixManager {
 
         };
 
-
         /*
          * IMPORTANT:
          *
-         * The internal values remain:
+         * Existing values remain:
          *
          * Early
          * Mid
          * Late
          *
-         * This keeps existing Supabase data compatible.
+         * New shift:
          *
-         * The user-facing labels are changed in
-         * addShiftOptions().
+         * Early930
+         *
+         * This keeps existing Supabase data compatible.
          */
 
         this.shiftOptions = [
 
             'Early',
+
+            'Early930',
 
             'Mid',
 
@@ -1734,7 +1746,6 @@ class RotaMatrixManager {
                 )
             );
 
-
         this.populateMonthSelector();
 
         this.populateShiftSelectors();
@@ -1743,12 +1754,9 @@ class RotaMatrixManager {
             'connecting'
         );
 
-
         await this.loadFromSupabase();
 
-
         this.render();
-
 
         this.setConnectionStatus(
             'connected'
@@ -1858,11 +1866,9 @@ class RotaMatrixManager {
                 error
             );
 
-
             this.setConnectionStatus(
                 'error'
             );
-
 
             this.showToast(
                 'Could not load rota from Supabase.',
@@ -1925,7 +1931,6 @@ class RotaMatrixManager {
                 'connected'
             );
 
-
             return true;
 
         } catch (error) {
@@ -1935,17 +1940,14 @@ class RotaMatrixManager {
                 error
             );
 
-
             this.setConnectionStatus(
                 'error'
             );
-
 
             this.showToast(
                 'Failed to save to Supabase.',
                 true
             );
-
 
             return false;
 
@@ -1964,7 +1966,6 @@ class RotaMatrixManager {
 
         button.disabled = true;
 
-
         button.innerHTML =
             '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Saving...';
 
@@ -1974,7 +1975,6 @@ class RotaMatrixManager {
 
 
         button.disabled = false;
-
 
         button.innerHTML =
             '<i class="fa-solid fa-cloud-arrow-up mr-1"></i> Save';
@@ -2011,7 +2011,6 @@ class RotaMatrixManager {
                 'connection-status'
             );
 
-
         if (!el) return;
 
 
@@ -2022,7 +2021,6 @@ class RotaMatrixManager {
 
             el.className =
                 'ml-2 inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-green-500/20 text-green-300';
-
 
             el.innerHTML =
                 '<span class="w-2 h-2 rounded-full bg-green-400"></span> Supabase Connected';
@@ -2035,7 +2033,6 @@ class RotaMatrixManager {
             el.className =
                 'ml-2 inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-red-500/20 text-red-300';
 
-
             el.innerHTML =
                 '<span class="w-2 h-2 rounded-full bg-red-400"></span> Connection Error';
 
@@ -2043,7 +2040,6 @@ class RotaMatrixManager {
 
             el.className =
                 'ml-2 inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-yellow-500/20 text-yellow-300';
-
 
             el.innerHTML =
                 '<span class="w-2 h-2 rounded-full bg-yellow-400"></span> Connecting...';
@@ -2107,7 +2103,6 @@ class RotaMatrixManager {
             this.state.currentDate
                 .getFullYear();
 
-
         const month =
             String(
                 this.state.currentDate
@@ -2116,7 +2111,6 @@ class RotaMatrixManager {
                 2,
                 '0'
             );
-
 
         return `${year}-${month}`;
 
@@ -2139,7 +2133,6 @@ class RotaMatrixManager {
         const year =
             this.state.currentDate.getFullYear();
 
-
         const month =
             String(
                 this.state.currentDate.getMonth() + 1
@@ -2148,13 +2141,11 @@ class RotaMatrixManager {
                 '0'
             );
 
-
         const date =
             String(day).padStart(
                 2,
                 '0'
             );
-
 
         return `${year}-${month}-${date}`;
 
@@ -2485,7 +2476,6 @@ class RotaMatrixManager {
                                 select
                             );
 
-
                             this.handleCellChange(
                                 member.id,
                                 dateString,
@@ -2614,7 +2604,6 @@ class RotaMatrixManager {
                 1
             );
 
-
         this.render();
 
     }
@@ -2646,7 +2635,6 @@ class RotaMatrixManager {
 
         this.state.searchQuery =
             value || '';
-
 
         this.renderTableBody();
 
@@ -2942,7 +2930,6 @@ class RotaMatrixManager {
                                 select
                             );
 
-
                             this.handleCellChange(
                                 member.id,
                                 dateString,
@@ -2981,6 +2968,9 @@ class RotaMatrixManager {
 
             'Early':
                 'shift-Early',
+
+            'Early930':
+                'shift-Early930',
 
             'Mid':
                 'shift-Mid',
@@ -3044,6 +3034,8 @@ class RotaMatrixManager {
 
             'shift-Early',
 
+            'shift-Early930',
+
             'shift-Mid',
 
             'shift-Late',
@@ -3091,9 +3083,6 @@ class RotaMatrixManager {
 
     /*
      * USER-FACING SHIFT LABELS
-     *
-     * Internal values remain Early/Mid/Late
-     * so existing Supabase data is not broken.
      */
 
     getShiftLabel(value) {
@@ -3102,6 +3091,9 @@ class RotaMatrixManager {
 
             'Early':
                 '09:00 - 17:30',
+
+            'Early930':
+                '09:30 - 18:00',
 
             'Mid':
                 '10:00 - 18:30',
@@ -3262,6 +3254,8 @@ class RotaMatrixManager {
 
             Early: 0,
 
+            Early930: 0,
+
             Mid: 0,
 
             Late: 0,
@@ -3311,6 +3305,15 @@ class RotaMatrixManager {
                 ) {
 
                     counts.Early++;
+
+                }
+
+
+                if (
+                    value === 'Early930'
+                ) {
+
+                    counts.Early930++;
 
                 }
 
@@ -3367,6 +3370,12 @@ class RotaMatrixManager {
             'stat-early'
         ).textContent =
             counts.Early;
+
+
+        document.getElementById(
+            'stat-early930'
+        ).textContent =
+            counts.Early930;
 
 
         document.getElementById(
@@ -3722,7 +3731,6 @@ class RotaMatrixManager {
                 true
             );
 
-
             return;
 
         }
@@ -4073,6 +4081,14 @@ class RotaMatrixManager {
 
             {
                 value:
+                    'weekdays_only_early930',
+
+                label:
+                    '09:30 - 18:00 - Weekdays only'
+            },
+
+            {
+                value:
                     'weekdays_only_mid',
 
                 label:
@@ -4185,6 +4201,9 @@ class RotaMatrixManager {
 
             weekdays_only_early:
                 'Early',
+
+            weekdays_only_early930:
+                'Early930',
 
             weekdays_only_mid:
                 'Mid',
@@ -4824,11 +4843,6 @@ class RotaMatrixManager {
                         `${member.id}_${this.getDateString(day)}`;
 
 
-                    /*
-                     * Export the user-facing shift labels
-                     * rather than Early/Mid/Late.
-                     */
-
                     const storedValue =
                         this.state.shifts[key] || '';
 
@@ -5280,4 +5294,3 @@ document.addEventListener(
 </body>
 
 </html>
-```

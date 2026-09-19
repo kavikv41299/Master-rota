@@ -1,8 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" class="h-full">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Team Rota Manager</title>
 
@@ -95,8 +101,8 @@
         }
 
         .day-header {
-            min-width: 125px;
-            width: 125px;
+            min-width: 155px;
+            width: 155px;
         }
 
         /* =====================================================
@@ -148,13 +154,13 @@
         }
 
         .management-day-header {
-            min-width: 125px;
-            width: 125px;
+            min-width: 155px;
+            width: 155px;
         }
 
         .management-shift-cell {
-            min-width: 125px;
-            width: 125px;
+            min-width: 155px;
+            width: 155px;
             padding: 6px;
         }
 
@@ -466,6 +472,7 @@
         }
 
     </style>
+
 </head>
 
 
@@ -648,14 +655,11 @@
 
     <!-- =====================================================
          MAIN
-    ====================================================== -->
+    ===================================================== -->
 
     <main class="p-4 space-y-5">
 
-
-        <!-- =================================================
-             MANAGEMENT TEAM WITH SHIFTS
-        ================================================== -->
+        <!-- MANAGEMENT -->
 
         <section class="management-card">
 
@@ -730,9 +734,7 @@
                     <table class="management-shift-table">
 
                         <thead>
-
                             <tr id="senior-manager-header-row"></tr>
-
                         </thead>
 
                         <tbody id="senior-manager-shift-body"></tbody>
@@ -779,9 +781,7 @@
                     <table class="management-shift-table">
 
                         <thead>
-
                             <tr id="manager-header-row"></tr>
-
                         </thead>
 
                         <tbody id="manager-shift-body"></tbody>
@@ -795,9 +795,7 @@
         </section>
 
 
-        <!-- =================================================
-             MAIN ROTA
-        ================================================== -->
+        <!-- MAIN ROTA -->
 
         <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
 
@@ -834,9 +832,7 @@
                 <table class="matrix-table w-full">
 
                     <thead class="matrix-header">
-
                         <tr id="matrix-header-row"></tr>
-
                     </thead>
 
                     <tbody id="matrix-tbody"></tbody>
@@ -856,9 +852,7 @@
         </section>
 
 
-        <!-- =================================================
-             BOTTOM SUMMARY
-        ================================================== -->
+        <!-- MONTHLY SUMMARY -->
 
         <section>
 
@@ -878,33 +872,75 @@
             <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
 
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
-                    <p class="text-xs font-semibold text-slate-500 uppercase">Early</p>
-                    <p id="stat-early" class="text-2xl font-bold text-slate-900">0</p>
+                    <p class="text-xs font-semibold text-slate-500 uppercase">
+                        09:00 - 17:30
+                    </p>
+                    <p
+                        id="stat-early"
+                        class="text-2xl font-bold text-slate-900"
+                    >
+                        0
+                    </p>
                 </div>
 
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
-                    <p class="text-xs font-semibold text-slate-500 uppercase">Mid</p>
-                    <p id="stat-mid" class="text-2xl font-bold text-slate-900">0</p>
+                    <p class="text-xs font-semibold text-slate-500 uppercase">
+                        10:00 - 18:30
+                    </p>
+                    <p
+                        id="stat-mid"
+                        class="text-2xl font-bold text-slate-900"
+                    >
+                        0
+                    </p>
                 </div>
 
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
-                    <p class="text-xs font-semibold text-slate-500 uppercase">Late</p>
-                    <p id="stat-late" class="text-2xl font-bold text-slate-900">0</p>
+                    <p class="text-xs font-semibold text-slate-500 uppercase">
+                        11:30 - 20:00
+                    </p>
+                    <p
+                        id="stat-late"
+                        class="text-2xl font-bold text-slate-900"
+                    >
+                        0
+                    </p>
                 </div>
 
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
-                    <p class="text-xs font-semibold text-slate-500 uppercase">Don't Work</p>
-                    <p id="stat-dont-work" class="text-2xl font-bold text-slate-900">0</p>
+                    <p class="text-xs font-semibold text-slate-500 uppercase">
+                        Don't Work
+                    </p>
+                    <p
+                        id="stat-dont-work"
+                        class="text-2xl font-bold text-slate-900"
+                    >
+                        0
+                    </p>
                 </div>
 
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
-                    <p class="text-xs font-semibold text-slate-500 uppercase">Dependancy Leave</p>
-                    <p id="stat-dependency" class="text-2xl font-bold text-slate-900">0</p>
+                    <p class="text-xs font-semibold text-slate-500 uppercase">
+                        Dependancy Leave
+                    </p>
+                    <p
+                        id="stat-dependency"
+                        class="text-2xl font-bold text-slate-900"
+                    >
+                        0
+                    </p>
                 </div>
 
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
-                    <p class="text-xs font-semibold text-slate-500 uppercase">WFH</p>
-                    <p id="stat-wfh" class="text-2xl font-bold text-slate-900">0</p>
+                    <p class="text-xs font-semibold text-slate-500 uppercase">
+                        WFH
+                    </p>
+                    <p
+                        id="stat-wfh"
+                        class="text-2xl font-bold text-slate-900"
+                    >
+                        0
+                    </p>
                 </div>
 
             </div>
@@ -912,11 +948,12 @@
         </section>
 
 
-        <!-- =================================================
-             WEEKEND COVERAGE
-        ================================================== -->
+        <!-- WEEKEND COVERAGE -->
 
-        <section id="weekend-coverage-section" class="hidden bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <section
+            id="weekend-coverage-section"
+            class="hidden bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden"
+        >
 
             <div class="px-5 py-4 border-b border-slate-200">
 
@@ -974,9 +1011,7 @@
 </div>
 
 
-<!-- =====================================================
-     ADMIN PIN MODAL
-====================================================== -->
+<!-- ADMIN PIN MODAL -->
 
 <div
     id="admin-pin-modal"
@@ -997,7 +1032,10 @@
 
         </div>
 
-        <form onsubmit="app.handlePinSubmit(event)" class="p-6">
+        <form
+            onsubmit="app.handlePinSubmit(event)"
+            class="p-6"
+        >
 
             <label class="block text-sm font-semibold text-slate-700 mb-2">
                 Admin PIN
@@ -1038,9 +1076,7 @@
 </div>
 
 
-<!-- =====================================================
-     CHANGE PIN MODAL
-====================================================== -->
+<!-- CHANGE PIN MODAL -->
 
 <div
     id="change-pin-modal"
@@ -1057,7 +1093,10 @@
 
         </div>
 
-        <form onsubmit="app.handleChangePinSubmit(event)" class="p-6">
+        <form
+            onsubmit="app.handleChangePinSubmit(event)"
+            class="p-6"
+        >
 
             <label class="block text-sm font-semibold text-slate-700 mb-2">
                 New PIN
@@ -1098,9 +1137,7 @@
 </div>
 
 
-<!-- =====================================================
-     EMPLOYEE MODAL
-====================================================== -->
+<!-- EMPLOYEE MODAL -->
 
 <div
     id="member-modal"
@@ -1120,9 +1157,15 @@
 
         </div>
 
-        <form onsubmit="app.handleMemberSubmit(event)" class="p-6">
+        <form
+            onsubmit="app.handleMemberSubmit(event)"
+            class="p-6"
+        >
 
-            <input id="member-id-input" type="hidden">
+            <input
+                id="member-id-input"
+                type="hidden"
+            >
 
             <div class="mb-4">
 
@@ -1199,9 +1242,7 @@
 </div>
 
 
-<!-- =====================================================
-     MONTHLY SHIFT MODAL
-====================================================== -->
+<!-- MONTHLY SHIFT MODAL -->
 
 <div
     id="bulk-monthly-modal"
@@ -1222,7 +1263,10 @@
 
         </div>
 
-        <form onsubmit="app.handleBulkMonthlySubmit(event)" class="p-6">
+        <form
+            onsubmit="app.handleBulkMonthlySubmit(event)"
+            class="p-6"
+        >
 
             <div class="mb-4">
 
@@ -1277,9 +1321,7 @@
 </div>
 
 
-<!-- =====================================================
-     WEEKLY SHIFT MODAL
-====================================================== -->
+<!-- WEEKLY SHIFT MODAL -->
 
 <div
     id="bulk-weekly-modal"
@@ -1300,7 +1342,10 @@
 
         </div>
 
-        <form onsubmit="app.handleBulkWeeklySubmit(event)" class="p-6">
+        <form
+            onsubmit="app.handleBulkWeeklySubmit(event)"
+            class="p-6"
+        >
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-5">
 
@@ -1366,38 +1411,73 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
 
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">Monday</label>
-                        <select id="weekly-mon" class="weekly-shift shift-modal-select"></select>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">
+                            Monday
+                        </label>
+                        <select
+                            id="weekly-mon"
+                            class="weekly-shift shift-modal-select"
+                        ></select>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">Tuesday</label>
-                        <select id="weekly-tue" class="weekly-shift shift-modal-select"></select>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">
+                            Tuesday
+                        </label>
+                        <select
+                            id="weekly-tue"
+                            class="weekly-shift shift-modal-select"
+                        ></select>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">Wednesday</label>
-                        <select id="weekly-wed" class="weekly-shift shift-modal-select"></select>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">
+                            Wednesday
+                        </label>
+                        <select
+                            id="weekly-wed"
+                            class="weekly-shift shift-modal-select"
+                        ></select>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">Thursday</label>
-                        <select id="weekly-thu" class="weekly-shift shift-modal-select"></select>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">
+                            Thursday
+                        </label>
+                        <select
+                            id="weekly-thu"
+                            class="weekly-shift shift-modal-select"
+                        ></select>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">Friday</label>
-                        <select id="weekly-fri" class="weekly-shift shift-modal-select"></select>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">
+                            Friday
+                        </label>
+                        <select
+                            id="weekly-fri"
+                            class="weekly-shift shift-modal-select"
+                        ></select>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">Saturday</label>
-                        <select id="weekly-sat" class="weekly-shift shift-modal-select"></select>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">
+                            Saturday
+                        </label>
+                        <select
+                            id="weekly-sat"
+                            class="weekly-shift shift-modal-select"
+                        ></select>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">Sunday</label>
-                        <select id="weekly-sun" class="weekly-shift shift-modal-select"></select>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">
+                            Sunday
+                        </label>
+                        <select
+                            id="weekly-sun"
+                            class="weekly-shift shift-modal-select"
+                        ></select>
                     </div>
 
                 </div>
@@ -1446,9 +1526,7 @@
 </div>
 
 
-<!-- =====================================================
-     TOAST
-====================================================== -->
+<!-- TOAST -->
 
 <div
     id="toast"
@@ -1471,9 +1549,7 @@
 </div>
 
 
-<!-- =====================================================
-     SUPABASE
-====================================================== -->
+<!-- SUPABASE -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -1482,10 +1558,8 @@
 const SUPABASE_URL =
     'https://lfoumafetmwayteullrg.supabase.co';
 
-
 const SUPABASE_ANON_KEY =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmb3VtYWZldG13YXl0ZXVsbHJnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk3Mjg1MzEsImV4cCI6MjEwNTMwNDUzMX0.-mKvr2dYdFPPQgkpIAa6pnFAVYgoRCQHoh33H-1tpgk';
-
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJmb3VtYWZldG13YXl0ZXVsbHJnIiwicmVmIjoibGZvdW1hZmV0bXdheXRldWxscmd0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk3Mjg1MzEsImV4cCI6MjEwNTMwNDUzMX0.-mKvr2dYdFPPQgkpIAa6pnFAVYgoRCQHoh33H-1tpgk';
 
 const supabaseClient =
     window.supabase.createClient(
@@ -1512,26 +1586,57 @@ class RotaMatrixManager {
             isAdmin: false,
 
             adminPin: '9999'
+
         };
 
+
+        /*
+         * IMPORTANT:
+         *
+         * The internal values remain:
+         *
+         * Early
+         * Mid
+         * Late
+         *
+         * This keeps existing Supabase data compatible.
+         *
+         * The user-facing labels are changed in
+         * addShiftOptions().
+         */
 
         this.shiftOptions = [
 
             'Early',
+
             'Mid',
+
             'Late',
+
             'Early finish - Early shift',
+
             'Late start - Early shift',
+
             'Early finish - Late shift',
+
             'Late start - Late shift',
+
             'Doctors appointment',
+
             'Dont work',
+
             'Dependancy leave',
+
             'Holiday',
+
             'WFH',
+
             'FW',
+
             'Flexi Time taken',
+
             'Flexi time redeem'
+
         ];
 
 
@@ -1614,7 +1719,9 @@ class RotaMatrixManager {
                 name: 'Shawn Kurian',
                 role: 'Staff'
             }
+
         ];
+
     }
 
 
@@ -1646,6 +1753,7 @@ class RotaMatrixManager {
         this.setConnectionStatus(
             'connected'
         );
+
     }
 
 
@@ -1676,9 +1784,11 @@ class RotaMatrixManager {
                 ) {
 
                     return;
+
                 }
 
                 throw error;
+
             }
 
 
@@ -1700,6 +1810,7 @@ class RotaMatrixManager {
 
                     this.state.members =
                         saved.members;
+
                 }
 
 
@@ -1713,6 +1824,7 @@ class RotaMatrixManager {
 
                     this.state.adminPin =
                         saved.adminPin;
+
                 }
 
 
@@ -1726,9 +1838,12 @@ class RotaMatrixManager {
 
                             member.role =
                                 'Senior Manager';
+
                         }
+
                     }
                 );
+
             }
 
 
@@ -1753,7 +1868,9 @@ class RotaMatrixManager {
                 'Could not load rota from Supabase.',
                 true
             );
+
         }
+
     }
 
 
@@ -1769,6 +1886,7 @@ class RotaMatrixManager {
 
             adminPin:
                 this.state.adminPin
+
         };
 
 
@@ -1789,6 +1907,7 @@ class RotaMatrixManager {
                             updated_at:
                                 new Date()
                                     .toISOString()
+
                         },
                         {
                             onConflict:
@@ -1829,7 +1948,9 @@ class RotaMatrixManager {
 
 
             return false;
+
         }
+
     }
 
 
@@ -1864,7 +1985,9 @@ class RotaMatrixManager {
             this.showToast(
                 'Rota saved to Supabase successfully!'
             );
+
         }
+
     }
 
 
@@ -1877,6 +2000,7 @@ class RotaMatrixManager {
         this.showToast(
             'Data refreshed from Supabase.'
         );
+
     }
 
 
@@ -1923,7 +2047,9 @@ class RotaMatrixManager {
 
             el.innerHTML =
                 '<span class="w-2 h-2 rounded-full bg-yellow-400"></span> Connecting...';
+
         }
+
     }
 
 
@@ -1948,6 +2074,7 @@ class RotaMatrixManager {
         this.renderWeekendCoverage();
 
         this.renderAdminState();
+
     }
 
 
@@ -1957,6 +2084,7 @@ class RotaMatrixManager {
             'rota-title'
         ).textContent =
             `${this.getMonthName()} ${this.state.currentDate.getFullYear()} Rota`;
+
     }
 
 
@@ -1969,6 +2097,7 @@ class RotaMatrixManager {
                     month: 'long'
                 }
             );
+
     }
 
 
@@ -1990,6 +2119,7 @@ class RotaMatrixManager {
 
 
         return `${year}-${month}`;
+
     }
 
 
@@ -2000,6 +2130,7 @@ class RotaMatrixManager {
             this.state.currentDate.getMonth() + 1,
             0
         ).getDate();
+
     }
 
 
@@ -2012,14 +2143,21 @@ class RotaMatrixManager {
         const month =
             String(
                 this.state.currentDate.getMonth() + 1
-            ).padStart(2, '0');
+            ).padStart(
+                2,
+                '0'
+            );
 
 
         const date =
-            String(day).padStart(2, '0');
+            String(day).padStart(
+                2,
+                '0'
+            );
 
 
         return `${year}-${month}-${date}`;
+
     }
 
 
@@ -2073,6 +2211,7 @@ class RotaMatrixManager {
             'manager-shift-body',
             managers
         );
+
     }
 
 
@@ -2083,11 +2222,15 @@ class RotaMatrixManager {
     ) {
 
         const header =
-            document.getElementById(headerId);
+            document.getElementById(
+                headerId
+            );
 
 
         const body =
-            document.getElementById(bodyId);
+            document.getElementById(
+                bodyId
+            );
 
 
         header.innerHTML = '';
@@ -2146,6 +2289,7 @@ class RotaMatrixManager {
                 th.classList.add(
                     'bg-slate-100'
                 );
+
             }
 
 
@@ -2172,6 +2316,7 @@ class RotaMatrixManager {
 
 
             header.appendChild(th);
+
         }
 
 
@@ -2202,6 +2347,7 @@ class RotaMatrixManager {
             body.appendChild(row);
 
             return;
+
         }
 
 
@@ -2298,6 +2444,7 @@ class RotaMatrixManager {
                         cell.classList.add(
                             'weekend-cell'
                         );
+
                     }
 
 
@@ -2308,6 +2455,7 @@ class RotaMatrixManager {
                         cell.classList.add(
                             'today-cell'
                         );
+
                     }
 
 
@@ -2343,6 +2491,7 @@ class RotaMatrixManager {
                                 dateString,
                                 select.value
                             );
+
                         }
                     );
 
@@ -2355,12 +2504,15 @@ class RotaMatrixManager {
                     row.appendChild(
                         cell
                     );
+
                 }
 
 
                 body.appendChild(row);
+
             }
         );
+
     }
 
 
@@ -2408,7 +2560,10 @@ class RotaMatrixManager {
             const month =
                 String(
                     date.getMonth() + 1
-                ).padStart(2, '0');
+                ).padStart(
+                    2,
+                    '0'
+                );
 
 
             const value =
@@ -2439,11 +2594,14 @@ class RotaMatrixManager {
             ) {
 
                 option.selected = true;
+
             }
 
 
             selector.appendChild(option);
+
         }
+
     }
 
 
@@ -2458,6 +2616,7 @@ class RotaMatrixManager {
 
 
         this.render();
+
     }
 
 
@@ -2479,6 +2638,7 @@ class RotaMatrixManager {
 
 
         this.render();
+
     }
 
 
@@ -2489,6 +2649,7 @@ class RotaMatrixManager {
 
 
         this.renderTableBody();
+
     }
 
 
@@ -2556,6 +2717,7 @@ class RotaMatrixManager {
                 th.classList.add(
                     'bg-slate-100'
                 );
+
             }
 
 
@@ -2582,7 +2744,9 @@ class RotaMatrixManager {
 
 
             row.appendChild(th);
+
         }
+
     }
 
 
@@ -2618,6 +2782,7 @@ class RotaMatrixManager {
                     return member.name
                         .toLowerCase()
                         .includes(search);
+
                 }
             );
 
@@ -2631,6 +2796,7 @@ class RotaMatrixManager {
         } else {
 
             empty.classList.add('hidden');
+
         }
 
 
@@ -2686,6 +2852,7 @@ class RotaMatrixManager {
                         }
 
                     </div>
+
                 `;
 
 
@@ -2734,6 +2901,7 @@ class RotaMatrixManager {
                         cell.classList.add(
                             'weekend-cell'
                         );
+
                     }
 
 
@@ -2744,6 +2912,7 @@ class RotaMatrixManager {
                         cell.classList.add(
                             'today-cell'
                         );
+
                     }
 
 
@@ -2779,6 +2948,7 @@ class RotaMatrixManager {
                                 dateString,
                                 select.value
                             );
+
                         }
                     );
 
@@ -2786,12 +2956,15 @@ class RotaMatrixManager {
                     cell.appendChild(select);
 
                     row.appendChild(cell);
+
                 }
 
 
                 tbody.appendChild(row);
+
             }
         );
+
     }
 
 
@@ -2850,10 +3023,13 @@ class RotaMatrixManager {
 
             'Flexi time redeem':
                 'shift-Flexi-time-redeem'
+
         };
 
 
-        return map[value] || 'shift-blank';
+        return map[value] ||
+            'shift-blank';
+
     }
 
 
@@ -2865,30 +3041,79 @@ class RotaMatrixManager {
         const classes = [
 
             'shift-blank',
+
             'shift-Early',
+
             'shift-Mid',
+
             'shift-Late',
+
             'shift-Early-finish-Early-shift',
+
             'shift-Late-start-Early-shift',
+
             'shift-Early-finish-Late-shift',
+
             'shift-Late-start-Late-shift',
+
             'shift-Doctors-appointment',
+
             'shift-Dont-work',
+
             'shift-Dependancy-leave',
+
             'shift-Holiday',
+
             'shift-WFH',
+
             'shift-FW',
+
             'shift-Flexi-Time-taken',
+
             'shift-Flexi-time-redeem'
+
         ];
 
 
-        select.classList.remove(...classes);
+        select.classList.remove(
+            ...classes
+        );
 
 
         select.classList.add(
-            this.getShiftClass(select.value)
+            this.getShiftClass(
+                select.value
+            )
         );
+
+    }
+
+
+    /*
+     * USER-FACING SHIFT LABELS
+     *
+     * Internal values remain Early/Mid/Late
+     * so existing Supabase data is not broken.
+     */
+
+    getShiftLabel(value) {
+
+        const labels = {
+
+            'Early':
+                '09:00 - 17:30',
+
+            'Mid':
+                '10:00 - 18:30',
+
+            'Late':
+                '11:30 - 20:00'
+
+        };
+
+
+        return labels[value] || value;
+
     }
 
 
@@ -2919,25 +3144,34 @@ class RotaMatrixManager {
                     document.createElement('option');
 
 
-                option.value = shift;
+                option.value =
+                    shift;
 
-                option.textContent = shift;
+
+                option.textContent =
+                    this.getShiftLabel(
+                        shift
+                    );
 
 
                 if (
                     shift === selectedValue
                 ) {
 
-                    option.selected = true;
+                    option.selected =
+                        true;
+
                 }
 
 
                 select.appendChild(option);
+
             }
         );
 
 
         this.applyShiftColour(select);
+
     }
 
 
@@ -2962,7 +3196,9 @@ class RotaMatrixManager {
 
         } else {
 
-            this.state.shifts[key] = value;
+            this.state.shifts[key] =
+                value;
+
         }
 
 
@@ -2974,6 +3210,7 @@ class RotaMatrixManager {
         this.showToast(
             'Change made — click Save to store it.'
         );
+
     }
 
 
@@ -3005,10 +3242,13 @@ class RotaMatrixManager {
                         this.applyShiftColour(
                             select
                         );
+
                     }
                 );
+
             }
         );
+
     }
 
 
@@ -3021,11 +3261,17 @@ class RotaMatrixManager {
         const counts = {
 
             Early: 0,
+
             Mid: 0,
+
             Late: 0,
+
             DontWork: 0,
+
             Dependency: 0,
+
             WFH: 0
+
         };
 
 
@@ -3046,25 +3292,73 @@ class RotaMatrixManager {
 
 
                 const date =
-                    key.substring(index + 1);
+                    key.substring(
+                        index + 1
+                    );
 
 
-                if (!date.startsWith(prefix)) {
+                if (
+                    !date.startsWith(prefix)
+                ) {
+
                     return;
+
                 }
 
 
-                if (value === 'Early') counts.Early++;
+                if (
+                    value === 'Early'
+                ) {
 
-                if (value === 'Mid') counts.Mid++;
+                    counts.Early++;
 
-                if (value === 'Late') counts.Late++;
+                }
 
-                if (value === 'Dont work') counts.DontWork++;
 
-                if (value === 'Dependancy leave') counts.Dependency++;
+                if (
+                    value === 'Mid'
+                ) {
 
-                if (value === 'WFH') counts.WFH++;
+                    counts.Mid++;
+
+                }
+
+
+                if (
+                    value === 'Late'
+                ) {
+
+                    counts.Late++;
+
+                }
+
+
+                if (
+                    value === 'Dont work'
+                ) {
+
+                    counts.DontWork++;
+
+                }
+
+
+                if (
+                    value === 'Dependancy leave'
+                ) {
+
+                    counts.Dependency++;
+
+                }
+
+
+                if (
+                    value === 'WFH'
+                ) {
+
+                    counts.WFH++;
+
+                }
+
             }
         );
 
@@ -3103,6 +3397,7 @@ class RotaMatrixManager {
             'stat-wfh'
         ).textContent =
             counts.WFH;
+
     }
 
 
@@ -3175,6 +3470,7 @@ class RotaMatrixManager {
                     ) {
 
                         saturdayCount++;
+
                     }
 
 
@@ -3184,7 +3480,9 @@ class RotaMatrixManager {
                     ) {
 
                         sundayCount++;
+
                     }
+
                 }
 
 
@@ -3200,41 +3498,53 @@ class RotaMatrixManager {
                 row.innerHTML = `
 
                     <td>
+
                         <div class="font-semibold text-slate-800">
                             ${this.escapeHtml(member.name)}
                         </div>
+
                     </td>
 
                     <td>
+
                         <span class="text-xs font-semibold text-slate-500">
                             ${this.escapeHtml(member.role || 'Staff')}
                         </span>
+
                     </td>
 
                     <td>
+
                         <span class="weekend-count saturday-count">
                             ${saturdayCount}
                         </span>
+
                     </td>
 
                     <td>
+
                         <span class="weekend-count sunday-count">
                             ${sundayCount}
                         </span>
+
                     </td>
 
                     <td>
+
                         <span class="weekend-count total-weekend-count">
                             ${total}
                         </span>
+
                     </td>
 
                 `;
 
 
                 tbody.appendChild(row);
+
             }
         );
+
     }
 
 
@@ -3255,10 +3565,12 @@ class RotaMatrixManager {
             );
 
             return;
+
         }
 
 
         this.openPinModal();
+
     }
 
 
@@ -3301,7 +3613,9 @@ class RotaMatrixManager {
                 'Incorrect PIN.',
                 true
             );
+
         }
+
     }
 
 
@@ -3333,7 +3647,10 @@ class RotaMatrixManager {
 
         if (this.state.isAdmin) {
 
-            weekendCoverage.classList.remove('hidden');
+            weekendCoverage.classList.remove(
+                'hidden'
+            );
+
 
             button.className =
                 'px-3 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-sm font-medium';
@@ -3351,11 +3668,16 @@ class RotaMatrixManager {
                 'Admin Editing Enabled';
 
 
-            changePin.classList.remove('hidden');
+            changePin.classList.remove(
+                'hidden'
+            );
 
         } else {
 
-            weekendCoverage.classList.add('hidden');
+            weekendCoverage.classList.add(
+                'hidden'
+            );
+
 
             button.className =
                 'px-3 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-sm font-medium';
@@ -3373,8 +3695,12 @@ class RotaMatrixManager {
                 'View Only';
 
 
-            changePin.classList.add('hidden');
+            changePin.classList.add(
+                'hidden'
+            );
+
         }
+
     }
 
 
@@ -3398,6 +3724,7 @@ class RotaMatrixManager {
 
 
             return;
+
         }
 
 
@@ -3422,7 +3749,9 @@ class RotaMatrixManager {
             this.showToast(
                 'Admin PIN updated successfully.'
             );
+
         }
+
     }
 
 
@@ -3440,6 +3769,7 @@ class RotaMatrixManager {
             );
 
             return;
+
         }
 
 
@@ -3466,10 +3796,15 @@ class RotaMatrixManager {
 
         document.getElementById(
             'delete-member-button'
-        ).classList.add('hidden');
+        ).classList.add(
+            'hidden'
+        );
 
 
-        this.openModal('member-modal');
+        this.openModal(
+            'member-modal'
+        );
+
     }
 
 
@@ -3520,10 +3855,15 @@ class RotaMatrixManager {
 
         document.getElementById(
             'delete-member-button'
-        ).classList.remove('hidden');
+        ).classList.remove(
+            'hidden'
+        );
 
 
-        this.openModal('member-modal');
+        this.openModal(
+            'member-modal'
+        );
+
     }
 
 
@@ -3563,9 +3903,12 @@ class RotaMatrixManager {
 
             if (member) {
 
-                member.name = name;
+                member.name =
+                    name;
 
-                member.role = role;
+                member.role =
+                    role;
+
             }
 
         } else {
@@ -3578,7 +3921,9 @@ class RotaMatrixManager {
                 name,
 
                 role
+
             });
+
         }
 
 
@@ -3595,7 +3940,9 @@ class RotaMatrixManager {
             this.showToast(
                 'Employee saved.'
             );
+
         }
+
     }
 
 
@@ -3620,7 +3967,11 @@ class RotaMatrixManager {
             !confirm(
                 `Are you sure you want to delete ${member.name}?`
             )
-        ) return;
+        ) {
+
+            return;
+
+        }
 
 
         this.state.members =
@@ -3639,7 +3990,9 @@ class RotaMatrixManager {
                 ) {
 
                     delete this.state.shifts[key];
+
                 }
+
             }
         );
 
@@ -3657,7 +4010,9 @@ class RotaMatrixManager {
             this.showToast(
                 'Employee deleted.'
             );
+
         }
+
     }
 
 
@@ -3675,6 +4030,7 @@ class RotaMatrixManager {
             );
 
             return;
+
         }
 
 
@@ -3712,7 +4068,7 @@ class RotaMatrixManager {
                     'weekdays_only_early',
 
                 label:
-                    'Early - Weekdays only'
+                    '09:00 - 17:30 - Weekdays only'
             },
 
             {
@@ -3720,7 +4076,7 @@ class RotaMatrixManager {
                     'weekdays_only_mid',
 
                 label:
-                    'Mid - Weekdays only'
+                    '10:00 - 18:30 - Weekdays only'
             },
 
             {
@@ -3728,7 +4084,7 @@ class RotaMatrixManager {
                     'weekdays_only_late',
 
                 label:
-                    'Lates - Weekdays only'
+                    '11:30 - 20:00 - Weekdays only'
             },
 
             {
@@ -3738,6 +4094,7 @@ class RotaMatrixManager {
                 label:
                     'FW - Weekdays only'
             }
+
         ];
 
 
@@ -3757,6 +4114,7 @@ class RotaMatrixManager {
 
 
                 select.appendChild(option);
+
             }
         );
 
@@ -3768,12 +4126,18 @@ class RotaMatrixManager {
                     document.createElement('option');
 
 
-                option.value = shift;
+                option.value =
+                    shift;
 
-                option.textContent = shift;
+
+                option.textContent =
+                    this.getShiftLabel(
+                        shift
+                    );
 
 
                 select.appendChild(option);
+
             }
         );
 
@@ -3784,6 +4148,7 @@ class RotaMatrixManager {
         this.openModal(
             'bulk-monthly-modal'
         );
+
     }
 
 
@@ -3806,6 +4171,7 @@ class RotaMatrixManager {
             );
 
             return;
+
         }
 
 
@@ -3828,6 +4194,7 @@ class RotaMatrixManager {
 
             weekdays_only_fw:
                 'FW'
+
         };
 
 
@@ -3880,9 +4247,12 @@ class RotaMatrixManager {
                         } else {
 
                             delete this.state.shifts[key];
+
                         }
 
-                    } else if (shift === '') {
+                    } else if (
+                        shift === ''
+                    ) {
 
                         delete this.state.shifts[key];
 
@@ -3890,8 +4260,11 @@ class RotaMatrixManager {
 
                         this.state.shifts[key] =
                             shift;
+
                     }
+
                 }
+
             }
         );
 
@@ -3909,7 +4282,9 @@ class RotaMatrixManager {
             this.showToast(
                 'Monthly shift applied and saved.'
             );
+
         }
+
     }
 
 
@@ -3927,6 +4302,7 @@ class RotaMatrixManager {
             );
 
             return;
+
         }
 
 
@@ -3936,11 +4312,13 @@ class RotaMatrixManager {
 
 
         const year =
-            this.state.currentDate.getFullYear();
+            this.state.currentDate
+                .getFullYear();
 
 
         const month =
-            this.state.currentDate.getMonth();
+            this.state.currentDate
+                .getMonth();
 
 
         const firstDay =
@@ -3978,6 +4356,7 @@ class RotaMatrixManager {
         this.openModal(
             'bulk-weekly-modal'
         );
+
     }
 
 
@@ -4009,6 +4388,7 @@ class RotaMatrixManager {
             );
 
             return;
+
         }
 
 
@@ -4032,6 +4412,7 @@ class RotaMatrixManager {
             );
 
             return;
+
         }
 
 
@@ -4049,6 +4430,7 @@ class RotaMatrixManager {
             );
 
             return;
+
         }
 
 
@@ -4081,6 +4463,7 @@ class RotaMatrixManager {
             document.getElementById(
                 'weekly-sun'
             ).value
+
         ];
 
 
@@ -4088,7 +4471,9 @@ class RotaMatrixManager {
             new Date(startDate);
 
 
-        while (currentDate <= endDate) {
+        while (
+            currentDate <= endDate
+        ) {
 
             const jsDay =
                 currentDate.getDay();
@@ -4101,7 +4486,9 @@ class RotaMatrixManager {
 
 
             const shift =
-                weeklyValues[patternIndex];
+                weeklyValues[
+                    patternIndex
+                ];
 
 
             const dateString =
@@ -4117,7 +4504,9 @@ class RotaMatrixManager {
                         `${memberId}_${dateString}`;
 
 
-                    if (shift === '') {
+                    if (
+                        shift === ''
+                    ) {
 
                         delete this.state.shifts[key];
 
@@ -4125,7 +4514,9 @@ class RotaMatrixManager {
 
                         this.state.shifts[key] =
                             shift;
+
                     }
+
                 }
             );
 
@@ -4133,6 +4524,7 @@ class RotaMatrixManager {
             currentDate.setDate(
                 currentDate.getDate() + 1
             );
+
         }
 
 
@@ -4149,7 +4541,9 @@ class RotaMatrixManager {
             this.showToast(
                 `Weekly pattern applied from ${this.formatDisplayDate(startDate)} to ${this.formatDisplayDate(endDate)}.`
             );
+
         }
+
     }
 
 
@@ -4191,7 +4585,9 @@ class RotaMatrixManager {
         `;
 
 
-        container.appendChild(selectAll);
+        container.appendChild(
+            selectAll
+        );
 
 
         this.state.members.forEach(
@@ -4219,8 +4615,10 @@ class RotaMatrixManager {
 
 
                 container.appendChild(label);
+
             }
         );
+
     }
 
 
@@ -4230,15 +4628,21 @@ class RotaMatrixManager {
     ) {
 
         document
-            .getElementById(containerId)
-            .querySelectorAll('.member-checkbox')
+            .getElementById(
+                containerId
+            )
+            .querySelectorAll(
+                '.member-checkbox'
+            )
             .forEach(
                 checkbox => {
 
                     checkbox.checked =
                         checked;
+
                 }
             );
+
     }
 
 
@@ -4249,7 +4653,9 @@ class RotaMatrixManager {
         return Array.from(
 
             document
-                .getElementById(containerId)
+                .getElementById(
+                    containerId
+                )
                 .querySelectorAll(
                     '.member-checkbox:checked'
                 )
@@ -4258,6 +4664,7 @@ class RotaMatrixManager {
             checkbox =>
                 checkbox.dataset.memberId
         );
+
     }
 
 
@@ -4275,6 +4682,7 @@ class RotaMatrixManager {
             );
 
             return;
+
         }
 
 
@@ -4282,7 +4690,11 @@ class RotaMatrixManager {
             !confirm(
                 `Are you sure you want to clear ${this.getMonthName()} ${this.state.currentDate.getFullYear()}?`
             )
-        ) return;
+        ) {
+
+            return;
+
+        }
 
 
         const prefix =
@@ -4302,13 +4714,19 @@ class RotaMatrixManager {
 
 
                 const date =
-                    key.substring(index + 1);
+                    key.substring(
+                        index + 1
+                    );
 
 
-                if (date.startsWith(prefix)) {
+                if (
+                    date.startsWith(prefix)
+                ) {
 
                     delete this.state.shifts[key];
+
                 }
+
             }
         );
 
@@ -4324,7 +4742,9 @@ class RotaMatrixManager {
             this.showToast(
                 'Month cleared and saved.'
             );
+
         }
+
     }
 
 
@@ -4338,8 +4758,11 @@ class RotaMatrixManager {
 
 
         const headers = [
+
             'Employee',
+
             'Role'
+
         ];
 
 
@@ -4371,6 +4794,7 @@ class RotaMatrixManager {
                     }
                 )
             );
+
         }
 
 
@@ -4386,6 +4810,7 @@ class RotaMatrixManager {
 
                     member.role ||
                     'Staff'
+
                 ];
 
 
@@ -4399,13 +4824,26 @@ class RotaMatrixManager {
                         `${member.id}_${this.getDateString(day)}`;
 
 
+                    /*
+                     * Export the user-facing shift labels
+                     * rather than Early/Mid/Late.
+                     */
+
+                    const storedValue =
+                        this.state.shifts[key] || '';
+
+
                     row.push(
-                        this.state.shifts[key] || ''
+                        this.getShiftLabel(
+                            storedValue
+                        )
                     );
+
                 }
 
 
                 rows.push(row);
+
             }
         );
 
@@ -4446,7 +4884,9 @@ class RotaMatrixManager {
             document.createElement('a');
 
 
-        a.href = url;
+        a.href =
+            url;
+
 
         a.download =
             `Rota_${this.getMonthKey()}.csv`;
@@ -4464,6 +4904,7 @@ class RotaMatrixManager {
         this.showToast(
             'CSV exported successfully.'
         );
+
     }
 
 
@@ -4477,9 +4918,15 @@ class RotaMatrixManager {
             document.getElementById(id);
 
 
-        modal.classList.remove('hidden');
+        modal.classList.remove(
+            'hidden'
+        );
 
-        modal.classList.add('flex');
+
+        modal.classList.add(
+            'flex'
+        );
+
     }
 
 
@@ -4489,9 +4936,15 @@ class RotaMatrixManager {
             document.getElementById(id);
 
 
-        modal.classList.add('hidden');
+        modal.classList.add(
+            'hidden'
+        );
 
-        modal.classList.remove('flex');
+
+        modal.classList.remove(
+            'flex'
+        );
+
     }
 
 
@@ -4512,6 +4965,7 @@ class RotaMatrixManager {
             },
             100
         );
+
     }
 
 
@@ -4520,6 +4974,7 @@ class RotaMatrixManager {
         this.closeModal(
             'admin-pin-modal'
         );
+
     }
 
 
@@ -4536,6 +4991,7 @@ class RotaMatrixManager {
         this.openModal(
             'change-pin-modal'
         );
+
     }
 
 
@@ -4544,6 +5000,7 @@ class RotaMatrixManager {
         this.closeModal(
             'change-pin-modal'
         );
+
     }
 
 
@@ -4552,6 +5009,7 @@ class RotaMatrixManager {
         this.closeModal(
             'member-modal'
         );
+
     }
 
 
@@ -4560,6 +5018,7 @@ class RotaMatrixManager {
         this.closeModal(
             'bulk-monthly-modal'
         );
+
     }
 
 
@@ -4568,6 +5027,7 @@ class RotaMatrixManager {
         this.closeModal(
             'bulk-weekly-modal'
         );
+
     }
 
 
@@ -4594,6 +5054,7 @@ class RotaMatrixManager {
             month - 1,
             day
         );
+
     }
 
 
@@ -4608,16 +5069,23 @@ class RotaMatrixManager {
         const month =
             String(
                 date.getMonth() + 1
-            ).padStart(2, '0');
+            ).padStart(
+                2,
+                '0'
+            );
 
 
         const day =
             String(
                 date.getDate()
-            ).padStart(2, '0');
+            ).padStart(
+                2,
+                '0'
+            );
 
 
         return `${year}-${month}-${day}`;
+
     }
 
 
@@ -4633,6 +5101,7 @@ class RotaMatrixManager {
                 year: 'numeric'
             }
         );
+
     }
 
 
@@ -4643,10 +5112,22 @@ class RotaMatrixManager {
 
 
         return (
-            date.getFullYear() === today.getFullYear() &&
-            date.getMonth() === today.getMonth() &&
-            date.getDate() === today.getDate()
+
+            date.getFullYear() ===
+            today.getFullYear()
+
+            &&
+
+            date.getMonth() ===
+            today.getMonth()
+
+            &&
+
+            date.getDate() ===
+            today.getDate()
+
         );
+
     }
 
 
@@ -4657,14 +5138,22 @@ class RotaMatrixManager {
     getInitials(name) {
 
         return String(name)
+
             .trim()
+
             .split(/\s+/)
+
             .slice(0, 2)
+
             .map(
                 part =>
-                    part.charAt(0).toUpperCase()
+                    part
+                        .charAt(0)
+                        .toUpperCase()
             )
+
             .join('');
+
     }
 
 
@@ -4696,6 +5185,7 @@ class RotaMatrixManager {
                 /'/g,
                 '&#039;'
             );
+
     }
 
 
@@ -4732,9 +5222,14 @@ class RotaMatrixManager {
                 : 'fa-solid fa-circle-check text-green-400';
 
 
-        toast.classList.remove('hidden');
+        toast.classList.remove(
+            'hidden'
+        );
 
-        toast.classList.add('visible');
+
+        toast.classList.add(
+            'visible'
+        );
 
 
         clearTimeout(
@@ -4757,6 +5252,7 @@ class RotaMatrixManager {
                 },
                 3500
             );
+
     }
 
 }
@@ -4782,4 +5278,6 @@ document.addEventListener(
 </script>
 
 </body>
+
 </html>
+```

@@ -1330,7 +1330,7 @@ class RotaMatrixManager {
             { label: 'L', bg: '#f59e0b', color: '#ffffff', filter: s => s === 'Late' || s === 'Early finish - Late shift' || s === 'Late start - Late shift' },
             { label: 'M', bg: '#9333ea', color: '#ffffff', filter: s => s === 'Mid' },
             { label: 'E', bg: '#16a34a', color: '#ffffff', filter: s => s === 'Early' || s === 'Early930' },
-            { label: 'TOTAL IN', bg: '#15803d', color: '#ffffff', filter: s => s !== '' && s !== 'Holiday' && s !== 'Dont work' && s !== 'Dependancy leave' && s !== 'Flexi Time taken' }
+            { label: 'TOTAL IN', bg: '#15803d', color: '#ffffff', filter: s => s !== '' && s !== 'Holiday' && s !== 'FW' && s !== 'Dont work' && s !== 'Dependancy leave' && s !== 'Flexi Time taken' }
         ];
 
         summaryRowsConfig.forEach(conf => {

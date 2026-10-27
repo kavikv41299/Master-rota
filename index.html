@@ -270,6 +270,12 @@
             border-color: #c2410c !important;
         }
 
+        .shift-Sick-leave {
+            background: #be123c !important;
+            color: #ffffff !important;
+            border-color: #9f1239 !important;
+        }
+
         .shift-Holiday {
             background: #eab308 !important;
             color: #ffffff !important;
@@ -522,6 +528,10 @@
                     >
                         <i class="fa-solid fa-trash mr-1"></i>
                         Clear Month
+                    </button>
+                    <button id="manage-shifts-button" onclick="app.openShiftManager()"
+                        class="hidden px-3 py-2 rounded-lg bg-cyan-700 hover:bg-cyan-800 text-sm font-medium">
+                        <i class="fa-solid fa-palette mr-1"></i> Manage Shifts
                     </button>
                     <button
                         id="change-pin-button"
@@ -890,6 +900,33 @@
     </div>
 </div>
 
+<!-- ADMIN SHIFT MANAGEMENT -->
+<div id="shift-manager-modal" class="hidden fixed inset-0 z-50 modal-backdrop items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        <div class="px-5 py-4 border-b border-slate-200 flex justify-between items-center">
+            <div><h3 class="font-bold text-lg text-slate-900">Manage Shift Types</h3>
+            <p class="text-xs text-slate-500">Change colours, add or remove shifts, and set whether shifts count as working or off.</p></div>
+            <button type="button" onclick="app.closeModal('shift-manager-modal')" class="text-slate-500 px-3 py-2">Close</button>
+        </div>
+        <div class="p-5">
+            <div id="shift-manager-list" class="max-h-[47vh] overflow-y-auto mb-5"></div>
+            <div class="bg-slate-50 rounded-lg p-4">
+                <h4 class="font-bold text-sm mb-3">Add a shift</h4>
+                <div class="flex flex-wrap gap-2 items-center">
+                    <input type="text" id="new-shift-name" maxlength="70" placeholder="New shift name" class="flex-1 min-w-[160px] border rounded-lg p-2 text-sm">
+                    <input type="color" id="new-shift-colour" value="#64748b" class="w-10 h-9 cursor-pointer" title="New shift colour">
+                    <select id="new-shift-type" class="border rounded-lg p-2 text-sm"><option value="in">Working</option><option value="off">Off / Leave</option></select>
+                    <button type="button" onclick="app.addShiftType()" class="rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-2">Add Shift</button>
+                </div>
+            </div>
+            <div class="flex flex-wrap justify-between items-center gap-3 mt-4">
+                <p class="text-xs text-slate-500">Removing a shift clears its existing rota entries after confirmation. Save to Supabase when finished.</p>
+                <button type="button" onclick="app.closeModal('shift-manager-modal'); app.saveData()" class="rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm px-4 py-2">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="toast" class="toast hidden fixed bottom-5 right-5 z-[100] bg-slate-900 text-white px-5 py-3 rounded-xl shadow-xl text-sm">
     <div class="flex items-center gap-2">
         <i id="toast-icon" class="fa-solid fa-circle-check text-green-400"></i>
@@ -929,12 +966,25 @@ class RotaMatrixManager {
             'Doctors appointment',
             'Dont work',
             'Dependancy leave',
+            'Sick leave',
             'Holiday',
-            'WFH',
             'FW',
             'Flexi Time taken',
             'Flexi time redeem'
         ];
+
+        // Customisable options, stored alongside rota data in Supabase.
+        this.shiftSettings = {};
+        this.defaultShiftColours = {
+            'Early': '#16a34a', 'Early930': '#14b8a6', 'Mid': '#f59e0b',
+            'Late': '#7c3aed', 'Early finish - Early shift': '#06b6d4',
+            'Late start - Early shift': '#0d9488', 'Early finish - Late shift': '#ec4899',
+            'Late start - Late shift': '#f43f5e', 'Doctors appointment': '#2563eb',
+            'Dont work': '#dc2626', 'Dependancy leave': '#ea580c',
+            'Sick leave': '#991b1b', 'Holiday': '#eab308', 'FW': '#0891b2',
+            'Flexi Time taken': '#9333ea', 'Flexi time redeem': '#4f46e5'
+        };
+        this.defaultOffShifts = ['Holiday', 'Dont work', 'Dependancy leave', 'Sick leave', 'Flexi Time taken', 'FW'];
 
         this.defaultMembers = [
             { id: 'm_1', name: 'Angelo Rizon', role: 'Staff' },
@@ -959,6 +1009,7 @@ class RotaMatrixManager {
         this.populateShiftSelectors();
         this.setConnectionStatus('connecting');
         await this.loadFromSupabase();
+        this.populateShiftSelectors();
         this.render();
         this.setConnectionStatus('connected');
     }
@@ -983,6 +1034,12 @@ class RotaMatrixManager {
                 }
                 this.state.shifts = saved.shifts || {};
                 this.state.notes = saved.notes || {};
+                if (Array.isArray(saved.shiftOptions)) {
+                    this.shiftOptions = saved.shiftOptions.filter(x => typeof x === 'string' && x.trim() && x !== 'WFH');
+                    if (!this.shiftOptions.includes('Sick leave')) this.shiftOptions.push('Sick leave');
+                }
+                this.shiftSettings = saved.shiftSettings && typeof saved.shiftSettings === 'object' ? saved.shiftSettings : {};
+                delete this.shiftSettings.WFH;
                 if (saved.adminPin) {
                     this.state.adminPin = saved.adminPin;
                 }
@@ -1000,6 +1057,8 @@ class RotaMatrixManager {
             members: this.state.members,
             shifts: this.state.shifts,
             notes: this.state.notes,
+            shiftOptions: this.shiftOptions,
+            shiftSettings: this.shiftSettings,
             adminPin: this.state.adminPin
         };
 
@@ -1326,11 +1385,11 @@ class RotaMatrixManager {
         const summaryRowsConfig = [
             { label: 'FW', bg: '#0891b2', color: '#ffffff', filter: s => s === 'FW' },
             { label: 'H', bg: '#eab308', color: '#ffffff', filter: s => s === 'Holiday' },
-            { label: 'TOTAL OFF', bg: '#dcfce7', color: '#15803d', filter: s => s === 'Holiday' || s === 'Dont work' || s === 'Dependancy leave' || s === 'Flexi Time taken' },
+            { label: 'TOTAL OFF', bg: '#dcfce7', color: '#15803d', filter: s => this.isOffShift(s) },
             { label: 'L', bg: '#f59e0b', color: '#ffffff', filter: s => s === 'Late' || s === 'Early finish - Late shift' || s === 'Late start - Late shift' },
             { label: 'M', bg: '#9333ea', color: '#ffffff', filter: s => s === 'Mid' },
             { label: 'E', bg: '#16a34a', color: '#ffffff', filter: s => s === 'Early' || s === 'Early930' },
-            { label: 'TOTAL IN', bg: '#15803d', color: '#ffffff', filter: s => s !== '' && s !== 'Holiday' && s !== 'FW' && s !== 'Dont work' && s !== 'Dependancy leave' && s !== 'Flexi Time taken' }
+            { label: 'TOTAL IN', bg: '#15803d', color: '#ffffff', filter: s => this.isWorkingShift(s) }
         ];
 
         summaryRowsConfig.forEach(conf => {
@@ -1392,8 +1451,8 @@ class RotaMatrixManager {
             'Doctors appointment': 'shift-Doctors-appointment',
             'Dont work': 'shift-Dont-work',
             'Dependancy leave': 'shift-Dependancy-leave',
+            'Sick leave': 'shift-Sick-leave',
             'Holiday': 'shift-Holiday',
-            'WFH': 'shift-WFH',
             'FW': 'shift-FW',
             'Flexi Time taken': 'shift-Flexi-Time-taken',
             'Flexi time redeem': 'shift-Flexi-time-redeem'
@@ -1401,17 +1460,118 @@ class RotaMatrixManager {
         return map[value] || 'shift-blank';
     }
 
+    getShiftSettings(name) {
+        const saved = this.shiftSettings[name] || {};
+        return {
+            color: saved.color || this.defaultShiftColours[name] || '#64748b',
+            attendance: saved.attendance || (this.defaultOffShifts.includes(name) ? 'off' : 'in')
+        };
+    }
+
+    isWorkingShift(name) {
+        return Boolean(name) && name !== 'WFH' && this.getShiftSettings(name).attendance === 'in';
+    }
+
+    isOffShift(name) {
+        return Boolean(name) && this.getShiftSettings(name).attendance === 'off' && name !== 'FW';
+    }
+
     applyShiftColour(select) {
         if (!select) return;
-        const classes = [
-            'shift-blank', 'shift-Early', 'shift-Early930', 'shift-Mid', 'shift-Late',
-            'shift-Early-finish-Early-shift', 'shift-Late-start-Early-shift',
-            'shift-Early-finish-Late-shift', 'shift-Late-start-Late-shift',
-            'shift-Doctors-appointment', 'shift-Dont-work', 'shift-Dependancy-leave',
-            'shift-Holiday', 'shift-WFH', 'shift-FW', 'shift-Flexi-Time-taken', 'shift-Flexi-time-redeem'
-        ];
-        select.classList.remove(...classes);
-        select.classList.add(this.getShiftClass(select.value));
+        // Inline important colours override the legacy CSS classes without breaking old rotas.
+        select.className = select.className.split(/\s+/).filter(c => !c.startsWith('shift-')).join(' ');
+        const colour = select.value && !select.value.startsWith('weekdays_only_')
+            ? this.getShiftSettings(select.value).color : '#ffffff';
+        select.style.setProperty('background-color', colour, 'important');
+        select.style.setProperty('border-color', colour === '#ffffff' ? '#cbd5e1' : colour, 'important');
+        select.style.setProperty('color', colour === '#ffffff' || this.isLightColor(colour) ? '#1e293b' : '#ffffff', 'important');
+    }
+
+    isLightColor(hex) {
+        const c = String(hex).replace('#', '');
+        if (!/^[0-9a-f]{6}$/i.test(c)) return false;
+        const rgb = [0, 2, 4].map(i => parseInt(c.slice(i, i + 2), 16) / 255);
+        const linear = rgb.map(v => v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
+        return linear[0] * 0.2126 + linear[1] * 0.7152 + linear[2] * 0.0722 > 0.42;
+    }
+
+    openShiftManager() {
+        if (!this.state.isAdmin) return;
+        this.renderShiftManager();
+        this.openModal('shift-manager-modal');
+    }
+
+    renderShiftManager() {
+        const body = document.getElementById('shift-manager-list');
+        body.innerHTML = '';
+        this.shiftOptions.forEach((name, index) => {
+            const settings = this.getShiftSettings(name);
+            const row = document.createElement('div');
+            row.className = 'flex flex-wrap items-center gap-2 py-2 border-b border-slate-100';
+            const title = document.createElement('span');
+            title.className = 'font-semibold text-sm text-slate-700 flex-1 min-w-[110px]';
+            title.textContent = name;
+            const color = document.createElement('input');
+            color.type = 'color'; color.value = settings.color;
+            color.title = 'Shift colour'; color.className = 'w-10 h-9 cursor-pointer';
+            color.addEventListener('input', () => { this.shiftSettings[name] = {...this.getShiftSettings(name), color: color.value}; this.refreshShiftAppearance(); });
+            const type = document.createElement('select');
+            type.className = 'border rounded-md p-2 text-xs';
+            [['in','Working'],['off','Off / Leave']].forEach(([v, label]) => {
+                const option = new Option(label, v); type.appendChild(option);
+            });
+            type.value = settings.attendance;
+            type.addEventListener('change', () => { this.shiftSettings[name] = {...this.getShiftSettings(name), attendance: type.value}; this.renderTableFoot(); this.renderWeekendCoverage(); });
+            const remove = document.createElement('button');
+            remove.type = 'button'; remove.className = 'px-2 py-1.5 text-xs rounded bg-red-100 text-red-700 hover:bg-red-200';
+            remove.textContent = 'Remove';
+            remove.addEventListener('click', () => this.removeShiftType(name));
+            row.append(title, color, type, remove); body.appendChild(row);
+        });
+    }
+
+    addShiftType() {
+        if (!this.state.isAdmin) return;
+        const input = document.getElementById('new-shift-name');
+        const name = input.value.trim();
+        if (!name || name.length > 70 || name.toLowerCase() === 'wfh' || name.startsWith('weekdays_only_')) {
+            this.showToast('Enter a valid shift name (WFH is retired).', true); return;
+        }
+        if (this.shiftOptions.some(x => x.toLowerCase() === name.toLowerCase())) {
+            this.showToast('This shift already exists.', true); return;
+        }
+        this.shiftOptions.push(name);
+        this.shiftSettings[name] = {
+            color: document.getElementById('new-shift-colour').value,
+            attendance: document.getElementById('new-shift-type').value
+        };
+        input.value = '';
+        this.renderShiftManager(); this.refreshShiftAppearance();
+        this.showToast('Shift added. Click Save to store changes.');
+    }
+
+    removeShiftType(name) {
+        if (!this.state.isAdmin) return;
+        const used = Object.values(this.state.shifts).filter(v => v === name).length;
+        if (!confirm(`Remove "${name}" from shift options?${used ? ` It is assigned to ${used} rota cells; these will be cleared.` : ''}`)) return;
+        this.shiftOptions = this.shiftOptions.filter(x => x !== name);
+        delete this.shiftSettings[name];
+        Object.keys(this.state.shifts).forEach(key => { if (this.state.shifts[key] === name) delete this.state.shifts[key]; });
+        this.renderShiftManager(); this.refreshShiftAppearance();
+        this.showToast('Shift removed. Click Save to store changes.');
+    }
+
+    refreshShiftAppearance() {
+        this.populateShiftSelectors();
+        this.render();
+        document.querySelectorAll('#monthly-shift-input option').forEach(option => {
+            if (option.value && !option.value.startsWith('weekdays_only_') && !this.shiftOptions.includes(option.value)) option.remove();
+        });
+        this.shiftOptions.forEach(name => {
+            const select = document.getElementById('monthly-shift-input');
+            if (![...select.options].some(o => o.value === name)) select.add(new Option(this.getShiftLabel(name), name));
+        });
+        this.applyShiftColour(document.getElementById('monthly-shift-input'));
     }
 
     getShiftLabel(value) {
@@ -1481,8 +1641,8 @@ class RotaMatrixManager {
                 const dateString = this.getDateString(day);
                 const key = `${member.id}_${dateString}`;
                 const shift = this.state.shifts[key] || '';
-                if (date.getDay() === 6 && shift !== '') saturdayCount++;
-                if (date.getDay() === 0 && shift !== '') sundayCount++;
+                if (date.getDay() === 6 && this.isWorkingShift(shift)) saturdayCount++;
+                if (date.getDay() === 0 && this.isWorkingShift(shift)) sundayCount++;
             }
 
             const total = saturdayCount + sundayCount;
@@ -1526,6 +1686,7 @@ class RotaMatrixManager {
         const button = document.getElementById('admin-mode-button');
         const status = document.getElementById('admin-status');
         const changePin = document.getElementById('change-pin-button');
+        const manageShifts = document.getElementById('manage-shifts-button');
         const weekendCoverage = document.getElementById('weekend-coverage-section');
         const monthlyNotesSection = document.getElementById('monthly-notes-section');
 
@@ -1537,6 +1698,7 @@ class RotaMatrixManager {
             status.className = 'text-xs px-3 py-1.5 rounded-full bg-green-100 text-green-700';
             status.textContent = 'Admin Editing Enabled';
             changePin.classList.remove('hidden');
+            manageShifts.classList.remove('hidden');
         } else {
             weekendCoverage.classList.add('hidden');
             monthlyNotesSection.classList.add('hidden');
@@ -1545,6 +1707,8 @@ class RotaMatrixManager {
             status.className = 'text-xs px-3 py-1.5 rounded-full bg-slate-100 text-slate-500';
             status.textContent = 'View Only';
             changePin.classList.add('hidden');
+            manageShifts.classList.add('hidden');
+            this.closeModal('shift-manager-modal');
         }
     }
 

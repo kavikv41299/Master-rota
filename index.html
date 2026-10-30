@@ -913,7 +913,7 @@
     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
         <div class="px-5 py-4 border-b border-slate-200 flex justify-between items-center">
             <div><h3 class="font-bold text-lg text-slate-900">Manage Shift Types</h3>
-            <p class="text-xs text-slate-500">Change colours, add or remove shifts, and set whether shifts count as working or off.</p></div>
+            <p class="text-xs text-slate-500">Rename shifts, change colours, add or remove shifts, and set whether shifts count as working or off.</p></div>
             <button type="button" onclick="app.closeModal('shift-manager-modal')" class="text-slate-500 px-3 py-2">Close</button>
         </div>
         <div class="p-5">
@@ -1439,7 +1439,7 @@ class RotaMatrixManager {
                 const select = document.createElement('select');
                 select.className = 'rota-select';
                 select.disabled = !this.state.isAdmin;
-                this.addShiftOptions(select, value);
+                this.addShiftOptions(select, value, true);
                 select.addEventListener('change', () => {
                     this.handleCellChange(member.id, dateString, select.value, select);
                 });
@@ -1587,9 +1587,26 @@ class RotaMatrixManager {
             const settings = this.getShiftSettings(name);
             const row = document.createElement('div');
             row.className = 'flex flex-wrap items-center gap-2 py-2 border-b border-slate-100';
-            const title = document.createElement('span');
-            title.className = 'font-semibold text-sm text-slate-700 flex-1 min-w-[110px]';
-            title.textContent = name;
+            const title = document.createElement('input');
+            title.type = 'text';
+            title.maxLength = 70;
+            title.value = name;
+            title.className = 'font-semibold text-sm text-slate-700 flex-1 min-w-[150px] border border-slate-300 rounded-md px-2 py-2';
+            title.title = 'Edit the shift name, then press Enter or click outside to apply';
+            // Holiday, Incentive day and FW are used by the holiday/coverage calculations.
+            const protectedShift = ['Holiday', 'Incentive day', 'FW'].includes(name);
+            if (protectedShift) {
+                title.readOnly = true;
+                title.classList.add('bg-slate-100', 'cursor-not-allowed');
+                title.title = 'This shift name is required for holiday or coverage calculations';
+            } else {
+                title.addEventListener('change', () => {
+                    if (!this.renameShiftType(name, title.value)) title.value = name;
+                });
+                title.addEventListener('keydown', event => {
+                    if (event.key === 'Enter') { event.preventDefault(); title.blur(); }
+                });
+            }
             const color = document.createElement('input');
             color.type = 'color'; color.value = settings.color;
             color.title = 'Shift colour'; color.className = 'w-10 h-9 cursor-pointer';
@@ -1607,6 +1624,38 @@ class RotaMatrixManager {
             remove.addEventListener('click', () => this.removeShiftType(name));
             row.append(title, color, type, remove); body.appendChild(row);
         });
+    }
+
+    renameShiftType(oldName, requestedName) {
+        if (!this.state.isAdmin) return false;
+        const newName = String(requestedName).trim();
+        if (newName === oldName) return true;
+        if (!newName || newName.length > 70 || newName.toLowerCase() === 'wfh' ||
+            newName.startsWith('weekdays_only_')) {
+            this.showToast('Enter a valid new shift name.', true);
+            return false;
+        }
+        if (this.shiftOptions.some(x => x.toLowerCase() === newName.toLowerCase())) {
+            this.showToast('This shift name already exists.', true);
+            return false;
+        }
+        const oldSettings = this.getShiftSettings(oldName);
+        const oldIndex = this.shiftOptions.indexOf(oldName);
+        if (oldIndex === -1) return false;
+        this.shiftOptions[oldIndex] = newName;
+        this.shiftSettings[newName] = { ...oldSettings };
+        delete this.shiftSettings[oldName];
+        if (Object.prototype.hasOwnProperty.call(this.defaultShiftColours, oldName)) {
+            this.defaultShiftColours[newName] = this.defaultShiftColours[oldName];
+        }
+        this.defaultOffShifts = this.defaultOffShifts.map(x => x === oldName ? newName : x);
+        Object.keys(this.state.shifts).forEach(key => {
+            if (this.state.shifts[key] === oldName) this.state.shifts[key] = newName;
+        });
+        this.renderShiftManager();
+        this.refreshShiftAppearance();
+        this.showToast('Shift renamed, including existing rota entries. Click Save Changes.');
+        return true;
     }
 
     addShiftType() {
@@ -1663,7 +1712,7 @@ class RotaMatrixManager {
         return labels[value] || value;
     }
 
-    addShiftOptions(select, selectedValue) {
+    addShiftOptions(select, selectedValue, displayIncentiveAsHoliday = false) {
         select.innerHTML = '';
         const blank = document.createElement('option');
         blank.value = '';
@@ -1673,7 +1722,9 @@ class RotaMatrixManager {
         this.shiftOptions.forEach(shift => {
             const option = document.createElement('option');
             option.value = shift;
-            option.textContent = this.getShiftLabel(shift);
+            // Presentation only: keep the actual value as 'Incentive day' for balance calculations.
+            option.textContent = displayIncentiveAsHoliday && shift === 'Incentive day'
+                ? 'Holidays' : this.getShiftLabel(shift);
             if (shift === selectedValue) option.selected = true;
             select.appendChild(option);
         });

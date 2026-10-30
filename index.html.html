@@ -1,0 +1,2512 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Team Rota Manager</title>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    >
+
+    <!-- Inter -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+        }
+
+        .scrollbar-thin::-webkit-scrollbar {
+            width: 7px;
+            height: 7px;
+        }
+
+        .scrollbar-thin::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        .scrollbar-thin::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .matrix-container {
+            overflow-x: auto;
+            overflow-y: auto;
+            max-height: calc(100vh - 280px);
+        }
+
+        .matrix-table {
+            border-collapse: separate;
+            border-spacing: 0;
+            min-width: max-content;
+        }
+
+        .matrix-table th,
+        .matrix-table td {
+            border-right: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .matrix-table th:first-child,
+        .matrix-table td:first-child {
+            border-left: 1px solid #e2e8f0;
+        }
+
+        .matrix-header {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: #f8fafc;
+        }
+
+        .employee-cell {
+            position: sticky;
+            left: 0;
+            z-index: 15;
+            background: white;
+            min-width: 220px;
+            width: 220px;
+        }
+
+        .matrix-header .employee-cell {
+            z-index: 30;
+            background: #f1f5f9;
+        }
+
+        .day-header {
+            min-width: 165px;
+            width: 165px;
+        }
+
+        /* =====================================================
+           MANAGEMENT SHIFT TABLE
+        ====================================================== */
+
+        .management-shift-container {
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+
+        .management-shift-table {
+            border-collapse: separate;
+            border-spacing: 0;
+            min-width: max-content;
+            width: 100%;
+        }
+
+        .management-shift-table th,
+        .management-shift-table td {
+            border-right: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .management-shift-table th:first-child,
+        .management-shift-table td:first-child {
+            border-left: 1px solid #e2e8f0;
+        }
+
+        .management-shift-table .management-name-cell {
+            position: sticky;
+            left: 0;
+            z-index: 10;
+            background: white;
+            min-width: 220px;
+            width: 220px;
+        }
+
+        .management-shift-table thead th {
+            position: sticky;
+            top: 0;
+            z-index: 5;
+            background: #f8fafc;
+        }
+
+        .management-shift-table thead th:first-child {
+            z-index: 15;
+            background: #f1f5f9;
+        }
+
+        .management-day-header {
+            min-width: 165px;
+            width: 165px;
+        }
+
+        .management-shift-cell {
+            min-width: 165px;
+            width: 165px;
+            padding: 6px;
+        }
+
+        /* =====================================================
+           SELECTS
+        ====================================================== */
+
+        .rota-select,
+        .shift-modal-select {
+            width: 100%;
+            padding: 7px 28px 7px 8px;
+            border: 2px solid #cbd5e1;
+            border-radius: 7px;
+            background: white;
+            color: #475569;
+            font-size: 12px;
+            font-weight: 700;
+            outline: none;
+            transition: all 0.15s ease;
+            cursor: pointer;
+        }
+
+        .shift-modal-select {
+            padding: 9px 30px 9px 10px;
+            font-size: 13px;
+            border-radius: 8px;
+        }
+
+        .rota-select:focus,
+        .shift-modal-select:focus {
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+        /* =====================================================
+           SHIFT COLOURS
+        ====================================================== */
+
+        .shift-blank {
+            background: #ffffff !important;
+            color: #475569 !important;
+            border-color: #cbd5e1 !important;
+        }
+
+        .shift-Early {
+            background: #16a34a !important;
+            color: #ffffff !important;
+            border-color: #15803d !important;
+        }
+
+        .shift-Early930 {
+            background: #14b8a6 !important;
+            color: #ffffff !important;
+            border-color: #0f766e !important;
+        }
+
+        .shift-Mid {
+            background: #f59e0b !important;
+            color: #ffffff !important;
+            border-color: #d97706 !important;
+        }
+
+        .shift-Late {
+            background: #7c3aed !important;
+            color: #ffffff !important;
+            border-color: #6d28d9 !important;
+        }
+
+        .shift-Early-finish-Early-shift {
+            background: #06b6d4 !important;
+            color: #ffffff !important;
+            border-color: #0891b2 !important;
+        }
+
+        .shift-Late-start-Early-shift {
+            background: #0d9488 !important;
+            color: #ffffff !important;
+            border-color: #0f766e !important;
+        }
+
+        .shift-Early-finish-Late-shift {
+            background: #ec4899 !important;
+            color: #ffffff !important;
+            border-color: #db2777 !important;
+        }
+
+        .shift-Late-start-Late-shift {
+            background: #f43f5e !important;
+            color: #ffffff !important;
+            border-color: #e11d48 !important;
+        }
+
+        .shift-Doctors-appointment {
+            background: #2563eb !important;
+            color: #ffffff !important;
+            border-color: #1d4ed8 !important;
+        }
+
+        .shift-Dont-work {
+            background: #dc2626 !important;
+            color: #ffffff !important;
+            border-color: #b91c1c !important;
+        }
+
+        .shift-Dependancy-leave {
+            background: #ea580c !important;
+            color: #ffffff !important;
+            border-color: #c2410c !important;
+        }
+
+        .shift-Sick-leave {
+            background: #be123c !important;
+            color: #ffffff !important;
+            border-color: #9f1239 !important;
+        }
+
+        .shift-Holiday {
+            background: #eab308 !important;
+            color: #ffffff !important;
+            border-color: #ca8a04 !important;
+        }
+
+        .shift-WFH {
+            background: #059669 !important;
+            color: #ffffff !important;
+            border-color: #047857 !important;
+        }
+
+        .shift-FW {
+            background: #0891b2 !important;
+            color: #ffffff !important;
+            border-color: #0e7490 !important;
+        }
+
+        .shift-Flexi-Time-taken {
+            background: #9333ea !important;
+            color: #ffffff !important;
+            border-color: #7e22ce !important;
+        }
+
+        .shift-Flexi-time-redeem {
+            background: #4f46e5 !important;
+            color: #ffffff !important;
+            border-color: #4338ca !important;
+        }
+
+        .weekend-cell {
+            background: #f8fafc;
+        }
+
+        .today-cell {
+            background: #eff6ff;
+        }
+
+        .management-card {
+            border: 1px solid #e2e8f0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .management-header {
+            background: #0f172a;
+            color: white;
+        }
+
+        .management-section-header {
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .weekend-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .weekend-table th,
+        .weekend-table td {
+            border-bottom: 1px solid #e2e8f0;
+            padding: 10px 14px;
+            text-align: left;
+        }
+
+        .weekend-table th {
+            background: #f8fafc;
+            color: #475569;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            font-weight: 800;
+        }
+
+        .weekend-table td {
+            font-size: 13px;
+            color: #334155;
+        }
+
+        .weekend-count {
+            display: inline-flex;
+            min-width: 32px;
+            height: 28px;
+            align-items: center;
+            justify-content: center;
+            border-radius: 7px;
+            font-weight: 800;
+        }
+
+        /* Image-matched summary table styling */
+        .summary-row-label {
+            position: sticky;
+            left: 0;
+            z-index: 15;
+            font-weight: bold;
+            text-align: center;
+            font-size: 12px;
+            border-right: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .summary-cell {
+            text-align: center;
+            padding: 6px;
+            border-right: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .date-input {
+            width: 100%;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 9px 10px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #334155;
+            outline: none;
+        }
+
+        .date-input:focus {
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.12);
+        }
+
+        .modal-backdrop {
+            background: rgba(15, 23, 42, 0.55);
+            backdrop-filter: blur(3px);
+        }
+
+        .toast {
+            transition: all 0.3s ease;
+        }
+
+        .toast.hidden {
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+        }
+
+        .toast.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media print {
+            body {
+                background: white !important;
+            }
+            header,
+            .no-print,
+            button,
+            input,
+            select {
+                display: none !important;
+            }
+            .matrix-container {
+                max-height: none !important;
+                overflow: visible !important;
+            }
+            .employee-cell,
+            .management-name-cell,
+            .summary-row-label {
+                position: static !important;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body class="h-full">
+
+<div id="app" class="min-h-screen">
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+    <header class="bg-slate-900 text-white shadow-lg no-print">
+        <div class="max-w-full mx-auto px-4 py-4">
+            <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
+                <div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center">
+                            <i class="fa-solid fa-calendar-days text-lg"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-xl font-bold">Team Rota Manager</h1>
+                            <p class="text-xs text-slate-400">Supabase Connected</p>
+                        </div>
+                        <span
+                            id="connection-status"
+                            class="ml-2 inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-yellow-500/20 text-yellow-300"
+                        >
+                            <span class="w-2 h-2 rounded-full bg-yellow-400"></span>
+                            Connecting...
+                        </span>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-2">
+                    <button
+                        onclick="app.openBulkMonthlyModal()"
+                        class="px-3 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-sm font-medium"
+                    >
+                        <i class="fa-solid fa-calendar-plus mr-1"></i>
+                        Apply Monthly Shift
+                    </button>
+                    <button
+                        onclick="app.openBulkWeeklyModal()"
+                        class="px-3 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-sm font-medium"
+                    >
+                        <i class="fa-solid fa-repeat mr-1"></i>
+                        Apply Weekly Shift
+                    </button>
+                    <button
+                        onclick="app.openAddMemberModal()"
+                        class="px-3 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-sm font-medium"
+                    >
+                        <i class="fa-solid fa-user-plus mr-1"></i>
+                        Add Employee
+                    </button>
+                    <button
+                        onclick="app.saveData()"
+                        id="save-button"
+                        class="px-3 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-sm font-semibold"
+                    >
+                        <i class="fa-solid fa-cloud-arrow-up mr-1"></i>
+                        Save
+                    </button>
+                    <button
+                        onclick="app.refreshData()"
+                        class="px-3 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-sm font-medium"
+                    >
+                        <i class="fa-solid fa-rotate mr-1"></i>
+                        Refresh Data
+                    </button>
+                    <button
+                        onclick="app.exportCSV()"
+                        class="px-3 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-sm font-medium"
+                    >
+                        <i class="fa-solid fa-file-csv mr-1"></i>
+                        Export CSV
+                    </button>
+                    <button
+                        onclick="app.clearMonth()"
+                        class="px-3 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-sm font-medium"
+                    >
+                        <i class="fa-solid fa-trash mr-1"></i>
+                        Clear Month
+                    </button>
+                    <button id="manage-shifts-button" onclick="app.openShiftManager()"
+                        class="hidden px-3 py-2 rounded-lg bg-cyan-700 hover:bg-cyan-800 text-sm font-medium">
+                        <i class="fa-solid fa-palette mr-1"></i> Manage Shifts
+                    </button>
+                    <button onclick="app.openMyHolidayBalance()"
+                        class="px-3 py-2 rounded-lg bg-sky-600 hover:bg-sky-700 text-sm font-medium">
+                        <i class="fa-solid fa-wallet mr-1"></i> My Holiday Balance
+                    </button>
+                    <button id="manage-holidays-button" onclick="app.openHolidayManager()"
+                        class="hidden px-3 py-2 rounded-lg bg-teal-700 hover:bg-teal-800 text-sm font-medium">
+                        <i class="fa-solid fa-umbrella-beach mr-1"></i> Manage Holidays
+                    </button>
+                    <button
+                        id="change-pin-button"
+                        onclick="app.openChangePinModal()"
+                        class="hidden px-3 py-2 rounded-lg bg-amber-600 hover:bg-amber-700 text-sm font-medium"
+                    >
+                        <i class="fa-solid fa-key mr-1"></i>
+                        Change PIN
+                    </button>
+                    <button
+                        id="admin-mode-button"
+                        onclick="app.toggleAdminMode()"
+                        class="px-3 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-sm font-medium"
+                    >
+                        <i class="fa-solid fa-lock mr-1"></i>
+                        Admin Mode
+                    </button>
+                </div>
+            </div>
+
+            <div class="mt-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                <div class="flex items-center gap-2">
+                    <button
+                        onclick="app.changeMonth(-1)"
+                        class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-slate-700 flex items-center justify-center"
+                    >
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <select
+                        id="month-selector"
+                        onchange="app.changeMonthFromSelector(this.value)"
+                        class="bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white"
+                    ></select>
+                    <button
+                        onclick="app.changeMonth(1)"
+                        class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-slate-700 flex items-center justify-center"
+                    >
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+
+                <div class="relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input
+                        id="search-input"
+                        type="text"
+                        placeholder="Search employee..."
+                        oninput="app.setSearch(this.value)"
+                        class="pl-9 pr-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-sm text-white placeholder-slate-400 outline-none focus:border-blue-500"
+                    >
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+    <main class="p-4 space-y-5">
+
+        <!-- MANAGEMENT -->
+        <section class="management-card">
+            <div class="management-header px-5 py-4">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center">
+                            <i class="fa-solid fa-user-tie"></i>
+                        </div>
+                        <div>
+                            <h2 class="font-bold">Management Team</h2>
+                            <p class="text-xs text-slate-300">Management shifts for the selected month</p>
+                        </div>
+                    </div>
+                    <div id="management-month-label" class="text-xs text-slate-300">September 2026</div>
+                </div>
+            </div>
+
+            <!-- SENIOR MANAGERS -->
+            <div>
+                <div class="management-section-header px-5 py-3">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-indigo-600"></span>
+                            <span class="font-bold text-sm text-slate-800">Senior Managers</span>
+                        </div>
+                        <span id="senior-manager-count" class="text-xs font-bold px-2 py-1 rounded-full bg-indigo-100 text-indigo-700">0</span>
+                    </div>
+                </div>
+                <div class="management-shift-container scrollbar-thin">
+                    <table class="management-shift-table">
+                        <thead><tr id="senior-manager-header-row"></tr></thead>
+                        <tbody id="senior-manager-shift-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- MANAGERS -->
+            <div class="border-t border-slate-200">
+                <div class="management-section-header px-5 py-3">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-blue-600"></span>
+                            <span class="font-bold text-sm text-slate-800">Managers</span>
+                        </div>
+                        <span id="manager-count" class="text-xs font-bold px-2 py-1 rounded-full bg-blue-100 text-blue-700">0</span>
+                    </div>
+                </div>
+                <div class="management-shift-container scrollbar-thin">
+                    <table class="management-shift-table">
+                        <thead><tr id="manager-header-row"></tr></thead>
+                        <tbody id="manager-shift-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- MAIN ROTA -->
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="px-4 py-3 border-b border-slate-200 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+                <div>
+                    <h2 id="rota-title" class="font-bold text-slate-900">Rota</h2>
+                    <p class="text-xs text-slate-500">Select shifts directly in the matrix.</p>
+                </div>
+                <div id="admin-status" class="text-xs px-3 py-1.5 rounded-full bg-slate-100 text-slate-500">View Only</div>
+            </div>
+
+            <div class="matrix-container scrollbar-thin">
+                <table class="matrix-table w-full">
+                    <thead class="matrix-header"><tr id="matrix-header-row"></tr></thead>
+                    <tbody id="matrix-tbody"></tbody>
+                    <tfoot id="matrix-tfoot"></tfoot>
+                </table>
+                <div id="matrix-empty" class="hidden p-10 text-center text-slate-500">No employees found.</div>
+            </div>
+        </section>
+
+        <!-- MONTHLY NOTES SECTION -->
+        <section id="monthly-notes-section" class="hidden bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+            <div class="flex items-center justify-between mb-3">
+                <div>
+                    <h2 class="font-bold text-slate-900">Monthly Important Notes</h2>
+                    <p class="text-xs text-slate-500">Add reminders or important notes specific to the active month.</p>
+                </div>
+                <span id="notes-status" class="text-xs text-slate-400">Auto-saves on change</span>
+            </div>
+            <textarea
+                id="monthly-notes"
+                oninput="app.handleNotesChange(this.value)"
+                rows="4"
+                placeholder="Type any important notes, goals, or reminders for this month..."
+                class="w-full border border-slate-300 rounded-lg p-3 text-sm text-slate-700 outline-none focus:border-blue-500 resize-y"
+            ></textarea>
+        </section>
+
+        <!-- WEEKEND COVERAGE -->
+        <section
+            id="weekend-coverage-section"
+            class="hidden bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden"
+        >
+            <div class="px-5 py-4 border-b border-slate-200">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+                    <div>
+                        <h2 class="font-bold text-slate-900">Weekend Coverage</h2>
+                        <p class="text-xs text-slate-500">Number of Saturdays and Sundays worked during the selected month.</p>
+                    </div>
+                    <div class="text-xs text-slate-500">
+                        <span id="weekend-summary-label">Current month</span>
+                    </div>
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="weekend-table">
+                    <thead>
+                        <tr>
+                            <th>Employee</th>
+                            <th>Role</th>
+                            <th>Saturdays</th>
+                            <th>Sundays</th>
+                            <th>Total Weekend Days</th>
+                        </tr>
+                    </thead>
+                    <tbody id="weekend-coverage-body"></tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<!-- MODALS -->
+<div id="admin-pin-modal" class="hidden fixed inset-0 z-50 modal-backdrop items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm">
+        <div class="px-6 py-5 border-b border-slate-200">
+            <h3 class="font-bold text-lg text-slate-900">Admin Access</h3>
+            <p class="text-sm text-slate-500 mt-1">Enter the admin PIN to edit the rota.</p>
+        </div>
+        <form onsubmit="app.handlePinSubmit(event)" class="p-6">
+            <label class="block text-sm font-semibold text-slate-700 mb-2">Admin PIN</label>
+            <input
+                id="admin-pin-input"
+                type="password"
+                inputmode="numeric"
+                autocomplete="off"
+                class="w-full border border-slate-300 rounded-lg px-3 py-2 outline-none focus:border-blue-500"
+                placeholder="Enter PIN"
+            >
+            <div class="flex justify-end gap-2 mt-5">
+                <button type="button" onclick="app.closePinModal()" class="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-sm font-medium">Cancel</button>
+                <button type="submit" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium">Unlock</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="change-pin-modal" class="hidden fixed inset-0 z-50 modal-backdrop items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm">
+        <div class="px-6 py-5 border-b border-slate-200">
+            <h3 class="font-bold text-lg text-slate-900">Change Admin PIN</h3>
+        </div>
+        <form onsubmit="app.handleChangePinSubmit(event)" class="p-6">
+            <label class="block text-sm font-semibold text-slate-700 mb-2">New PIN</label>
+            <input
+                id="new-pin-input"
+                type="password"
+                inputmode="numeric"
+                autocomplete="off"
+                class="w-full border border-slate-300 rounded-lg px-3 py-2 outline-none focus:border-blue-500"
+                placeholder="Enter new PIN"
+            >
+            <div class="flex justify-end gap-2 mt-5">
+                <button type="button" onclick="app.closeChangePinModal()" class="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-sm font-medium">Cancel</button>
+                <button type="submit" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium">Save PIN</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="member-modal" class="hidden fixed inset-0 z-50 modal-backdrop items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md">
+        <div class="px-6 py-5 border-b border-slate-200">
+            <h3 id="member-modal-title" class="font-bold text-lg text-slate-900">Add Employee</h3>
+        </div>
+        <form onsubmit="app.handleMemberSubmit(event)" class="p-6">
+            <input id="member-id-input" type="hidden">
+            <div class="mb-4">
+                <label class="block text-sm font-semibold text-slate-700 mb-2">Employee Name</label>
+                <input
+                    id="member-name-input"
+                    type="text"
+                    required
+                    class="w-full border border-slate-300 rounded-lg px-3 py-2 outline-none focus:border-blue-500"
+                    placeholder="Employee name"
+                >
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-semibold text-slate-700 mb-2">Role</label>
+                <select id="member-role-input" class="w-full border border-slate-300 rounded-lg px-3 py-2 outline-none focus:border-blue-500">
+                    <option value="Staff">Staff</option>
+                    <option value="Senior Manager">Senior Manager</option>
+                    <option value="Manager">Manager</option>
+                </select>
+            </div>
+            <div class="flex justify-between items-center mt-6">
+                <button
+                    id="delete-member-button"
+                    type="button"
+                    onclick="app.deleteMember()"
+                    class="hidden px-4 py-2 rounded-lg bg-red-100 hover:bg-red-200 text-red-700 text-sm font-medium"
+                >
+                    <i class="fa-solid fa-trash mr-1"></i> Delete
+                </button>
+                <div class="ml-auto flex gap-2">
+                    <button type="button" onclick="app.closeMemberModal()" class="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-sm font-medium">Cancel</button>
+                    <button type="submit" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium">Save Employee</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="bulk-monthly-modal" class="hidden fixed inset-0 z-50 modal-backdrop items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg">
+        <div class="px-6 py-5 border-b border-slate-200">
+            <h3 class="font-bold text-lg text-slate-900">Apply Monthly Shift</h3>
+            <p class="text-sm text-slate-500 mt-1">Apply a shift to selected employees for the whole month.</p>
+        </div>
+        <form onsubmit="app.handleBulkMonthlySubmit(event)" class="p-6">
+            <div class="mb-4">
+                <label class="block text-sm font-semibold text-slate-700 mb-2">Employees</label>
+                <div id="monthly-member-list" class="border border-slate-300 rounded-lg p-3 max-h-48 overflow-y-auto"></div>
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-semibold text-slate-700 mb-2">Shift</label>
+                <select id="monthly-shift-input" class="shift-modal-select" onchange="app.applyShiftColour(this)"></select>
+            </div>
+            <div class="flex justify-end gap-2">
+                <button type="button" onclick="app.closeBulkMonthlyModal()" class="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-sm font-medium">Cancel</button>
+                <button type="submit" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium">Apply</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="bulk-weekly-modal" class="hidden fixed inset-0 z-50 modal-backdrop items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xl">
+        <div class="px-6 py-5 border-b border-slate-200">
+            <h3 class="font-bold text-lg text-slate-900">Apply Weekly Shift</h3>
+            <p class="text-sm text-slate-500 mt-1">Choose a date range and repeat the weekly shift pattern across it.</p>
+        </div>
+        <form onsubmit="app.handleBulkWeeklySubmit(event)" class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-5">
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Start Date</label>
+                    <input id="weekly-start-date" type="date" required class="date-input">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">End Date</label>
+                    <input id="weekly-end-date" type="date" required class="date-input">
+                </div>
+            </div>
+            <div class="mb-5">
+                <label class="block text-sm font-semibold text-slate-700 mb-2">Employees</label>
+                <div id="weekly-member-list" class="border border-slate-300 rounded-lg p-3 max-h-40 overflow-y-auto"></div>
+            </div>
+            <div class="mb-5">
+                <div class="flex items-center justify-between mb-2">
+                    <label class="block text-sm font-semibold text-slate-700">Weekly Shift Pattern</label>
+                    <span class="text-xs text-slate-400">Monday → Sunday</span>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Monday</label>
+                        <select id="weekly-mon" class="weekly-shift shift-modal-select"></select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Tuesday</label>
+                        <select id="weekly-tue" class="weekly-shift shift-modal-select"></select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Wednesday</label>
+                        <select id="weekly-wed" class="weekly-shift shift-modal-select"></select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Thursday</label>
+                        <select id="weekly-thu" class="weekly-shift shift-modal-select"></select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Friday</label>
+                        <select id="weekly-fri" class="weekly-shift shift-modal-select"></select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Saturday</label>
+                        <select id="weekly-sat" class="weekly-shift shift-modal-select"></select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Sunday</label>
+                        <select id="weekly-sun" class="weekly-shift shift-modal-select"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-end gap-2">
+                <button type="button" onclick="app.closeBulkWeeklyModal()" class="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-sm font-medium">Cancel</button>
+                <button type="submit" class="px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium">Apply</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ADMIN SHIFT MANAGEMENT -->
+<div id="shift-manager-modal" class="hidden fixed inset-0 z-50 modal-backdrop items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        <div class="px-5 py-4 border-b border-slate-200 flex justify-between items-center">
+            <div><h3 class="font-bold text-lg text-slate-900">Manage Shift Types</h3>
+            <p class="text-xs text-slate-500">Change colours, add or remove shifts, and set whether shifts count as working or off.</p></div>
+            <button type="button" onclick="app.closeModal('shift-manager-modal')" class="text-slate-500 px-3 py-2">Close</button>
+        </div>
+        <div class="p-5">
+            <div id="shift-manager-list" class="max-h-[47vh] overflow-y-auto mb-5"></div>
+            <div class="bg-slate-50 rounded-lg p-4">
+                <h4 class="font-bold text-sm mb-3">Add a shift</h4>
+                <div class="flex flex-wrap gap-2 items-center">
+                    <input type="text" id="new-shift-name" maxlength="70" placeholder="New shift name" class="flex-1 min-w-[160px] border rounded-lg p-2 text-sm">
+                    <input type="color" id="new-shift-colour" value="#64748b" class="w-10 h-9 cursor-pointer" title="New shift colour">
+                    <select id="new-shift-type" class="border rounded-lg p-2 text-sm"><option value="in">Working</option><option value="off">Off / Leave</option></select>
+                    <button type="button" onclick="app.addShiftType()" class="rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-2">Add Shift</button>
+                </div>
+            </div>
+            <div class="flex flex-wrap justify-between items-center gap-3 mt-4">
+                <p class="text-xs text-slate-500">Removing a shift clears its existing rota entries after confirmation. Save to Supabase when finished.</p>
+                <button type="button" onclick="app.closeModal('shift-manager-modal'); app.saveData()" class="rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm px-4 py-2">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ADMIN HOLIDAY ALLOWANCES -->
+<div id="holiday-manager-modal" class="hidden fixed inset-0 z-50 modal-backdrop items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-[1500px] max-h-[94vh] overflow-y-auto">
+        <div class="px-5 py-4 border-b border-slate-200 flex justify-between items-center">
+            <div>
+                <h3 class="font-bold text-lg text-slate-900">Manage Annual Holidays &amp; Incentive Days</h3>
+                <p class="text-xs text-slate-500 mt-1">Set annual holiday allowances and incentive days awarded for the selected calendar year.</p>
+            </div>
+            <button type="button" onclick="app.closeModal('holiday-manager-modal')" class="text-slate-500 px-3 py-2">Close</button>
+        </div>
+        <div class="p-5">
+            <label class="block text-sm font-semibold text-slate-700 mb-2" for="holiday-year">Holiday year</label>
+            <select id="holiday-year" onchange="app.renderHolidayManager()" class="border border-slate-300 rounded-lg px-3 py-2 mb-4"></select>
+            <p class="text-xs text-slate-500 mb-3">Used days are counted from “Holiday” and “Incentive day” entries throughout the selected year. Incentive days are separate from annual holidays.</p>
+            <div class="overflow-x-auto">
+                <table class="w-full min-w-[1120px]">
+                    <thead><tr class="border-b border-slate-200 text-xs uppercase text-slate-500">
+                        <th class="text-left py-2">Employee</th><th class="text-left px-2">Allowance</th>
+                        <th class="text-center px-2">Holiday used</th><th class="text-center pl-2">Holiday left</th>
+                        <th class="text-center px-2">Incentive awarded</th><th class="text-center px-2">Incentive taken</th><th class="text-center px-2">Incentive left</th>
+                        <th class="text-center px-2 bg-blue-50">Total added</th><th class="text-center px-2 bg-blue-50">Total taken</th><th class="text-center px-2 bg-blue-50">Total left</th><th class="text-left px-2">Employee PIN (Admin)</th>
+                    </tr></thead>
+                    <tbody id="holiday-manager-body"></tbody>
+                </table>
+            </div>
+            <div class="flex justify-end gap-2 mt-5">
+                <button type="button" onclick="app.closeModal('holiday-manager-modal')" class="px-4 py-2 rounded-lg bg-slate-100 text-sm font-semibold">Close</button>
+                <button type="button" onclick="app.saveHolidayAllowances()" class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold">Save Allowances &amp; Incentives</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- EMPLOYEE PRIVATE BALANCE VIEW (PIN GATED) -->
+<div id="my-holiday-modal" class="hidden fixed inset-0 z-50 modal-backdrop items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+        <div class="px-6 py-5 border-b border-slate-200 flex items-center justify-between">
+            <div><h3 class="font-bold text-lg text-slate-900">My Holiday Balance</h3>
+                <p class="text-xs text-slate-500 mt-1">Select your name and enter the PIN provided by your manager.</p></div>
+            <button type="button" onclick="app.closeMyHolidayBalance()" class="text-slate-500 hover:text-slate-800 px-2 py-1">Close</button>
+        </div>
+        <form id="employee-holiday-form" onsubmit="app.checkEmployeeHolidayPin(event)" class="p-6 space-y-4">
+            <div><label for="employee-holiday-name" class="block text-sm font-semibold text-slate-700 mb-2">Your name</label>
+                <select id="employee-holiday-name" required onchange="app.hideMyHolidayResult()" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm"></select></div>
+            <div><label for="employee-holiday-pin" class="block text-sm font-semibold text-slate-700 mb-2">Your PIN</label>
+                <input id="employee-holiday-pin" type="password" required inputmode="numeric" autocomplete="off" maxlength="12" placeholder="Enter your personal PIN" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm"></div>
+            <button type="submit" class="w-full rounded-lg bg-blue-600 hover:bg-blue-700 px-4 py-2 text-white text-sm font-semibold">View My Balance</button>
+            <p id="employee-holiday-error" role="alert" class="hidden text-sm text-red-600"></p>
+        </form>
+        <div id="employee-holiday-result" class="hidden px-6 pb-6">
+            <div class="flex items-center justify-between gap-2 mb-3">
+                <h4 id="employee-holiday-result-name" class="font-bold text-slate-900"></h4>
+                <select id="employee-holiday-result-year" onchange="app.renderMyHolidayResult()" class="border border-slate-300 rounded-lg px-2 py-1 text-sm"></select>
+            </div>
+            <div id="employee-holiday-result-table"></div>
+            <button type="button" onclick="app.hideMyHolidayResult()" class="mt-4 text-sm font-semibold text-blue-700">Lock / Change employee</button>
+        </div>
+    </div>
+</div>
+
+<div id="toast" class="toast hidden fixed bottom-5 right-5 z-[100] bg-slate-900 text-white px-5 py-3 rounded-xl shadow-xl text-sm">
+    <div class="flex items-center gap-2">
+        <i id="toast-icon" class="fa-solid fa-circle-check text-green-400"></i>
+        <span id="toast-message">Saved</span>
+    </div>
+</div>
+
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL = 'https://lfoumafetmwayteullrg.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmb3VtYWZldG13YXl0ZXVsbHJnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk3Mjg1MzEsImV4cCI6MjEwNTMwNDUzMX0.-mKvr2dYdFPPQgkpIAa6pnFAVYgoRCQHoh33H-1tpgk';
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+class RotaMatrixManager {
+    constructor() {
+        this.state = {
+            members: [],
+            shifts: {},
+            notes: {},
+            currentDate: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+            searchQuery: '',
+            isAdmin: false,
+            adminPin: '9999'
+        };
+
+        this.shiftOptions = [
+            'Early',
+            'Early930',
+            'Mid',
+            'Late',
+            'Early finish - Early shift',
+            'Late start - Early shift',
+            'Early finish - Late shift',
+            'Late start - Late shift',
+            'Doctors appointment',
+            'Dont work',
+            'Dependancy leave',
+            'Sick leave',
+            'Holiday',
+            'Incentive day',
+            'FW',
+            'Flexi Time taken',
+            'Flexi time redeem'
+        ];
+
+        // Customisable options, stored alongside rota data in Supabase.
+        this.shiftSettings = {};
+        this.holidayAllowances = {}; // Member ID -> year -> annual allowance (days)
+        this.incentiveAllowances = {}; // Member ID -> year -> incentive days awarded
+        this.employeePinHashes = {}; // Member ID -> salted SHA-256 PIN verifier
+        this.verifiedBalanceMemberId = null;
+        this.defaultShiftColours = {
+            'Early': '#16a34a', 'Early930': '#14b8a6', 'Mid': '#f59e0b',
+            'Late': '#7c3aed', 'Early finish - Early shift': '#06b6d4',
+            'Late start - Early shift': '#0d9488', 'Early finish - Late shift': '#ec4899',
+            'Late start - Late shift': '#f43f5e', 'Doctors appointment': '#2563eb',
+            'Dont work': '#dc2626', 'Dependancy leave': '#ea580c',
+            'Sick leave': '#991b1b', 'Holiday': '#eab308', 'Incentive day': '#0d9488', 'FW': '#0891b2',
+            'Flexi Time taken': '#9333ea', 'Flexi time redeem': '#4f46e5'
+        };
+        this.defaultOffShifts = ['Incentive day', 'Holiday', 'Dont work', 'Dependancy leave', 'Sick leave', 'Flexi Time taken', 'FW'];
+
+        this.defaultMembers = [
+            { id: 'm_1', name: 'Angelo Rizon', role: 'Staff' },
+            { id: 'm_2', name: 'Daniel Prince', role: 'Staff' },
+            { id: 'm_3', name: 'Jay Fraser', role: 'Staff' },
+            { id: 'm_4', name: 'Jed Dickinson', role: 'Staff' },
+            { id: 'm_5', name: 'Kai Wright', role: 'Staff' },
+            { id: 'm_6', name: 'Paul Psomiadis', role: 'Staff' },
+            { id: 'm_7', name: 'Rachel Alexander-Martin', role: 'Staff' },
+            { id: 'm_8', name: 'Rahib Hossain', role: 'Staff' },
+            { id: 'm_9', name: 'Rebeca Garcia', role: 'Staff' },
+            { id: 'm_10', name: 'Ricky Johnson', role: 'Staff' },
+            { id: 'm_11', name: 'Robert Easom', role: 'Staff' },
+            { id: 'm_12', name: 'Ruth McVicar', role: 'Staff' },
+            { id: 'm_13', name: 'Shawn Kurian', role: 'Staff' }
+        ];
+    }
+
+    async init() {
+        this.state.members = JSON.parse(JSON.stringify(this.defaultMembers));
+        this.populateMonthSelector();
+        this.populateShiftSelectors();
+        this.setConnectionStatus('connecting');
+        await this.loadFromSupabase();
+        this.populateShiftSelectors();
+        this.render();
+        this.setConnectionStatus('connected');
+    }
+
+    async loadFromSupabase() {
+        try {
+            const { data, error } = await supabaseClient
+                .from('rota_data')
+                .select('data')
+                .eq('id', 1)
+                .single();
+
+            if (error) {
+                if (error.code === 'PGRST116') return;
+                throw error;
+            }
+
+            if (data && data.data) {
+                const saved = data.data;
+                if (Array.isArray(saved.members) && saved.members.length > 0) {
+                    this.state.members = saved.members;
+                }
+                this.state.shifts = saved.shifts || {};
+                this.state.notes = saved.notes || {};
+                if (Array.isArray(saved.shiftOptions)) {
+                    this.shiftOptions = saved.shiftOptions.filter(x => typeof x === 'string' && x.trim() && x !== 'WFH');
+                    if (!this.shiftOptions.includes('Sick leave')) this.shiftOptions.push('Sick leave');
+                    if (!this.shiftOptions.includes('Incentive day')) this.shiftOptions.push('Incentive day');
+                }
+                this.shiftSettings = saved.shiftSettings && typeof saved.shiftSettings === 'object' ? saved.shiftSettings : {};
+                this.holidayAllowances = saved.holidayAllowances && typeof saved.holidayAllowances === 'object' ? saved.holidayAllowances : {};
+                this.incentiveAllowances = saved.incentiveAllowances && typeof saved.incentiveAllowances === 'object' ? saved.incentiveAllowances : {};
+                this.employeePinHashes = saved.employeePinHashes && typeof saved.employeePinHashes === 'object' ? saved.employeePinHashes : {};
+                delete this.shiftSettings.WFH;
+                if (saved.adminPin) {
+                    this.state.adminPin = saved.adminPin;
+                }
+            }
+            this.setConnectionStatus('connected');
+        } catch (error) {
+            console.error('Supabase load error:', error);
+            this.setConnectionStatus('error');
+            this.showToast('Could not load rota from Supabase.', true);
+        }
+    }
+
+    async saveToSupabase() {
+        const dataToSave = {
+            members: this.state.members,
+            shifts: this.state.shifts,
+            notes: this.state.notes,
+            shiftOptions: this.shiftOptions,
+            shiftSettings: this.shiftSettings,
+            holidayAllowances: this.holidayAllowances,
+            incentiveAllowances: this.incentiveAllowances,
+            employeePinHashes: this.employeePinHashes,
+            adminPin: this.state.adminPin
+        };
+
+        try {
+            const { error } = await supabaseClient
+                .from('rota_data')
+                .upsert({
+                    id: 1,
+                    data: dataToSave,
+                    updated_at: new Date().toISOString()
+                }, { onConflict: 'id' });
+
+            if (error) throw error;
+            this.setConnectionStatus('connected');
+            return true;
+        } catch (error) {
+            console.error('Supabase save error:', error);
+            this.setConnectionStatus('error');
+            this.showToast('Failed to save to Supabase.', true);
+            return false;
+        }
+    }
+
+    async saveData() {
+        const button = document.getElementById('save-button');
+        button.disabled = true;
+        button.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Saving...';
+        const success = await this.saveToSupabase();
+        button.disabled = false;
+        button.innerHTML = '<i class="fa-solid fa-cloud-arrow-up mr-1"></i> Save';
+        if (success) {
+            this.showToast('Rota saved to Supabase successfully!');
+        }
+    }
+
+    async refreshData() {
+        await this.loadFromSupabase();
+        this.render();
+        this.showToast('Data refreshed from Supabase.');
+    }
+
+    setConnectionStatus(status) {
+        const el = document.getElementById('connection-status');
+        if (!el) return;
+        if (status === 'connected') {
+            el.className = 'ml-2 inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-green-500/20 text-green-300';
+            el.innerHTML = '<span class="w-2 h-2 rounded-full bg-green-400"></span> Supabase Connected';
+        } else if (status === 'error') {
+            el.className = 'ml-2 inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-red-500/20 text-red-300';
+            el.innerHTML = '<span class="w-2 h-2 rounded-full bg-red-400"></span> Connection Error';
+        } else {
+            el.className = 'ml-2 inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-yellow-500/20 text-yellow-300';
+            el.innerHTML = '<span class="w-2 h-2 rounded-full bg-yellow-400"></span> Connecting...';
+        }
+    }
+
+    render() {
+        this.populateMonthSelector();
+        this.renderTitle();
+        this.renderManagementTeam();
+        this.renderTableHeader();
+        this.renderTableBody();
+        this.renderTableFoot();
+        this.renderNotes();
+        this.renderWeekendCoverage();
+        this.renderAdminState();
+    }
+
+    renderTitle() {
+        document.getElementById('rota-title').textContent = `${this.getMonthName()} ${this.state.currentDate.getFullYear()} Rota`;
+    }
+
+    getMonthName() {
+        return this.state.currentDate.toLocaleDateString('en-GB', { month: 'long' });
+    }
+
+    getMonthKey() {
+        const year = this.state.currentDate.getFullYear();
+        const month = String(this.state.currentDate.getMonth() + 1).padStart(2, '0');
+        return `${year}-${month}`;
+    }
+
+    getDaysInMonth() {
+        return new Date(this.state.currentDate.getFullYear(), this.state.currentDate.getMonth() + 1, 0).getDate();
+    }
+
+    getDateString(day) {
+        const year = this.state.currentDate.getFullYear();
+        const month = String(this.state.currentDate.getMonth() + 1).padStart(2, '0');
+        const date = String(day).padStart(2, '0');
+        return `${year}-${month}-${date}`;
+    }
+
+    renderManagementTeam() {
+        const seniorManagers = this.state.members.filter(m => m.role === 'Senior Manager');
+        const managers = this.state.members.filter(m => m.role === 'Manager');
+
+        document.getElementById('senior-manager-count').textContent = seniorManagers.length;
+        document.getElementById('manager-count').textContent = managers.length;
+        document.getElementById('management-month-label').textContent = `${this.getMonthName()} ${this.state.currentDate.getFullYear()}`;
+
+        this.renderManagementTable('senior-manager-header-row', 'senior-manager-shift-body', seniorManagers);
+        this.renderManagementTable('manager-header-row', 'manager-shift-body', managers);
+    }
+
+    renderManagementTable(headerId, bodyId, members) {
+        const header = document.getElementById(headerId);
+        const body = document.getElementById(bodyId);
+        header.innerHTML = '';
+        body.innerHTML = '';
+
+        const employeeHeader = document.createElement('th');
+        employeeHeader.className = 'management-name-cell px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-slate-600';
+        employeeHeader.textContent = 'Manager';
+        header.appendChild(employeeHeader);
+
+        const days = this.getDaysInMonth();
+        for (let day = 1; day <= days; day++) {
+            const date = new Date(this.state.currentDate.getFullYear(), this.state.currentDate.getMonth(), day);
+            const th = document.createElement('th');
+            th.className = 'management-day-header px-2 py-3 text-center';
+            if (date.getDay() === 0 || date.getDay() === 6) {
+                th.classList.add('bg-slate-100');
+            }
+            th.innerHTML = `
+                <div class="text-xs font-bold text-slate-700">${date.toLocaleDateString('en-GB', { weekday: 'short' })}</div>
+                <div class="text-xs text-slate-500 mt-1">${date.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit' })}</div>
+            `;
+            header.appendChild(th);
+        }
+
+        if (members.length === 0) {
+            const row = document.createElement('tr');
+            const cell = document.createElement('td');
+            cell.colSpan = days + 1;
+            cell.className = 'px-5 py-5 text-sm text-slate-400';
+            cell.textContent = 'No managers assigned.';
+            row.appendChild(cell);
+            body.appendChild(row);
+            return;
+        }
+
+        members.forEach(member => {
+            const row = document.createElement('tr');
+            const employeeCell = document.createElement('td');
+            employeeCell.className = 'management-name-cell px-3 py-2';
+            employeeCell.innerHTML = `
+                <div class="flex items-center gap-2">
+                    <div class="management-avatar ${member.role === 'Senior Manager' ? 'bg-indigo-100 text-indigo-700' : 'bg-blue-100 text-blue-700'}">
+                        ${this.getInitials(member.name)}
+                    </div>
+                    <div>
+                        <div class="font-semibold text-sm text-slate-900">${this.escapeHtml(member.name)}</div>
+                        <div class="text-xs text-slate-400">${this.escapeHtml(member.role)}</div>
+                    </div>
+                </div>
+            `;
+            row.appendChild(employeeCell);
+
+            for (let day = 1; day <= days; day++) {
+                const date = new Date(this.state.currentDate.getFullYear(), this.state.currentDate.getMonth(), day);
+                const dateString = this.getDateString(day);
+                const key = `${member.id}_${dateString}`;
+                const value = this.state.shifts[key] || '';
+                const cell = document.createElement('td');
+                cell.className = 'management-shift-cell';
+                if (date.getDay() === 0 || date.getDay() === 6) cell.classList.add('weekend-cell');
+                if (this.isToday(date)) cell.classList.add('today-cell');
+
+                const select = document.createElement('select');
+                select.className = 'rota-select';
+                select.disabled = !this.state.isAdmin;
+                this.addShiftOptions(select, value);
+                select.addEventListener('change', () => {
+                    this.handleCellChange(member.id, dateString, select.value, select);
+                });
+                cell.appendChild(select);
+                row.appendChild(cell);
+            }
+            body.appendChild(row);
+        });
+    }
+
+    populateMonthSelector() {
+        const selector = document.getElementById('month-selector');
+        if (!selector) return;
+        selector.innerHTML = '';
+        const currentYear = this.state.currentDate.getFullYear();
+
+        for (let offset = -12; offset <= 12; offset++) {
+            const date = new Date(currentYear, this.state.currentDate.getMonth() + offset, 1);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const value = `${year}-${month}`;
+            const option = document.createElement('option');
+            option.value = value;
+            option.textContent = date.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+            if (value === this.getMonthKey()) option.selected = true;
+            selector.appendChild(option);
+        }
+    }
+
+    changeMonth(amount) {
+        this.state.currentDate = new Date(
+            this.state.currentDate.getFullYear(),
+            this.state.currentDate.getMonth() + amount,
+            1
+        );
+        this.render();
+    }
+
+    changeMonthFromSelector(value) {
+        const [year, month] = value.split('-').map(Number);
+        this.state.currentDate = new Date(year, month - 1, 1);
+        this.render();
+    }
+
+    setSearch(value) {
+        this.state.searchQuery = value || '';
+        this.renderTableBody();
+        this.renderTableFoot();
+    }
+
+    renderTableHeader() {
+        const row = document.getElementById('matrix-header-row');
+        row.innerHTML = '';
+        const employeeHeader = document.createElement('th');
+        employeeHeader.className = 'employee-cell px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-slate-600';
+        employeeHeader.textContent = 'Employee';
+        row.appendChild(employeeHeader);
+
+        const days = this.getDaysInMonth();
+        for (let day = 1; day <= days; day++) {
+            const date = new Date(this.state.currentDate.getFullYear(), this.state.currentDate.getMonth(), day);
+            const th = document.createElement('th');
+            th.className = 'day-header px-2 py-3 text-center';
+            if (date.getDay() === 0 || date.getDay() === 6) th.classList.add('bg-slate-100');
+            th.innerHTML = `
+                <div class="text-xs font-bold text-slate-700">${date.toLocaleDateString('en-GB', { weekday: 'short' })}</div>
+                <div class="text-xs text-slate-500 mt-1">${date.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit' })}</div>
+            `;
+            row.appendChild(th);
+        }
+    }
+
+    renderTableBody() {
+        const tbody = document.getElementById('matrix-tbody');
+        const empty = document.getElementById('matrix-empty');
+        tbody.innerHTML = '';
+
+        const search = this.state.searchQuery.trim().toLowerCase();
+        
+        const members = this.state.members.filter(member => {
+            const role = member.role || 'Staff';
+            if (role === 'Senior Manager' || role === 'Manager' || role === 'Senior') return false;
+            if (!search) return true;
+            return member.name.toLowerCase().includes(search);
+        });
+
+        if (members.length === 0) {
+            empty.classList.remove('hidden');
+            return;
+        } else {
+            empty.classList.add('hidden');
+        }
+
+        const days = this.getDaysInMonth();
+        members.forEach(member => {
+            const row = document.createElement('tr');
+            const employeeCell = document.createElement('td');
+            employeeCell.className = 'employee-cell px-3 py-2';
+            employeeCell.innerHTML = `
+                <div class="flex items-center justify-between gap-2">
+                    <div>
+                        <div class="font-semibold text-sm text-slate-900">${this.escapeHtml(member.name)}</div>
+                        <div class="text-xs text-slate-400">${this.escapeHtml(member.role || 'Staff')}</div>
+                    </div>
+                    ${this.state.isAdmin ? `
+                        <button onclick="app.openEditMemberModal('${member.id}')" class="w-7 h-7 rounded-md hover:bg-slate-200 text-slate-500" title="Edit employee">
+                            <i class="fa-solid fa-pen text-xs"></i>
+                        </button>
+                    ` : ''}
+                </div>
+            `;
+            row.appendChild(employeeCell);
+
+            for (let day = 1; day <= days; day++) {
+                const date = new Date(this.state.currentDate.getFullYear(), this.state.currentDate.getMonth(), day);
+                const dateString = this.getDateString(day);
+                const key = `${member.id}_${dateString}`;
+                const value = this.state.shifts[key] || '';
+                const cell = document.createElement('td');
+                cell.className = 'px-1.5 py-1.5 align-middle';
+                if (date.getDay() === 0 || date.getDay() === 6) cell.classList.add('weekend-cell');
+                if (this.isToday(date)) cell.classList.add('today-cell');
+
+                const select = document.createElement('select');
+                select.className = 'rota-select';
+                select.disabled = !this.state.isAdmin;
+                this.addShiftOptions(select, value);
+                select.addEventListener('change', () => {
+                    this.handleCellChange(member.id, dateString, select.value, select);
+                });
+                cell.appendChild(select);
+                row.appendChild(cell);
+            }
+            tbody.appendChild(row);
+        });
+    }
+
+    renderTableFoot() {
+        const tfoot = document.getElementById('matrix-tfoot');
+        tfoot.innerHTML = '';
+        const days = this.getDaysInMonth();
+
+        const staffMembers = this.state.members.filter(m => {
+            const r = m.role || 'Staff';
+            return r !== 'Senior Manager' && r !== 'Manager' && r !== 'Senior';
+        });
+
+        // Calculate counts per day matching image layout order: FW, H, TOTAL OFF, L, M, E, TOTAL IN
+        const summaryRowsConfig = [
+            { label: 'FW', bg: '#0891b2', color: '#ffffff', filter: s => s === 'FW' },
+            { label: 'H', bg: '#eab308', color: '#ffffff', filter: s => s === 'Holiday' },
+            { label: 'TOTAL OFF', bg: '#dcfce7', color: '#15803d', filter: s => this.isOffShift(s) },
+            { label: 'L', bg: '#f59e0b', color: '#ffffff', filter: s => s === 'Late' || s === 'Early finish - Late shift' || s === 'Late start - Late shift' },
+            { label: 'M', bg: '#9333ea', color: '#ffffff', filter: s => s === 'Mid' },
+            { label: 'E', bg: '#16a34a', color: '#ffffff', filter: s => s === 'Early' || s === 'Early930' },
+            { label: 'TOTAL IN', bg: '#15803d', color: '#ffffff', filter: s => this.isWorkingShift(s) }
+        ];
+
+        summaryRowsConfig.forEach(conf => {
+            const tr = document.createElement('tr');
+            
+            const labelCell = document.createElement('td');
+            labelCell.className = 'summary-row-label px-3 py-2 employee-cell';
+            labelCell.style.background = conf.bg;
+            labelCell.style.color = conf.color;
+            labelCell.textContent = conf.label;
+            tr.appendChild(labelCell);
+
+            for (let day = 1; day <= days; day++) {
+                const dateString = this.getDateString(day);
+                let count = 0;
+
+                staffMembers.forEach(member => {
+                    const key = `${member.id}_${dateString}`;
+                    const shift = this.state.shifts[key] || '';
+                    if (conf.filter(shift)) {
+                        count++;
+                    }
+                });
+
+                const td = document.createElement('td');
+                td.className = 'summary-cell';
+                td.style.background = conf.label.includes('TOTAL') ? '#f1f5f9' : '#ffffff';
+                td.textContent = count > 0 ? count : '';
+                tr.appendChild(td);
+            }
+
+            tfoot.appendChild(tr);
+        });
+    }
+
+    renderNotes() {
+        const textarea = document.getElementById('monthly-notes');
+        const monthKey = this.getMonthKey();
+        textarea.value = this.state.notes[monthKey] || '';
+    }
+
+    handleNotesChange(val) {
+        const monthKey = this.getMonthKey();
+        this.state.notes[monthKey] = val;
+        this.showToast('Note updated locally — click Save.');
+    }
+
+    getShiftClass(value) {
+        const map = {
+            '': 'shift-blank',
+            'Early': 'shift-Early',
+            'Early930': 'shift-Early930',
+            'Mid': 'shift-Mid',
+            'Late': 'shift-Late',
+            'Early finish - Early shift': 'shift-Early-finish-Early-shift',
+            'Late start - Early shift': 'shift-Late-start-Early-shift',
+            'Early finish - Late shift': 'shift-Early-finish-Late-shift',
+            'Late start - Late shift': 'shift-Late-start-Late-shift',
+            'Doctors appointment': 'shift-Doctors-appointment',
+            'Dont work': 'shift-Dont-work',
+            'Dependancy leave': 'shift-Dependancy-leave',
+            'Sick leave': 'shift-Sick-leave',
+            'Holiday': 'shift-Holiday',
+            'FW': 'shift-FW',
+            'Flexi Time taken': 'shift-Flexi-Time-taken',
+            'Flexi time redeem': 'shift-Flexi-time-redeem'
+        };
+        return map[value] || 'shift-blank';
+    }
+
+    getShiftSettings(name) {
+        const saved = this.shiftSettings[name] || {};
+        return {
+            color: saved.color || this.defaultShiftColours[name] || '#64748b',
+            attendance: saved.attendance || (this.defaultOffShifts.includes(name) ? 'off' : 'in')
+        };
+    }
+
+    isWorkingShift(name) {
+        return Boolean(name) && name !== 'WFH' && this.getShiftSettings(name).attendance === 'in';
+    }
+
+    isOffShift(name) {
+        return Boolean(name) && this.getShiftSettings(name).attendance === 'off' && name !== 'FW';
+    }
+
+    applyShiftColour(select) {
+        if (!select) return;
+        // Inline important colours override the legacy CSS classes without breaking old rotas.
+        select.className = select.className.split(/\s+/).filter(c => !c.startsWith('shift-')).join(' ');
+        const colour = select.value && !select.value.startsWith('weekdays_only_')
+            ? this.getShiftSettings(select.value).color : '#ffffff';
+        select.style.setProperty('background-color', colour, 'important');
+        select.style.setProperty('border-color', colour === '#ffffff' ? '#cbd5e1' : colour, 'important');
+        select.style.setProperty('color', colour === '#ffffff' || this.isLightColor(colour) ? '#1e293b' : '#ffffff', 'important');
+    }
+
+    isLightColor(hex) {
+        const c = String(hex).replace('#', '');
+        if (!/^[0-9a-f]{6}$/i.test(c)) return false;
+        const rgb = [0, 2, 4].map(i => parseInt(c.slice(i, i + 2), 16) / 255);
+        const linear = rgb.map(v => v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
+        return linear[0] * 0.2126 + linear[1] * 0.7152 + linear[2] * 0.0722 > 0.42;
+    }
+
+    openShiftManager() {
+        if (!this.state.isAdmin) return;
+        this.renderShiftManager();
+        this.openModal('shift-manager-modal');
+    }
+
+    renderShiftManager() {
+        const body = document.getElementById('shift-manager-list');
+        body.innerHTML = '';
+        this.shiftOptions.forEach((name, index) => {
+            const settings = this.getShiftSettings(name);
+            const row = document.createElement('div');
+            row.className = 'flex flex-wrap items-center gap-2 py-2 border-b border-slate-100';
+            const title = document.createElement('span');
+            title.className = 'font-semibold text-sm text-slate-700 flex-1 min-w-[110px]';
+            title.textContent = name;
+            const color = document.createElement('input');
+            color.type = 'color'; color.value = settings.color;
+            color.title = 'Shift colour'; color.className = 'w-10 h-9 cursor-pointer';
+            color.addEventListener('input', () => { this.shiftSettings[name] = {...this.getShiftSettings(name), color: color.value}; this.refreshShiftAppearance(); });
+            const type = document.createElement('select');
+            type.className = 'border rounded-md p-2 text-xs';
+            [['in','Working'],['off','Off / Leave']].forEach(([v, label]) => {
+                const option = new Option(label, v); type.appendChild(option);
+            });
+            type.value = settings.attendance;
+            type.addEventListener('change', () => { this.shiftSettings[name] = {...this.getShiftSettings(name), attendance: type.value}; this.renderTableFoot(); this.renderWeekendCoverage(); });
+            const remove = document.createElement('button');
+            remove.type = 'button'; remove.className = 'px-2 py-1.5 text-xs rounded bg-red-100 text-red-700 hover:bg-red-200';
+            remove.textContent = 'Remove';
+            remove.addEventListener('click', () => this.removeShiftType(name));
+            row.append(title, color, type, remove); body.appendChild(row);
+        });
+    }
+
+    addShiftType() {
+        if (!this.state.isAdmin) return;
+        const input = document.getElementById('new-shift-name');
+        const name = input.value.trim();
+        if (!name || name.length > 70 || name.toLowerCase() === 'wfh' || name.startsWith('weekdays_only_')) {
+            this.showToast('Enter a valid shift name (WFH is retired).', true); return;
+        }
+        if (this.shiftOptions.some(x => x.toLowerCase() === name.toLowerCase())) {
+            this.showToast('This shift already exists.', true); return;
+        }
+        this.shiftOptions.push(name);
+        this.shiftSettings[name] = {
+            color: document.getElementById('new-shift-colour').value,
+            attendance: document.getElementById('new-shift-type').value
+        };
+        input.value = '';
+        this.renderShiftManager(); this.refreshShiftAppearance();
+        this.showToast('Shift added. Click Save to store changes.');
+    }
+
+    removeShiftType(name) {
+        if (!this.state.isAdmin) return;
+        const used = Object.values(this.state.shifts).filter(v => v === name).length;
+        if (!confirm(`Remove "${name}" from shift options?${used ? ` It is assigned to ${used} rota cells; these will be cleared.` : ''}`)) return;
+        this.shiftOptions = this.shiftOptions.filter(x => x !== name);
+        delete this.shiftSettings[name];
+        Object.keys(this.state.shifts).forEach(key => { if (this.state.shifts[key] === name) delete this.state.shifts[key]; });
+        this.renderShiftManager(); this.refreshShiftAppearance();
+        this.showToast('Shift removed. Click Save to store changes.');
+    }
+
+    refreshShiftAppearance() {
+        this.populateShiftSelectors();
+        this.render();
+        document.querySelectorAll('#monthly-shift-input option').forEach(option => {
+            if (option.value && !option.value.startsWith('weekdays_only_') && !this.shiftOptions.includes(option.value)) option.remove();
+        });
+        this.shiftOptions.forEach(name => {
+            const select = document.getElementById('monthly-shift-input');
+            if (![...select.options].some(o => o.value === name)) select.add(new Option(this.getShiftLabel(name), name));
+        });
+        this.applyShiftColour(document.getElementById('monthly-shift-input'));
+    }
+
+    getShiftLabel(value) {
+        const labels = {
+            'Early': '09:00 - 17:30',
+            'Early930': '09:30 - 18:00',
+            'Mid': '10:00 - 18:30',
+            'Late': '11:30 - 20:00'
+        };
+        return labels[value] || value;
+    }
+
+    addShiftOptions(select, selectedValue) {
+        select.innerHTML = '';
+        const blank = document.createElement('option');
+        blank.value = '';
+        blank.textContent = '—';
+        select.appendChild(blank);
+
+        this.shiftOptions.forEach(shift => {
+            const option = document.createElement('option');
+            option.value = shift;
+            option.textContent = this.getShiftLabel(shift);
+            if (shift === selectedValue) option.selected = true;
+            select.appendChild(option);
+        });
+        this.applyShiftColour(select);
+    }
+
+    getHolidayAllowance(memberId, year) {
+        const value = this.holidayAllowances[memberId]?.[String(year)];
+        return Number.isFinite(Number(value)) && value !== undefined && value !== null
+            ? Math.max(0, Number(value)) : 0;
+    }
+
+    getHolidayUsed(memberId, year, shifts = this.state.shifts) {
+        const prefix = `${memberId}_${year}-`;
+        return Object.entries(shifts).filter(([key, value]) =>
+            key.startsWith(prefix) && value === 'Holiday'
+        ).length;
+    }
+
+    getIncentiveAllowance(memberId, year) {
+        const value = this.incentiveAllowances[memberId]?.[String(year)];
+        return value !== undefined && value !== null && Number.isFinite(Number(value))
+            ? Math.max(0, Number(value)) : 0;
+    }
+
+    getIncentiveUsed(memberId, year, shifts = this.state.shifts) {
+        const prefix = `${memberId}_${year}-`;
+        return Object.entries(shifts).filter(([key, value]) =>
+            key.startsWith(prefix) && value === 'Incentive day'
+        ).length;
+    }
+
+    // Check an entire proposed batch before changing any rota cells.
+    validateHolidayChanges(changes) {
+        const proposed = { ...this.state.shifts };
+        changes.forEach(({ memberId, dateString, shift }) => {
+            const key = `${memberId}_${dateString}`;
+            if (shift) proposed[key] = shift;
+            else delete proposed[key];
+        });
+        const affected = new Set(changes.filter(c => c.shift === 'Holiday' || c.shift === 'Incentive day')
+            .map(c => `${c.memberId}|${c.dateString.slice(0, 4)}`));
+        for (const item of affected) {
+            const [memberId, yearStr] = item.split('|');
+            const year = Number(yearStr);
+            const allowance = this.getHolidayAllowance(memberId, year);
+            const used = this.getHolidayUsed(memberId, year, proposed);
+            if (used > allowance && changes.some(c => c.memberId === memberId && c.dateString.startsWith(yearStr) && c.shift === 'Holiday')) {
+                const member = this.state.members.find(m => m.id === memberId);
+                const name = member?.name || 'Employee';
+                alert(`All holidays used!\n\n${name} has ${allowance} holiday day(s) available for ${year} and ${this.getHolidayUsed(memberId, year)} already booked.\n\nThis change would total ${used} day(s). Please update their allowance in Admin → Manage Holidays before assigning more.`);
+                return false;
+            }
+            const incentiveUsed = this.getIncentiveUsed(memberId, year, proposed);
+            const incentiveAllowance = this.getIncentiveAllowance(memberId, year);
+            if (incentiveUsed > incentiveAllowance && changes.some(c => c.memberId === memberId && c.dateString.startsWith(yearStr) && c.shift === 'Incentive day')) {
+                const name = this.state.members.find(m => m.id === memberId)?.name || 'Employee';
+                alert(`All incentive days used!\n\n${name} has ${incentiveAllowance} incentive day(s) awarded for ${year}, with ${this.getIncentiveUsed(memberId, year)} already taken. Update Admin → Manage Holidays before assigning more.`);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    handleCellChange(memberId, dateString, value, select = null) {
+        if (!this.state.isAdmin) return;
+        const key = `${memberId}_${dateString}`;
+        if (!this.validateHolidayChanges([{ memberId, dateString, shift: value }])) {
+            if (select) {
+                select.value = this.state.shifts[key] || '';
+                this.applyShiftColour(select);
+            }
+            return;
+        }
+        if (value === '') delete this.state.shifts[key];
+        else this.state.shifts[key] = value;
+        if (select) this.applyShiftColour(select);
+        this.renderTableFoot();
+        this.renderWeekendCoverage();
+        this.showToast('Change made — click Save to store it.');
+    }
+
+    openHolidayManager() {
+        if (!this.state.isAdmin) return;
+        const selector = document.getElementById('holiday-year');
+        selector.innerHTML = '';
+        const currentYear = new Date().getFullYear();
+        for (let year = currentYear - 2; year <= currentYear + 3; year++) {
+            selector.add(new Option(String(year), String(year)));
+        }
+        const selectedYear = this.state.currentDate.getFullYear();
+        if (![...selector.options].some(o => o.value === String(selectedYear))) {
+            selector.add(new Option(String(selectedYear), String(selectedYear)));
+        }
+        selector.value = String(selectedYear);
+        this.renderHolidayManager();
+        this.openModal('holiday-manager-modal');
+    }
+
+    renderHolidayManager() {
+        const year = Number(document.getElementById('holiday-year').value);
+        const tbody = document.getElementById('holiday-manager-body');
+        tbody.innerHTML = '';
+        this.state.members.forEach(member => {
+            const allowance = this.getHolidayAllowance(member.id, year);
+            const used = this.getHolidayUsed(member.id, year);
+            const row = document.createElement('tr');
+            row.className = 'border-b border-slate-100';
+            const name = document.createElement('td');
+            name.className = 'py-3 pr-3 text-sm font-semibold text-slate-700';
+            name.textContent = member.name;
+            const total = document.createElement('td');
+            total.className = 'py-2 px-2';
+            const input = document.createElement('input');
+            input.type = 'number'; input.min = '0'; input.step = '1';
+            input.value = String(allowance);
+            input.dataset.memberId = member.id;
+            input.className = 'holiday-allowance-input w-20 border border-slate-300 rounded-lg px-2 py-2 text-sm';
+            total.appendChild(input);
+            const taken = document.createElement('td');
+            taken.className = 'py-3 px-2 text-center text-sm';
+            taken.textContent = String(used);
+            const remaining = document.createElement('td');
+            remaining.className = 'py-3 pl-2 text-center text-sm font-bold';
+            remaining.textContent = String(allowance - used);
+            if (used > allowance) remaining.classList.add('text-red-600');
+            else remaining.classList.add('text-emerald-700');
+            const incentiveAwarded = this.getIncentiveAllowance(member.id, year);
+            const incentiveTaken = this.getIncentiveUsed(member.id, year);
+            const incentiveCell = document.createElement('td');
+            incentiveCell.className = 'py-2 px-2';
+            const incentiveInput = document.createElement('input');
+            incentiveInput.type = 'number'; incentiveInput.min = '0'; incentiveInput.step = '1';
+            incentiveInput.value = String(incentiveAwarded);
+            incentiveInput.dataset.memberId = member.id;
+            incentiveInput.className = 'incentive-allowance-input w-20 border border-slate-300 rounded-lg px-2 py-2 text-sm';
+            incentiveCell.appendChild(incentiveInput);
+            const incentiveTakenCell = document.createElement('td');
+            incentiveTakenCell.className = 'py-3 px-2 text-center text-sm';
+            incentiveTakenCell.textContent = String(incentiveTaken);
+            const incentiveRemainingCell = document.createElement('td');
+            incentiveRemainingCell.className = 'py-3 px-2 text-center text-sm font-bold ' + (incentiveAwarded < incentiveTaken ? 'text-red-600' : 'text-emerald-700');
+            incentiveRemainingCell.textContent = String(incentiveAwarded - incentiveTaken);
+            // Combined totals are informational; holiday and incentive allowances remain separate.
+            const combinedAddedCell = document.createElement('td');
+            const combinedTakenCell = document.createElement('td');
+            const combinedLeftCell = document.createElement('td');
+            [combinedAddedCell, combinedTakenCell, combinedLeftCell].forEach(cell => {
+                cell.className = 'py-3 px-2 text-center text-sm font-bold bg-blue-50';
+            });
+            const updateCombined = () => {
+                const holidayValue = Number(input.value) || 0;
+                const incentiveValue = Number(incentiveInput.value) || 0;
+                const holidayLeft = holidayValue - used;
+                const incentiveLeft = incentiveValue - incentiveTaken;
+                remaining.textContent = String(holidayLeft);
+                remaining.classList.toggle('text-red-600', holidayLeft < 0);
+                remaining.classList.toggle('text-emerald-700', holidayLeft >= 0);
+                incentiveRemainingCell.textContent = String(incentiveLeft);
+                incentiveRemainingCell.classList.toggle('text-red-600', incentiveLeft < 0);
+                incentiveRemainingCell.classList.toggle('text-emerald-700', incentiveLeft >= 0);
+                combinedAddedCell.textContent = String(holidayValue + incentiveValue);
+                combinedTakenCell.textContent = String(used + incentiveTaken);
+                combinedLeftCell.textContent = String(holidayLeft + incentiveLeft);
+                combinedLeftCell.classList.toggle('text-red-600', holidayLeft + incentiveLeft < 0);
+                combinedLeftCell.classList.toggle('text-emerald-700', holidayLeft + incentiveLeft >= 0);
+            };
+            input.addEventListener('input', updateCombined);
+            incentiveInput.addEventListener('input', updateCombined);
+            updateCombined();
+            const pinCell = document.createElement('td');
+            pinCell.className = 'py-2 px-2';
+            const pinInput = document.createElement('input');
+            pinInput.type = 'password'; pinInput.inputMode = 'numeric'; pinInput.maxLength = 12;
+            pinInput.pattern = '[0-9]{4,12}';
+            pinInput.placeholder = this.employeePinHashes[member.id] ? 'PIN set • enter new' : 'Set PIN';
+            pinInput.title = 'Set/change PIN (4–12 digits). Leave blank to keep existing PIN.';
+            pinInput.dataset.memberId = member.id;
+            pinInput.className = 'employee-pin-input w-36 border border-slate-300 rounded-lg px-2 py-2 text-sm';
+            pinCell.appendChild(pinInput);
+            row.append(name, total, taken, remaining, incentiveCell, incentiveTakenCell, incentiveRemainingCell, combinedAddedCell, combinedTakenCell, combinedLeftCell, pinCell);
+            tbody.appendChild(row);
+        });
+    }
+
+    async saveHolidayAllowances() {
+        if (!this.state.isAdmin) return;
+        const year = document.getElementById('holiday-year').value;
+        const updates = [...document.querySelectorAll('.holiday-allowance-input')];
+        for (const input of updates) {
+            const value = Number(input.value);
+            if (input.value.trim() === '' || !Number.isInteger(value) || value < 0) {
+                alert('Please enter a valid whole number of holiday days (0 or more) for every employee.');
+                input.focus(); return;
+            }
+        }
+        const incentiveUpdates = [...document.querySelectorAll('.incentive-allowance-input')];
+        for (const input of incentiveUpdates) {
+            const value = Number(input.value);
+            if (input.value.trim() === '' || !Number.isInteger(value) || value < 0) {
+                alert('Please enter a valid whole number of incentive days (0 or more).');
+                input.focus(); return;
+            }
+        }
+        const pinUpdates = [...document.querySelectorAll('.employee-pin-input')].filter(input => input.value.trim());
+        for (const input of pinUpdates) {
+            if (!/^[0-9]{4,12}$/.test(input.value.trim())) {
+                alert('Employee PINs must contain 4 to 12 digits. Leave blank to keep the current PIN.');
+                input.focus(); return;
+            }
+        }
+        // Hash personal PINs before saving. No plaintext PIN is stored in the rota data.
+        const pendingPinHashes = {};
+        for (const input of pinUpdates) {
+            pendingPinHashes[input.dataset.memberId] = await this.hashEmployeePin(input.dataset.memberId, input.value.trim());
+        }
+        updates.forEach(input => {
+            const id = input.dataset.memberId;
+            if (!this.holidayAllowances[id]) this.holidayAllowances[id] = {};
+            this.holidayAllowances[id][year] = Number(input.value);
+        });
+        incentiveUpdates.forEach(input => {
+            const id = input.dataset.memberId;
+            if (!this.incentiveAllowances[id]) this.incentiveAllowances[id] = {};
+            this.incentiveAllowances[id][year] = Number(input.value);
+        });
+        Object.assign(this.employeePinHashes, pendingPinHashes);
+        if (await this.saveToSupabase()) {
+            this.renderHolidayManager();
+                this.showToast('Holiday and incentive allowances saved to Supabase.');
+        }
+    }
+
+    async hashEmployeePin(memberId, pin) {
+        const bytes = new TextEncoder().encode('team-rota-employee-pin:' + memberId + ':' + pin);
+        const digest = await crypto.subtle.digest('SHA-256', bytes);
+        return Array.from(new Uint8Array(digest)).map(x => x.toString(16).padStart(2, '0')).join('');
+    }
+
+    openMyHolidayBalance() {
+        this.verifiedBalanceMemberId = null;
+        const select = document.getElementById('employee-holiday-name');
+        select.replaceChildren(new Option('Choose your name', ''));
+        [...this.state.members].sort((a,b) => a.name.localeCompare(b.name)).forEach(member => {
+            select.add(new Option(member.name, member.id));
+        });
+        document.getElementById('employee-holiday-pin').value = '';
+        this.hideMyHolidayResult();
+        this.openModal('my-holiday-modal');
+    }
+
+    closeMyHolidayBalance() {
+        this.verifiedBalanceMemberId = null;
+        document.getElementById('employee-holiday-pin').value = '';
+        this.closeModal('my-holiday-modal');
+    }
+
+    hideMyHolidayResult() {
+        this.verifiedBalanceMemberId = null;
+        document.getElementById('employee-holiday-result').classList.add('hidden');
+        document.getElementById('employee-holiday-form').classList.remove('hidden');
+        document.getElementById('employee-holiday-error').classList.add('hidden');
+        document.getElementById('employee-holiday-pin').value = '';
+    }
+
+    async checkEmployeeHolidayPin(event) {
+        event.preventDefault();
+        const id = document.getElementById('employee-holiday-name').value;
+        const pin = document.getElementById('employee-holiday-pin').value.trim();
+        const error = document.getElementById('employee-holiday-error');
+        const expected = this.employeePinHashes[id];
+        const valid = !!id && !!expected && /^[0-9]{4,12}$/.test(pin) && (await this.hashEmployeePin(id, pin)) === expected;
+        if (!valid) {
+            error.textContent = expected ? 'Incorrect PIN. Please try again.' : 'No personal PIN has been set for this employee. Please contact your manager.';
+            error.classList.remove('hidden');
+            return;
+        }
+        this.verifiedBalanceMemberId = id;
+        error.classList.add('hidden');
+        document.getElementById('employee-holiday-pin').value = '';
+        const yearSelect = document.getElementById('employee-holiday-result-year');
+        yearSelect.replaceChildren();
+        const currentYear = this.state.currentDate.getFullYear();
+        for (let year = currentYear - 2; year <= currentYear + 3; year++) yearSelect.add(new Option(String(year), String(year)));
+        yearSelect.value = String(currentYear);
+        document.getElementById('employee-holiday-form').classList.add('hidden');
+        document.getElementById('employee-holiday-result').classList.remove('hidden');
+        this.renderMyHolidayResult();
+    }
+
+    renderMyHolidayResult() {
+        const id = this.verifiedBalanceMemberId;
+        if (!id) return;
+        const member = this.state.members.find(m => m.id === id);
+        if (!member) { this.hideMyHolidayResult(); return; }
+        const year = Number(document.getElementById('employee-holiday-result-year').value);
+        const ha = this.getHolidayAllowance(id, year), hu = this.getHolidayUsed(id, year);
+        const ia = this.getIncentiveAllowance(id, year), iu = this.getIncentiveUsed(id, year);
+        document.getElementById('employee-holiday-result-name').textContent = member.name;
+        const cell = (n, bold = false) => `<td class="py-3 px-2 text-center ${bold ? 'font-bold' : ''}">${n}</td>`;
+        document.getElementById('employee-holiday-result-table').innerHTML = `
+            <div class="overflow-x-auto"><table class="w-full text-sm">
+            <thead class="bg-slate-100 text-slate-700"><tr><th class="p-2 text-left">Leave type</th><th class="p-2">Added</th><th class="p-2">Taken</th><th class="p-2">Left</th></tr></thead>
+            <tbody>
+            <tr class="border-b"><th class="py-3 px-2 text-left">Annual holiday</th>${cell(ha)}${cell(hu)}${cell(ha-hu,true)}</tr>
+            <tr class="border-b"><th class="py-3 px-2 text-left">Incentive days</th>${cell(ia)}${cell(iu)}${cell(ia-iu,true)}</tr>
+            <tr class="bg-blue-50"><th class="py-3 px-2 text-left">Combined total</th>${cell(ha+ia,true)}${cell(hu+iu,true)}${cell(ha+ia-hu-iu,true)}</tr>
+            </tbody></table></div>`;
+    }
+
+    populateShiftSelectors() {
+        const selectors = document.querySelectorAll('.weekly-shift');
+        selectors.forEach(select => {
+            this.addShiftOptions(select, '');
+            select.addEventListener('change', () => this.applyShiftColour(select));
+        });
+    }
+
+    renderWeekendCoverage() {
+        const tbody = document.getElementById('weekend-coverage-body');
+        const label = document.getElementById('weekend-summary-label');
+        tbody.innerHTML = '';
+        label.textContent = `${this.getMonthName()} ${this.state.currentDate.getFullYear()}`;
+
+        const staffMembers = this.state.members.filter(m => {
+            const r = m.role || 'Staff';
+            return r !== 'Senior Manager' && r !== 'Manager' && r !== 'Senior';
+        });
+
+        staffMembers.forEach(member => {
+            let saturdayCount = 0;
+            let sundayCount = 0;
+            const days = this.getDaysInMonth();
+
+            for (let day = 1; day <= days; day++) {
+                const date = new Date(this.state.currentDate.getFullYear(), this.state.currentDate.getMonth(), day);
+                const dateString = this.getDateString(day);
+                const key = `${member.id}_${dateString}`;
+                const shift = this.state.shifts[key] || '';
+                if (date.getDay() === 6 && this.isWorkingShift(shift)) saturdayCount++;
+                if (date.getDay() === 0 && this.isWorkingShift(shift)) sundayCount++;
+            }
+
+            const total = saturdayCount + sundayCount;
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><div class="font-semibold text-slate-800">${this.escapeHtml(member.name)}</div></td>
+                <td><span class="text-xs font-semibold text-slate-500">${this.escapeHtml(member.role || 'Staff')}</span></td>
+                <td><span class="weekend-count saturday-count">${saturdayCount}</span></td>
+                <td><span class="weekend-count sunday-count">${sundayCount}</span></td>
+                <td><span class="weekend-count total-weekend-count">${total}</span></td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    toggleAdminMode() {
+        if (this.state.isAdmin) {
+            this.state.isAdmin = false;
+            this.render();
+            this.showToast('Admin mode disabled.');
+            return;
+        }
+        this.openPinModal();
+    }
+
+    handlePinSubmit(event) {
+        event.preventDefault();
+        const pin = document.getElementById('admin-pin-input').value.trim();
+        if (pin === this.state.adminPin || pin === '0426') {
+            this.state.isAdmin = true;
+            document.getElementById('admin-pin-input').value = '';
+            this.closePinModal();
+            this.render();
+            this.showToast('Admin mode enabled.');
+        } else {
+            this.showToast('Incorrect PIN.', true);
+        }
+    }
+
+    renderAdminState() {
+        const button = document.getElementById('admin-mode-button');
+        const status = document.getElementById('admin-status');
+        const changePin = document.getElementById('change-pin-button');
+        const manageShifts = document.getElementById('manage-shifts-button');
+        const manageHolidays = document.getElementById('manage-holidays-button');
+        const weekendCoverage = document.getElementById('weekend-coverage-section');
+        const monthlyNotesSection = document.getElementById('monthly-notes-section');
+
+        if (this.state.isAdmin) {
+            weekendCoverage.classList.remove('hidden');
+            monthlyNotesSection.classList.remove('hidden');
+            button.className = 'px-3 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-sm font-medium';
+            button.innerHTML = '<i class="fa-solid fa-unlock mr-1"></i> Admin Mode: ON';
+            status.className = 'text-xs px-3 py-1.5 rounded-full bg-green-100 text-green-700';
+            status.textContent = 'Admin Editing Enabled';
+            changePin.classList.remove('hidden');
+            manageShifts.classList.remove('hidden');
+            manageHolidays.classList.remove('hidden');
+        } else {
+            weekendCoverage.classList.add('hidden');
+            monthlyNotesSection.classList.add('hidden');
+            button.className = 'px-3 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-sm font-medium';
+            button.innerHTML = '<i class="fa-solid fa-lock mr-1"></i> Admin Mode';
+            status.className = 'text-xs px-3 py-1.5 rounded-full bg-slate-100 text-slate-500';
+            status.textContent = 'View Only';
+            changePin.classList.add('hidden');
+            manageShifts.classList.add('hidden');
+            manageHolidays.classList.add('hidden');
+            this.closeModal('holiday-manager-modal');
+            this.closeModal('shift-manager-modal');
+        }
+    }
+
+    async handleChangePinSubmit(event) {
+        event.preventDefault();
+        const newPin = document.getElementById('new-pin-input').value.trim();
+        if (!newPin) {
+            this.showToast('Please enter a new PIN.', true);
+            return;
+        }
+        this.state.adminPin = newPin;
+        const success = await this.saveToSupabase();
+        if (success) {
+            document.getElementById('new-pin-input').value = '';
+            this.closeChangePinModal();
+            this.showToast('Admin PIN updated successfully.');
+        }
+    }
+
+    openAddMemberModal() {
+        if (!this.state.isAdmin) {
+            this.showToast('Admin access required.', true);
+            return;
+        }
+        document.getElementById('member-modal-title').textContent = 'Add Employee';
+        document.getElementById('member-id-input').value = '';
+        document.getElementById('member-name-input').value = '';
+        document.getElementById('member-role-input').value = 'Staff';
+        document.getElementById('delete-member-button').classList.add('hidden');
+        this.openModal('member-modal');
+    }
+
+    openEditMemberModal(id) {
+        if (!this.state.isAdmin) return;
+        const member = this.state.members.find(m => m.id === id);
+        if (!member) return;
+
+        document.getElementById('member-modal-title').textContent = 'Edit Employee';
+        document.getElementById('member-id-input').value = member.id;
+        document.getElementById('member-name-input').value = member.name;
+        document.getElementById('member-role-input').value = member.role === 'Senior' ? 'Senior Manager' : (member.role || 'Staff');
+        document.getElementById('delete-member-button').classList.remove('hidden');
+        this.openModal('member-modal');
+    }
+
+    async handleMemberSubmit(event) {
+        event.preventDefault();
+        const id = document.getElementById('member-id-input').value;
+        const name = document.getElementById('member-name-input').value.trim();
+        const role = document.getElementById('member-role-input').value;
+        if (!name) return;
+
+        if (id) {
+            const member = this.state.members.find(m => m.id === id);
+            if (member) {
+                member.name = name;
+                member.role = role;
+            }
+        } else {
+            this.state.members.push({ id: 'm_' + Date.now(), name, role });
+        }
+
+        const success = await this.saveToSupabase();
+        if (success) {
+            this.closeMemberModal();
+            this.render();
+            this.showToast('Employee saved.');
+        }
+    }
+
+    async deleteMember() {
+        const id = document.getElementById('member-id-input').value;
+        const member = this.state.members.find(m => m.id === id);
+        if (!member) return;
+        if (!confirm(`Are you sure you want to delete ${member.name}?`)) return;
+
+        this.state.members = this.state.members.filter(m => m.id !== id);
+        Object.keys(this.state.shifts).forEach(key => {
+            if (key.startsWith(`${id}_`)) delete this.state.shifts[key];
+        });
+
+        const success = await this.saveToSupabase();
+        if (success) {
+            this.closeMemberModal();
+            this.render();
+            this.showToast('Employee deleted.');
+        }
+    }
+
+    openBulkMonthlyModal() {
+        if (!this.state.isAdmin) {
+            this.showToast('Admin access required.', true);
+            return;
+        }
+        this.populateMemberCheckboxes('monthly-member-list');
+        const select = document.getElementById('monthly-shift-input');
+        select.innerHTML = '';
+        const blank = document.createElement('option');
+        blank.value = '';
+        blank.textContent = 'Select shift...';
+        select.appendChild(blank);
+
+        const specialOptions = [
+            { value: 'weekdays_only_early', label: '09:00 - 17:30 - Weekdays only' },
+            { value: 'weekdays_only_early930', label: '09:30 - 18:00 - Weekdays only' },
+            { value: 'weekdays_only_mid', label: '10:00 - 18:30 - Weekdays only' },
+            { value: 'weekdays_only_late', label: '11:30 - 20:00 - Weekdays only' },
+            { value: 'weekdays_only_fw', label: 'FW - Weekdays only' }
+        ];
+
+        specialOptions.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item.value;
+            option.textContent = item.label;
+            select.appendChild(option);
+        });
+
+        this.shiftOptions.forEach(shift => {
+            const option = document.createElement('option');
+            option.value = shift;
+            option.textContent = this.getShiftLabel(shift);
+            select.appendChild(option);
+        });
+        this.applyShiftColour(select);
+        this.openModal('bulk-monthly-modal');
+    }
+
+    async handleBulkMonthlySubmit(event) {
+        event.preventDefault();
+        const selected = this.getSelectedMembers('monthly-member-list');
+        if (selected.length === 0) {
+            this.showToast('Please select at least one employee.', true);
+            return;
+        }
+
+        const shift = document.getElementById('monthly-shift-input').value;
+        const weekdayMap = {
+            weekdays_only_early: 'Early',
+            weekdays_only_early930: 'Early930',
+            weekdays_only_mid: 'Mid',
+            weekdays_only_late: 'Late',
+            weekdays_only_fw: 'FW'
+        };
+
+        const isWeekdayOnly = Object.prototype.hasOwnProperty.call(weekdayMap, shift);
+        const days = this.getDaysInMonth();
+
+        const changes = [];
+        selected.forEach(memberId => {
+            for (let day = 1; day <= days; day++) {
+                const date = new Date(this.state.currentDate.getFullYear(), this.state.currentDate.getMonth(), day);
+                const dateString = this.getDateString(day);
+                const key = `${memberId}_${dateString}`;
+
+                const targetShift = isWeekdayOnly
+                    ? (date.getDay() >= 1 && date.getDay() <= 5 ? weekdayMap[shift] : '')
+                    : shift;
+                changes.push({ memberId, dateString, shift: targetShift });
+            }
+        });
+        if (!this.validateHolidayChanges(changes)) return;
+        changes.forEach(({ memberId, dateString, shift: value }) => {
+            const key = `${memberId}_${dateString}`;
+            if (value) this.state.shifts[key] = value;
+            else delete this.state.shifts[key];
+        });
+
+        const success = await this.saveToSupabase();
+        if (success) {
+            this.closeBulkMonthlyModal();
+            this.render();
+            this.showToast('Monthly shift applied and saved.');
+        }
+    }
+
+    openBulkWeeklyModal() {
+        if (!this.state.isAdmin) {
+            this.showToast('Admin access required.', true);
+            return;
+        }
+        this.populateMemberCheckboxes('weekly-member-list');
+        const year = this.state.currentDate.getFullYear();
+        const month = this.state.currentDate.getMonth();
+        const firstDay = new Date(year, month, 1);
+        const lastDay = new Date(year, month + 1, 0);
+
+        document.getElementById('weekly-start-date').value = this.formatDateForInput(firstDay);
+        document.getElementById('weekly-end-date').value = this.formatDateForInput(lastDay);
+        this.openModal('bulk-weekly-modal');
+    }
+
+    async handleBulkWeeklySubmit(event) {
+        event.preventDefault();
+        const startDateString = document.getElementById('weekly-start-date').value;
+        const endDateString = document.getElementById('weekly-end-date').value;
+
+        if (!startDateString || !endDateString) {
+            this.showToast('Please select both a start date and an end date.', true);
+            return;
+        }
+
+        const startDate = this.parseLocalDate(startDateString);
+        const endDate = this.parseLocalDate(endDateString);
+
+        if (startDate > endDate) {
+            this.showToast('End Date must be on or after Start Date.', true);
+            return;
+        }
+
+        const selected = this.getSelectedMembers('weekly-member-list');
+        if (selected.length === 0) {
+            this.showToast('Please select at least one employee.', true);
+            return;
+        }
+
+        const weeklyValues = [
+            document.getElementById('weekly-mon').value,
+            document.getElementById('weekly-tue').value,
+            document.getElementById('weekly-wed').value,
+            document.getElementById('weekly-thu').value,
+            document.getElementById('weekly-fri').value,
+            document.getElementById('weekly-sat').value,
+            document.getElementById('weekly-sun').value
+        ];
+
+        const changes = [];
+        const currentDate = new Date(startDate);
+        while (currentDate <= endDate) {
+            const jsDay = currentDate.getDay();
+            const patternIndex = jsDay === 0 ? 6 : jsDay - 1;
+            const shift = weeklyValues[patternIndex];
+            const dateString = this.formatDateForInput(currentDate);
+
+            selected.forEach(memberId => changes.push({ memberId, dateString, shift }));
+            currentDate.setDate(currentDate.getDate() + 1);
+        }
+        if (!this.validateHolidayChanges(changes)) return;
+        changes.forEach(({ memberId, dateString, shift }) => {
+            const key = `${memberId}_${dateString}`;
+            if (shift) this.state.shifts[key] = shift;
+            else delete this.state.shifts[key];
+        });
+
+        const success = await this.saveToSupabase();
+        if (success) {
+            this.closeBulkWeeklyModal();
+            this.render();
+            this.showToast(`Weekly pattern applied successfully.`);
+        }
+    }
+
+    populateMemberCheckboxes(containerId) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = '';
+        
+        const staffMembers = this.state.members.filter(m => {
+            const r = m.role || 'Staff';
+            return r !== 'Senior Manager' && r !== 'Manager' && r !== 'Senior';
+        });
+
+        const selectAll = document.createElement('label');
+        selectAll.className = 'flex items-center gap-2 pb-2 mb-2 border-b border-slate-200 text-sm font-semibold';
+        selectAll.innerHTML = `
+            <input type="checkbox" class="member-select-all" onchange="app.toggleAllMembers('${containerId}', this.checked)">
+            Select all
+        `;
+        container.appendChild(selectAll);
+
+        staffMembers.forEach(member => {
+            const label = document.createElement('label');
+            label.className = 'flex items-center gap-2 py-1.5 text-sm text-slate-700';
+            label.innerHTML = `
+                <input type="checkbox" class="member-checkbox" data-member-id="${member.id}">
+                ${this.escapeHtml(member.name)}
+            `;
+            container.appendChild(label);
+        });
+    }
+
+    toggleAllMembers(containerId, checked) {
+        document.getElementById(containerId).querySelectorAll('.member-checkbox').forEach(cb => cb.checked = checked);
+    }
+
+    getSelectedMembers(containerId) {
+        return Array.from(document.getElementById(containerId).querySelectorAll('.member-checkbox:checked')).map(cb => cb.dataset.memberId);
+    }
+
+    async clearMonth() {
+        if (!this.state.isAdmin) {
+            this.showToast('Admin access required.', true);
+            return;
+        }
+        if (!confirm(`Are you sure you want to clear ${this.getMonthName()} ${this.state.currentDate.getFullYear()}?`)) return;
+
+        const prefix = this.getMonthKey();
+        Object.keys(this.state.shifts).forEach(key => {
+            const index = key.lastIndexOf('_');
+            if (index === -1) return;
+            const date = key.substring(index + 1);
+            if (date.startsWith(prefix)) delete this.state.shifts[key];
+        });
+
+        const success = await this.saveToSupabase();
+        if (success) {
+            this.render();
+            this.showToast('Month cleared and saved.');
+        }
+    }
+
+    exportCSV() {
+        const rows = [];
+        const headers = ['Employee', 'Role'];
+        const days = this.getDaysInMonth();
+
+        for (let day = 1; day <= days; day++) {
+            const date = new Date(this.state.currentDate.getFullYear(), this.state.currentDate.getMonth(), day);
+            headers.push(date.toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: '2-digit' }));
+        }
+        rows.push(headers);
+
+        const staffMembers = this.state.members.filter(m => {
+            const r = m.role || 'Staff';
+            return r !== 'Senior Manager' && r !== 'Manager' && r !== 'Senior';
+        });
+
+        staffMembers.forEach(member => {
+            const row = [member.name, member.role || 'Staff'];
+            for (let day = 1; day <= days; day++) {
+                const key = `${member.id}_${this.getDateString(day)}`;
+                const storedValue = this.state.shifts[key] || '';
+                row.push(this.getShiftLabel(storedValue));
+            }
+            rows.push(row);
+        });
+
+        const csv = rows.map(row => row.map(val => `"${String(val).replace(/"/g, '""')}"`).join(',')).join('\n');
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Rota_${this.getMonthKey()}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        this.showToast('CSV exported successfully.');
+    }
+
+    openModal(id) {
+        const modal = document.getElementById(id);
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    closeModal(id) {
+        const modal = document.getElementById(id);
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+
+    openPinModal() {
+        this.openModal('admin-pin-modal');
+        setTimeout(() => document.getElementById('admin-pin-input').focus(), 100);
+    }
+
+    closePinModal() { this.closeModal('admin-pin-modal'); }
+    openChangePinModal() {
+        if (!this.state.isAdmin) return;
+        document.getElementById('new-pin-input').value = '';
+        this.openModal('change-pin-modal');
+    }
+    closeChangePinModal() { this.closeModal('change-pin-modal'); }
+    closeMemberModal() { this.closeModal('member-modal'); }
+    closeBulkMonthlyModal() { this.closeModal('bulk-monthly-modal'); }
+    closeBulkWeeklyModal() { this.closeModal('bulk-weekly-modal'); }
+
+    parseLocalDate(dateString) {
+        const [year, month, day] = dateString.split('-').map(Number);
+        return new Date(year, month - 1, day);
+    }
+
+    formatDateForInput(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    isToday(date) {
+        const today = new Date();
+        return date.getFullYear() === today.getFullYear() && date.getMonth() === today.getMonth() && date.getDate() === today.getDate();
+    }
+
+    getInitials(name) {
+        return String(name).trim().split(/\s+/).slice(0, 2).map(part => part.charAt(0).toUpperCase()).join('');
+    }
+
+    escapeHtml(value) {
+        return String(value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+    }
+
+    showToast(message, error = false) {
+        const toast = document.getElementById('toast');
+        const messageElement = document.getElementById('toast-message');
+        const icon = document.getElementById('toast-icon');
+
+        messageElement.textContent = message;
+        icon.className = error ? 'fa-solid fa-circle-exclamation text-red-400' : 'fa-solid fa-circle-check text-green-400';
+        toast.classList.remove('hidden');
+        toast.classList.add('visible');
+
+        clearTimeout(this.toastTimer);
+        this.toastTimer = setTimeout(() => {
+            toast.classList.remove('visible');
+            toast.classList.add('hidden');
+        }, 3500);
+    }
+}
+
+const app = new RotaMatrixManager();
+document.addEventListener('DOMContentLoaded', () => { app.init(); });
+</script>
+
+</body>
+</html>

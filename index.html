@@ -2263,6 +2263,22 @@ class RotaMatrixManager {
         this.openModal('bulk-monthly-modal');
     }
 
+    // Bulk scheduling must preserve previously approved leave and unavailability.
+    isProtectedBulkShift(memberId, dateString) {
+        const existing = this.state.shifts[`${memberId}_${dateString}`];
+        if (typeof existing !== 'string') return false;
+        const normalized = existing.trim().toLowerCase().replace(/[’']/g, '');
+        return [
+            'holiday',             // Annual leave
+            'holidays',            // Alternate label for incentive days
+            'incentive day',       // Stored value displayed as "Holidays"
+            'dont work',
+            'doctors appointment',
+            'doctor appointment',
+            'birthday'
+        ].includes(normalized);
+    }
+
     async handleBulkMonthlySubmit(event) {
         event.preventDefault();
         const selected = this.getSelectedMembers('monthly-member-list');
@@ -2293,7 +2309,9 @@ class RotaMatrixManager {
                 const targetShift = isWeekdayOnly
                     ? (date.getDay() >= 1 && date.getDay() <= 5 ? weekdayMap[shift] : '')
                     : shift;
-                changes.push({ memberId, dateString, shift: targetShift });
+                if (!this.isProtectedBulkShift(memberId, dateString)) {
+                    changes.push({ memberId, dateString, shift: targetShift });
+                }
             }
         });
         if (!this.validateHolidayChanges(changes)) return;
@@ -2369,7 +2387,11 @@ class RotaMatrixManager {
             const shift = weeklyValues[patternIndex];
             const dateString = this.formatDateForInput(currentDate);
 
-            selected.forEach(memberId => changes.push({ memberId, dateString, shift }));
+            selected.forEach(memberId => {
+                if (!this.isProtectedBulkShift(memberId, dateString)) {
+                    changes.push({ memberId, dateString, shift });
+                }
+            });
             currentDate.setDate(currentDate.getDate() + 1);
         }
         if (!this.validateHolidayChanges(changes)) return;
